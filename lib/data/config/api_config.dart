@@ -50,6 +50,12 @@ class ApiConfig {
   /// (e.g. created via Google), enabling email/password login alongside it.
   static const String setPassword = '/auth/set-password';
 
+  // Password reset — a three step flow: request a code by email, exchange the
+  // code for a single-use token, then set the new password with that token.
+  static const String forgotPassword = '/auth/password/forgot';
+  static const String verifyResetCode = '/auth/password/verify-code';
+  static const String resetPassword = '/auth/password/reset';
+
   /// `PATCH /users/:id/profile` — update the signed-in user's own profile
   /// (first/last name, phone, avatar, school). See backend `UsersController.updateProfile`.
   static String userProfile(String id) => '/users/$id/profile';

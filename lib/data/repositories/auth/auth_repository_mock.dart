@@ -1,4 +1,5 @@
 import '../../dtos/auth_dto.dart';
+import '../../exceptions/api_exception.dart';
 import 'auth_repository.dart';
 
 class AuthRepositoryMock implements AuthRepository {
@@ -154,6 +155,36 @@ class AuthRepositoryMock implements AuthRepository {
   @override
   Future<void> setPassword(String password) async {
     await Future.delayed(const Duration(milliseconds: 400));
+    _hasPassword = true;
+  }
+
+  /// Accepted by the mock reset flow, mirroring the demo code the web client
+  /// uses. The real backend emails a random 6-digit code instead.
+  static const mockResetCode = '123456';
+
+  @override
+  Future<void> requestPasswordReset(String email) async {
+    await Future.delayed(const Duration(milliseconds: 600));
+  }
+
+  @override
+  Future<String> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (code != mockResetCode) {
+      throw const ApiException('That code is invalid or has expired.');
+    }
+    return 'mock-reset-token';
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String resetToken,
+    required String password,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
     _hasPassword = true;
   }
 

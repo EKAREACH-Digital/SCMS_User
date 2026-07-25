@@ -194,6 +194,34 @@ class AuthRepositoryNestjs implements AuthRepository {
   }
 
   @override
+  Future<void> requestPasswordReset(String email) async {
+    await _post(ApiConfig.forgotPassword, {'email': email});
+  }
+
+  @override
+  Future<String> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) async {
+    final response = await _post(ApiConfig.verifyResetCode, {
+      'email': email,
+      'code': code,
+    });
+    return response.data['data']['reset_token'] as String;
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String resetToken,
+    required String password,
+  }) async {
+    await _post(ApiConfig.resetPassword, {
+      'reset_token': resetToken,
+      'password': password,
+    });
+  }
+
+  @override
   Future<NotificationPreferencesDto> updateNotificationPreferences({
     required String userId,
     bool? orderUpdates,

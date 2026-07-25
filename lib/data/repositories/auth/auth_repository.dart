@@ -45,6 +45,23 @@ abstract class AuthRepository {
   /// enabling email/password sign-in alongside it.
   Future<void> setPassword(String password);
 
+  /// Password reset, step 1 — asks the backend to email a 6-digit code.
+  /// Always succeeds, even for an unknown address, so it can't be used to work
+  /// out which emails are registered.
+  Future<void> requestPasswordReset(String email);
+
+  /// Step 2 — exchanges the emailed code for a single-use reset token.
+  Future<String> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  });
+
+  /// Step 3 — sets the new password. Signs out every existing session.
+  Future<void> resetPassword({
+    required String resetToken,
+    required String password,
+  });
+
   /// Lists the schools a user can pick from during onboarding.
   Future<List<SchoolDto>> getSchools();
 

@@ -8,6 +8,7 @@ import '../../../ui/utils/async_value.dart';
 import '../../widgets/smart_canteen_widgets.dart';
 import '../home/home_screen.dart';
 import 'complete_profile_screen.dart';
+import 'forgot_password_screen.dart';
 import 'view_model/auth_view_model.dart';
 
 /// Brand gradient used for the primary action buttons (#4CAF50 → #81C784).
@@ -18,7 +19,7 @@ const _primaryGradient = LinearGradient(
 );
 
 const _googleBlue = Color(0xFF4285F4);
-const _facebookBlue = Color(0xFF1877F2);
+const _microsoftBlue = Color(0xFF0078D4);
 
 void _showComingSoon(BuildContext context, String feature) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -441,7 +442,15 @@ class _LoginFormState extends State<_LoginForm> {
             ),
             const Spacer(),
             _ForgotPasswordButton(
-              onTap: () => _showComingSoon(context, 'Password reset'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  // Carry over whatever email was already typed.
+                  builder: (_) => ForgotPasswordScreen(
+                    initialEmail: _emailController.text.trim(),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -650,12 +659,12 @@ class _SocialRow extends StatelessWidget {
         ),
         const SizedBox(width: 14),
         SmartCanteenSocialButton(
-          label: 'Facebook',
-          brandColor: _facebookBlue,
-          icon: _socialIcon('asset/auth_logo/facebook.png'),
+          label: 'Microsoft',
+          brandColor: _microsoftBlue,
+          icon: const _MicrosoftLogo(),
           onTap: isBusy
               ? null
-              : () => _showComingSoon(context, 'Facebook $suffix'),
+              : () => _showComingSoon(context, 'Microsoft $suffix'),
         ),
       ],
     );
@@ -727,6 +736,48 @@ class _ForgotPasswordButtonState extends State<_ForgotPasswordButton>
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+/// The Microsoft mark — four squares in a 2×2 grid, in its brand colours.
+/// Drawn inline rather than loaded from an image so the button always renders
+/// the correct logo without depending on a bundled asset.
+class _MicrosoftLogo extends StatelessWidget {
+  const _MicrosoftLogo();
+
+  /// Matches the 22px Google asset beside it, trimmed slightly since solid
+  /// squares read heavier than a glyph.
+  static const size = 20.0;
+
+  static const _red = Color(0xFFF25022);
+  static const _green = Color(0xFF7FBA00);
+  static const _blue = Color(0xFF00A4EF);
+  static const _yellow = Color(0xFFFFB900);
+
+  @override
+  Widget build(BuildContext context) {
+    // A hair of space between the squares, as in the real mark.
+    final square = (size - 2) / 2;
+    Widget tile(Color color) =>
+        SizedBox(width: square, height: square, child: ColoredBox(color: color));
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [tile(_red), tile(_green)],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [tile(_blue), tile(_yellow)],
+          ),
+        ],
       ),
     );
   }

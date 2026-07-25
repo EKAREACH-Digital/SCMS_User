@@ -109,16 +109,40 @@ class UserProfileDto {
         phone: json['phone'] as String?,
         avatarUrl: json['avatar_url'] as String?,
         status: json['status'] as String? ?? 'active',
-        role: json['role'] != null
-            ? RoleDto.fromJson(json['role'] as Map<String, dynamic>)
-            : null,
-        school: json['school'] != null
-            ? SchoolDto.fromJson(json['school'] as Map<String, dynamic>)
-            : null,
+        role: _parseRole(json['role']),
+        school: _parseSchool(json),
         notificationPreferences:
             NotificationPreferencesDto.fromUserJson(json),
         // Backend sends this on auth responses (serializeUser). Absent on the
         // raw /users/me entity, where we assume a password exists.
         canUseEmailPassword: json['can_use_email_password'] as bool? ?? true,
       );
+
+  /// `role` is the joined relation object in both shapes today; a bare name
+  /// string is tolerated so a flattened payload can't crash parsing.
+  static RoleDto? _parseRole(dynamic role) {
+    if (role is Map<String, dynamic>) return RoleDto.fromJson(role);
+    if (role is String && role.isNotEmpty) return RoleDto(id: '', name: role);
+    return null;
+  }
+
+  /// `school` arrives in two different shapes:
+  /// - `GET /users/me` returns the raw entity, so it's the joined relation
+  ///   object `{ id, name }`.
+  /// - Auth responses (`/auth/login`, `/auth/google`, `/auth/complete-profile`)
+  ///   go through the backend's `serializeUser`, which flattens it to just the
+  ///   school's **name string**, with the id left in `school_id`.
+  ///
+  /// Handling both keeps either response parseable.
+  static SchoolDto? _parseSchool(Map<String, dynamic> json) {
+    final school = json['school'];
+    if (school is Map<String, dynamic>) return SchoolDto.fromJson(school);
+    if (school is String && school.isNotEmpty) {
+      return SchoolDto(
+        id: json['school_id'] as String? ?? '',
+        name: school,
+      );
+    }
+    return null;
+  }
 }

@@ -17,6 +17,7 @@ import 'ui/screens/digital_wallet/history_screen.dart';
 import 'ui/screens/digital_wallet/qr_screen.dart';
 import 'ui/screens/digital_wallet/view_model/wallet_view_model.dart';
 import 'ui/screens/shell/app_shell.dart';
+import 'ui/screens/login/forgot_password_screen.dart';
 import 'ui/screens/login/sign_in_screen.dart';
 import 'ui/screens/login/sign_up_screen.dart';
 import 'ui/screens/login/view_model/auth_view_model.dart';
@@ -127,6 +128,8 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
               SplashScreen.routeName: (_) => const SplashScreen(),
               SignInScreen.routeName: (_) => const SignInScreen(),
               SignUpScreen.routeName: (_) => const SignUpScreen(),
+              ForgotPasswordScreen.routeName: (_) =>
+                  const ForgotPasswordScreen(),
               AppShell.routeName: (_) => const AppShell(),
               MenuScreen.routeName: (_) => const MenuScreen(),
               OrderSummaryScreen.routeName: (_) => const OrderSummaryScreen(),
