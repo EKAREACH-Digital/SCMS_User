@@ -20,6 +20,14 @@ class MealCouponsState extends ChangeNotifier {
         _ => const [],
       };
 
+  /// Every active coupon, whatever session it was filed under.
+  ///
+  /// All-day items (drinks) are attributed to the nearest meal session because
+  /// the backend has no "anytime" value, which means filtering strictly by
+  /// session can hide a ticket the user just bought. This is what the QR
+  /// screen shows by default.
+  List<CouponDto> get activeAll => _list.where((c) => c.isActive).toList();
+
   /// Active coupons for a given meal session (breakfast/lunch/dinner).
   List<CouponDto> forSession(String session) =>
       _list.where((c) => c.isActive && c.mealSession == session).toList();

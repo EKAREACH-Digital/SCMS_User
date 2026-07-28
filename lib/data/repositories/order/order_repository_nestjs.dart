@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
 import '../../config/api_client.dart';
@@ -11,11 +9,9 @@ import 'order_repository.dart';
 
 class OrderRepositoryNestjs implements OrderRepository {
   OrderRepositoryNestjs({Dio? dio, TokenStorage? tokenStorage})
-      : _tokenStorage = tokenStorage ?? TokenStorage.instance,
-        _dio = dio ?? createApiClient(tokenStorage: tokenStorage);
+      : _dio = dio ?? createApiClient(tokenStorage: tokenStorage);
 
   final Dio _dio;
-  final TokenStorage _tokenStorage;
 
   @override
   Future<PlacedOrderDto> placeOrder({
@@ -41,15 +37,12 @@ class OrderRepositoryNestjs implements OrderRepository {
 
   @override
   Future<List<CouponDto>> getActiveCoupons() async {
-    final userId = await _currentUserId();
-    if (userId == null) {
-      throw const ApiException('Not signed in — cannot load coupons.');
-    }
     try {
+      // `/coupons/my` scopes to the caller from the JWT. The plain `/coupons`
+      // list is staff-only and 403s for students.
       final response = await _dio.get(
-        ApiConfig.coupons,
+        ApiConfig.couponsMy,
         queryParameters: {
-          'user_id': userId,
           'status': 'active',
           'limit': 100,
         },
@@ -83,23 +76,6 @@ class OrderRepositoryNestjs implements OrderRepository {
     }
   }
 
-  /// Reads the user id (`sub`) from the stored JWT access token, without a
-  /// network round-trip.
-  Future<String?> _currentUserId() async {
-    final token = await _tokenStorage.readAccessToken();
-    if (token == null) return null;
-    try {
-      final parts = token.split('.');
-      if (parts.length != 3) return null;
-      final payload = utf8.decode(
-        base64Url.decode(base64Url.normalize(parts[1])),
-      );
-      final map = jsonDecode(payload) as Map<String, dynamic>;
-      return map['sub'] as String?;
-    } catch (_) {
-      return null;
-    }
-  }
 
   ApiException _mapError(DioException e) {
     final data = e.response?.data;

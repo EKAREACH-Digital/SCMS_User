@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../ui/utils/meal_session.dart';
 import 'food_item.dart';
 
 class CartEntry {
@@ -26,6 +27,13 @@ class CartModel extends ChangeNotifier {
   double get serviceFee => 0.0;
 
   double get total => subtotal;
+
+  /// True when everything in the cart is sold all day (drinks), so checkout
+  /// shouldn't wait for a meal window. An empty cart is not "anytime" — there
+  /// is nothing to buy.
+  bool get isAnytimeOnly =>
+      _entries.isNotEmpty &&
+      _entries.every((e) => MealSession.isAnytimeCategory(e.item.category));
 
   void add(FoodItem item) {
     final idx = _entries.indexWhere((e) => e.item.id == item.id);

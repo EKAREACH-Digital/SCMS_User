@@ -65,14 +65,19 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
       return;
     }
 
-    // Ordering is only allowed during the current meal session's window.
-    final session = MealSession.activeAt(DateTime.now());
-    if (session == null) {
+    final cart = CartProvider.of(context);
+
+    // Food is tied to a meal window; drinks are sold all day. A cart holding
+    // only all-day items can check out whenever, and is filed under the
+    // nearest session because every order needs one.
+    final now = DateTime.now();
+    final activeSession = MealSession.activeAt(now);
+    if (activeSession == null && !cart.isAnytimeOnly) {
       fail('Ordering is closed right now. Try during a meal session.');
       return;
     }
+    final session = activeSession ?? MealSession.nearestTo(now);
 
-    final cart = CartProvider.of(context);
     final orderRepo = context.read<OrderRepository>();
     final balance = context.read<BalanceState>();
     final mealCoupons = context.read<MealCouponsState>();
@@ -490,7 +495,10 @@ class _PaymentSummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isOpen = activeSession != null;
+    // A drinks-only cart isn't bound to a window, so checkout stays open even
+    // between sessions.
+    final anytimeOnly = cart.isAnytimeOnly;
+    final isOpen = activeSession != null || anytimeOnly;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -537,10 +545,13 @@ class _PaymentSummarySection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            isOpen
-                ? '${activeSession!.label} is open now (${activeSession!.timeRange})'
-                : 'Ordering is closed. Breakfast ${MealSession.breakfast.timeRange}, '
+            switch ((activeSession, anytimeOnly)) {
+              (final s?, _) => '${s.label} is open now (${s.timeRange})',
+              (null, true) => 'Drinks are available all day — you can order now.',
+              (null, false) =>
+                'Ordering is closed. Breakfast ${MealSession.breakfast.timeRange}, '
                     'Lunch ${MealSession.lunch.timeRange}, Dinner ${MealSession.dinner.timeRange}.',
+            },
             style: TextStyle(
               fontSize: 11,
               color: isOpen ? AppTheme.green : const Color(0xFFE53935),

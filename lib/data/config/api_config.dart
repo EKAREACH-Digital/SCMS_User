@@ -84,8 +84,13 @@ class ApiConfig {
   static const String ordersMy = '/orders/my';
 
   // Coupons
-  /// `GET /coupons?user_id=&status=` — the user's meal-ticket coupons.
+  /// `GET /coupons?user_id=&status=` — staff/manager/admin only.
   static const String coupons = '/coupons';
+
+  /// `GET /coupons/my?status=` — the signed-in user's own meal-ticket coupons.
+  /// The plain `/coupons` list is role-guarded to staff and above, so the app
+  /// must use this route; the user is taken from the JWT.
+  static const String couponsMy = '/coupons/my';
 
   // Wallet
   /// `GET /wallet/my` — all wallets for the signed-in user (one per school).

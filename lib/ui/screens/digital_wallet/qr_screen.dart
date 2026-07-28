@@ -11,7 +11,6 @@ import '../../../theme/app_theme.dart';
 import '../../../ui/states/meal_coupons_state.dart';
 import '../../../ui/states/order_history_state.dart';
 import '../../../ui/states/user_profile_state.dart';
-import '../../../ui/utils/meal_session.dart';
 import '../../widgets/smart_canteen_widgets.dart';
 
 // ── Screen-scoped palette (green theme) ──────────────────────────────────────
@@ -34,11 +33,11 @@ class QrScreen extends StatefulWidget {
 
 class _QrScreenState extends State<QrScreen>
     with TickerProviderStateMixin {
-  // Defaults to the session open right now; auto-jumps to whichever session
-  // actually has a coupon once they load (unless the user picks one manually).
-  late String _session =
-      MealSession.activeAt(DateTime.now())?.key ?? 'breakfast';
-  bool _userPickedSession = false;
+  /// Selected filter: [kAllSessions] or a MealSession key. Defaults to showing
+  /// everything — filtering by the session that happens to be open right now
+  /// hid tickets the user had just bought, especially all-day drinks, which are
+  /// filed under the nearest meal session rather than the current one.
+  String _session = kAllSessions;
   int _couponIndex = 0;
 
   late final AnimationController _pulseCtrl;
@@ -81,29 +80,9 @@ class _QrScreenState extends State<QrScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _entranceCtrl.forward();
-        context
-            .read<MealCouponsState>()
-            .fetchActive()
-            .then((_) => _autoSelectSession());
+        context.read<MealCouponsState>().fetchActive();
       }
     });
-  }
-
-  /// After coupons load, if the currently-shown session has none but another
-  /// session does, switch to that one — unless the user already picked a tab.
-  void _autoSelectSession() {
-    if (!mounted || _userPickedSession) return;
-    final coupons = context.read<MealCouponsState>();
-    if (coupons.forSession(_session).isNotEmpty) return;
-    for (final s in MealSession.values) {
-      if (coupons.forSession(s.key).isNotEmpty) {
-        setState(() {
-          _session = s.key;
-          _couponIndex = 0;
-        });
-        return;
-      }
-    }
   }
 
   @override
@@ -144,8 +123,11 @@ class _QrScreenState extends State<QrScreen>
     final orders = context.watch<OrderHistoryState>().orders;
     final latest = orders.isNotEmpty ? orders.first : null;
 
-    // Active coupons for the selected meal session; each is a scannable QR.
-    final sessionCoupons = context.watch<MealCouponsState>().forSession(_session);
+    // Active coupons for the selected filter; each is a scannable QR.
+    final mealCoupons = context.watch<MealCouponsState>();
+    final sessionCoupons = _session == kAllSessions
+        ? mealCoupons.activeAll
+        : mealCoupons.forSession(_session);
     final index = sessionCoupons.isEmpty
         ? 0
         : _couponIndex.clamp(0, sessionCoupons.length - 1);
@@ -190,14 +172,16 @@ class _QrScreenState extends State<QrScreen>
                 position: _entranceSlide,
                 child: _TicketCard(
                   userName: context.watch<UserProfileState>().name,
-                  sessionLabel: _sessionLabel(_session),
+                  sessionLabel: _sessionLabel(coupon?.mealSession ?? _session),
                   isPaid: isPaid,
                   pulseAnim: _pulseAnim,
                   qrData: coupon?.qrToken,
                   subtitle: coupon != null
                       ? '${coupon.menuItemName ?? 'Meal ticket'}'
                           '${coupon.couponCode != null ? '  ·  ${coupon.couponCode}' : ''}'
-                      : 'No active ticket for this session',
+                      : _session == kAllSessions
+                          ? 'No active tickets yet'
+                          : 'No active ticket for this session',
                 ),
               ),
             ),
@@ -217,7 +201,6 @@ class _QrScreenState extends State<QrScreen>
               onSelect: (s) => setState(() {
                 _session = s;
                 _couponIndex = 0;
-                _userPickedSession = true;
               }),
             ),
             const SizedBox(height: 20),
@@ -268,7 +251,11 @@ String _fmtDate(DateTime dt) {
   return '${d[dt.weekday - 1]}, ${m[dt.month - 1]} ${dt.day}, ${dt.year}';
 }
 
+/// Sentinel for "show every active ticket" rather than one meal session.
+const kAllSessions = 'all';
+
 String _sessionLabel(String key) => switch (key) {
+      kAllSessions => 'All tickets',
       'breakfast' => 'Breakfast',
       'lunch' => 'Lunch',
       'dinner' => 'Dinner',
@@ -862,32 +849,139 @@ class _SessionSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final total = context.watch<MealCouponsState>().activeAll.length;
+    return Column(
       children: [
-        _SessionChip(
-          icon: Icons.wb_sunny_outlined,
-          label: 'Breakfast',
-          time: '7 – 9 AM',
-          isSelected: selected == 'breakfast',
-          onTap: () => onSelect('breakfast'),
+        // Full width rather than a fourth chip in the row: four of these side
+        // by side leaves no room for the label and time to breathe.
+        _AllTicketsChip(
+          count: total,
+          isSelected: selected == kAllSessions,
+          onTap: () => onSelect(kAllSessions),
         ),
-        const SizedBox(width: 10),
-        _SessionChip(
-          icon: Icons.lunch_dining_outlined,
-          label: 'Lunch',
-          time: '11 AM – 1 PM',
-          isSelected: selected == 'lunch',
-          onTap: () => onSelect('lunch'),
-        ),
-        const SizedBox(width: 10),
-        _SessionChip(
-          icon: Icons.nightlight_outlined,
-          label: 'Dinner',
-          time: '3 – 5 PM',
-          isSelected: selected == 'dinner',
-          onTap: () => onSelect('dinner'),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            _SessionChip(
+              icon: Icons.wb_sunny_outlined,
+              label: 'Breakfast',
+              time: '7 – 9 AM',
+              isSelected: selected == 'breakfast',
+              onTap: () => onSelect('breakfast'),
+            ),
+            const SizedBox(width: 10),
+            _SessionChip(
+              icon: Icons.lunch_dining_outlined,
+              label: 'Lunch',
+              time: '11 AM – 1 PM',
+              isSelected: selected == 'lunch',
+              onTap: () => onSelect('lunch'),
+            ),
+            const SizedBox(width: 10),
+            _SessionChip(
+              icon: Icons.nightlight_outlined,
+              label: 'Dinner',
+              time: '3 – 5 PM',
+              isSelected: selected == 'dinner',
+              onTap: () => onSelect('dinner'),
+            ),
+          ],
         ),
       ],
+    );
+  }
+}
+
+/// Full-width "show everything" filter, with a live count so the user can see
+/// at a glance whether they have any tickets at all.
+class _AllTicketsChip extends StatelessWidget {
+  const _AllTicketsChip({
+    required this.count,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final int count;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        width: double.infinity,
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? const LinearGradient(
+                  colors: [_kGreen, _kGreenDeep],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+          color: isSelected ? null : context.borderColor,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? _kGreen.withValues(alpha: 0.28)
+                  : Colors.black.withValues(alpha: 0.04),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFFEAF6EB) : context.cardColor,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.confirmation_number_outlined,
+                size: 18,
+                color: isSelected ? _kGreenDeep : context.mutedColor,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'All tickets',
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: isSelected ? _kGreenDeep : context.textColor,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? _kGreenDeep.withValues(alpha: 0.12)
+                      : context.borderColor,
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                child: Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: isSelected ? _kGreenDeep : context.mutedColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

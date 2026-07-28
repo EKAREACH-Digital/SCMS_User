@@ -47,4 +47,44 @@ enum MealSession {
     }
     return null;
   }
+
+  /// Menu categories sold outside the meal windows. Drinks aren't tied to a
+  /// sitting, so requiring a user to wait for lunch to buy a bottle of water
+  /// made no sense. Add a category here to make it available all day.
+  static const anytimeCategories = {'drinks'};
+
+  static bool isAnytimeCategory(String category) =>
+      anytimeCategories.contains(category.toLowerCase());
+
+  /// The session to file an order under.
+  ///
+  /// Orders always carry a session — the backend enum is breakfast/lunch/dinner
+  /// with no "anytime" member — so an all-day purchase made between windows is
+  /// attributed to the nearest session on the same day. That keeps the coupon
+  /// in a bucket the QR screen can find rather than inventing a fourth value
+  /// that the schema and the staff dashboard don't understand.
+  static MealSession nearestTo(DateTime now) {
+    final active = activeAt(now);
+    if (active != null) return active;
+
+    final minutes = now.hour * 60 + now.minute;
+    MealSession best = MealSession.values.first;
+    int bestDistance = -1;
+
+    for (final s in MealSession.values) {
+      final start = s.startHour * 60;
+      final end = s.endHour * 60;
+      // Distance to the window, zero when inside it.
+      final distance = minutes < start
+          ? start - minutes
+          : minutes >= end
+              ? minutes - end
+              : 0;
+      if (bestDistance < 0 || distance < bestDistance) {
+        bestDistance = distance;
+        best = s;
+      }
+    }
+    return best;
+  }
 }
