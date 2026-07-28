@@ -45,13 +45,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<OrderHistoryState>().loadFromBackend(
-              context.read<OrderRepository>(),
-              context.read<WalletRepository>(),
-            );
-      }
+      if (mounted) _load();
     });
+  }
+
+  /// Fetches history. Also the retry action on the error state.
+  Future<void> _load() {
+    return context.read<OrderHistoryState>().loadFromBackend(
+          context.read<OrderRepository>(),
+          context.read<WalletRepository>(),
+        );
   }
 
   List<OrderRecord> _sorted(List<OrderRecord> orders) {
@@ -81,7 +84,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = context.watch<OrderHistoryState>().orders;
+    final state = context.watch<OrderHistoryState>();
+    final orders = state.orders;
     final sorted = _sorted(orders);
 
     final spent = orders
@@ -99,36 +103,46 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onSortTap: _showSortMenu,
           ),
           Expanded(
-            child: orders.isEmpty
-                ? const _EmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                    // +1 for the summary card pinned at the top of the list.
-                    itemCount: sorted.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return _FadeInItem(
-                          index: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: _SummaryCard(spent: spent, topUps: topUps),
-                          ),
-                        );
-                      }
-                      final order = sorted[index - 1];
-                      return _FadeInItem(
-                        key: ValueKey('${_sort}_${order.id}'),
-                        index: index,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _OrderCard(order: order),
-                        ),
-                      );
-                    },
-                  ),
+            // Once there is data, keep showing it — a failed background
+            // refresh shouldn't blank out a list the user can still read.
+            child: orders.isNotEmpty
+                ? _buildList(sorted, spent, topUps)
+                : state.isLoading
+                    ? const _LoadingState()
+                    : state.error != null
+                        ? _ErrorState(message: state.error!, onRetry: _load)
+                        : const _EmptyState(),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildList(List<OrderRecord> sorted, double spent, double topUps) {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      // +1 for the summary card pinned at the top of the list.
+      itemCount: sorted.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return _FadeInItem(
+            index: 0,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _SummaryCard(spent: spent, topUps: topUps),
+            ),
+          );
+        }
+        final order = sorted[index - 1];
+        return _FadeInItem(
+          key: ValueKey('${_sort}_${order.id}'),
+          index: index,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _OrderCard(order: order),
+          ),
+        );
+      },
     );
   }
 }
@@ -668,6 +682,170 @@ class _StatusBadgeState extends State<_StatusBadge>
         return Opacity(opacity: 0.65 + 0.35 * t, child: child);
       },
       child: pill,
+    );
+  }
+}
+
+// ── Loading state ──────────────────────────────────────────────────────────
+
+/// Shown only on the first load, while there is nothing to display yet.
+/// Without this the empty state flashes before the data arrives.
+class _LoadingState extends StatelessWidget {
+  const _LoadingState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox(
+        width: 32,
+        height: 32,
+        child: CircularProgressIndicator(
+          strokeWidth: 2.5,
+          color: AppTheme.green,
+        ),
+      ),
+    );
+  }
+}
+
+// ── Error state ────────────────────────────────────────────────────────────
+
+/// Shown when the fetch failed and there is no cached list to fall back on.
+/// Distinguishes "we couldn't load this" from "you have no orders".
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message, required this.onRetry});
+
+  final String message;
+  final Future<void> Function() onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: _kRed.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.cloud_off_rounded,
+                size: 36,
+                color: _kRed,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Couldn't load history",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: context.textColor,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: context.mutedColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 18),
+            _RetryButton(onRetry: onRetry),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Retry affordance that shows a spinner while the refetch is in flight.
+class _RetryButton extends StatefulWidget {
+  const _RetryButton({required this.onRetry});
+
+  final Future<void> Function() onRetry;
+
+  @override
+  State<_RetryButton> createState() => _RetryButtonState();
+}
+
+class _RetryButtonState extends State<_RetryButton> {
+  bool _busy = false;
+
+  Future<void> _run() async {
+    if (_busy) return;
+    HapticFeedback.selectionClick();
+    setState(() => _busy = true);
+    try {
+      await widget.onRetry();
+    } finally {
+      // The screen stays mounted through a failed retry, but guard anyway.
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _run,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.green.withValues(alpha: _busy ? 0.15 : 0.35),
+              blurRadius: 12,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 16,
+              height: 16,
+              child: _busy
+                  ? const CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.refresh_rounded,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              _busy ? 'Retrying…' : 'Try again',
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                letterSpacing: 0.1,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

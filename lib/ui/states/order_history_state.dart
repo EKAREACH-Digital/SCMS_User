@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/dtos/order_dto.dart';
 import '../../data/dtos/wallet_dto.dart';
+import '../../data/exceptions/api_exception.dart';
 import '../../data/repositories/order/order_repository.dart';
 import '../../data/repositories/wallet/wallet_repository.dart';
 
@@ -51,14 +52,22 @@ class OrderHistoryState extends ChangeNotifier {
   bool _loading = false;
   bool get isLoading => _loading;
 
+  String? _error;
+
+  /// Why the last load failed, or null if it succeeded. Lets the UI tell a
+  /// failed fetch apart from a genuinely empty history.
+  String? get error => _error;
+
   /// Loads the signed-in user's real history — food orders (`GET /orders/my`)
   /// and wallet top-ups (`GET /wallet/:id/transactions`) — merges them, sorts
-  /// newest-first, and replaces the list. On failure the current list is kept.
+  /// newest-first, and replaces the list. On failure the current list is kept
+  /// and [error] is set.
   Future<void> loadFromBackend(
     OrderRepository orderRepo,
     WalletRepository walletRepo,
   ) async {
     _loading = true;
+    _error = null;
     notifyListeners();
     try {
       final results = await Future.wait([
@@ -80,8 +89,11 @@ class OrderHistoryState extends ChangeNotifier {
       _orders
         ..clear()
         ..addAll(records);
-    } catch (_) {
-      // Keep whatever is already shown if the fetch fails.
+    } catch (e) {
+      // Keep whatever is already shown, but record why the refresh failed.
+      _error = e is ApiException
+          ? e.message
+          : "Couldn't load your history. Check your connection and try again.";
     } finally {
       _loading = false;
       notifyListeners();
