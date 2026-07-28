@@ -30,7 +30,11 @@ class TopUpScreen extends StatefulWidget {
   State<TopUpScreen> createState() => _TopUpScreenState();
 }
 
-enum _Stage { amount, waiting, paid }
+/// [_Stage.amount] is only reached when the screen is opened without a chosen
+/// amount, or when starting a payment failed. The normal path in — from the
+/// wallet sheet, which has already asked for an amount — skips straight to
+/// [_Stage.preparing] so the user isn't asked the same question twice.
+enum _Stage { amount, preparing, waiting, paid, failed }
 
 class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
   static const _pollInterval = Duration(seconds: 3);
@@ -63,11 +67,18 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_amountPrefilled) return;
-    final arg = ModalRoute.of(context)?.settings.arguments;
-    if (arg is num && arg > 0) {
-      _amountController.text = arg.toDouble().toStringAsFixed(2);
-    }
     _amountPrefilled = true;
+
+    final arg = ModalRoute.of(context)?.settings.arguments;
+    if (arg is! num || arg <= 0) return;
+
+    // The amount was already chosen upstream — open the payment session
+    // immediately rather than showing a second amount form.
+    _amountController.text = arg.toDouble().toStringAsFixed(2);
+    _stage = _Stage.preparing;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _start();
+    });
   }
 
   @override
@@ -91,7 +102,10 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
     final l10n = AppLocalizations.of(context)!;
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
-      setState(() => _error = l10n.topupInvalidAmount);
+      setState(() {
+        _stage = _Stage.amount;
+        _error = l10n.topupInvalidAmount;
+      });
       return;
     }
 
@@ -115,6 +129,9 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
       if (!mounted) return;
       setState(() {
         _starting = false;
+        // Surface it as a terminal failure with a retry, rather than dropping
+        // the user onto an amount form they already filled in upstream.
+        _stage = _Stage.failed;
         _error = e is ApiException ? e.message : l10n.topupStartError;
       });
     }
@@ -149,7 +166,7 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
       _pollTimer?.cancel();
       if (mounted) {
         setState(() {
-          _stage = _Stage.amount;
+          _stage = _Stage.failed;
           _error = AppLocalizations.of(context)!.topupExpired;
         });
       }
@@ -170,7 +187,7 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
       } else if (status == TopupStatus.failed) {
         _pollTimer?.cancel();
         setState(() {
-          _stage = _Stage.amount;
+          _stage = _Stage.failed;
           _error = AppLocalizations.of(context)!.topupFailed;
         });
       }
@@ -181,13 +198,26 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
     }
   }
 
+  /// Abandons the current attempt. The pending transaction is left alone — the
+  /// gateway expires it on its own after the QR lifetime, and nothing was
+  /// charged, so there is no state to unwind on our side.
   void _cancel() {
     _pollTimer?.cancel();
     setState(() {
-      _stage = _Stage.amount;
+      _stage = _Stage.failed;
+      _session = null;
+      _error = AppLocalizations.of(context)!.topupCancelledBody;
+    });
+  }
+
+  /// Starts a fresh payment for the same amount.
+  void _retry() {
+    setState(() {
+      _stage = _Stage.preparing;
       _session = null;
       _error = null;
     });
+    _start();
   }
 
   @override
@@ -205,11 +235,19 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
                 error: _error,
                 onSubmit: _start,
               ),
+            _Stage.preparing => _PreparingView(
+                amountUsd: double.tryParse(_amountController.text) ?? 0,
+              ),
             _Stage.waiting => _WaitingView(
                 session: _session!,
                 error: _error,
                 onOpenAba: _openAba,
                 onCancel: _cancel,
+              ),
+            _Stage.failed => _FailedView(
+                message: _error ?? '',
+                onRetry: _retry,
+                onBack: () => Navigator.of(context).pop(false),
               ),
             _Stage.paid => _PaidView(
                 amountUsd: _session?.amountUsd ?? 0,
@@ -288,6 +326,51 @@ class _AmountForm extends StatelessWidget {
               : Text(l10n.topupPayWithAba),
         ),
       ],
+    );
+  }
+}
+
+// ── Opening the payment session ────────────────────────────────────────────
+
+/// Bridges the gap between arriving with a chosen amount and the QR coming
+/// back from the gateway — typically under a second, but it needs to show the
+/// amount so the user can confirm they're paying what they picked.
+class _PreparingView extends StatelessWidget {
+  const _PreparingView({required this.amountUsd});
+
+  final double amountUsd;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.only(top: 80),
+      child: Column(
+        children: [
+          Text(
+            '\$${amountUsd.toStringAsFixed(2)}',
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.green,
+            ),
+          ),
+          const SizedBox(height: 28),
+          const SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.5,
+              color: AppTheme.green,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            l10n.topupPreparing,
+            style: TextStyle(fontSize: 13.5, color: context.mutedColor),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -390,6 +473,84 @@ class _WaitingView extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextButton(onPressed: onCancel, child: Text(l10n.topupCancel)),
+      ],
+    );
+  }
+}
+
+// ── Cancelled / failed ─────────────────────────────────────────────────────
+
+/// Terminal state for a payment that didn't complete — cancelled, declined, or
+/// expired. Deliberately explicit that no money moved, since an ambiguous exit
+/// from a payment screen is exactly where users worry they've been charged.
+class _FailedView extends StatelessWidget {
+  const _FailedView({
+    required this.message,
+    required this.onRetry,
+    required this.onBack,
+  });
+
+  final String message;
+  final VoidCallback onRetry;
+  final VoidCallback onBack;
+
+  static const _kRed = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 40),
+        Center(
+          child: Container(
+            width: 84,
+            height: 84,
+            decoration: BoxDecoration(
+              color: _kRed.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.cancel_rounded,
+              color: _kRed,
+              size: 48,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          l10n.topupNotCompletedTitle,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w800,
+            color: context.textColor,
+          ),
+        ),
+        if (message.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: context.mutedColor,
+              height: 1.5,
+            ),
+          ),
+        ],
+        const SizedBox(height: 32),
+        FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: AppTheme.green,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          onPressed: onRetry,
+          child: Text(l10n.topupTryAgain),
+        ),
+        const SizedBox(height: 8),
+        TextButton(onPressed: onBack, child: Text(l10n.topupBackToWallet)),
       ],
     );
   }

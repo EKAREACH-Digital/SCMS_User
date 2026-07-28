@@ -212,6 +212,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topupOpenAba => 'Open ABA Mobile';
 
   @override
+  String get topupPreparing => 'Preparing your payment…';
+
+  @override
   String get topupWaiting => 'Waiting for payment…';
 
   @override
@@ -232,6 +235,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get topupExpired => 'This QR has expired. Please start again.';
+
+  @override
+  String get topupNotCompletedTitle => 'Payment not completed';
+
+  @override
+  String get topupCancelledBody =>
+      'You cancelled the payment. Nothing was charged.';
+
+  @override
+  String get topupTryAgain => 'Try again';
+
+  @override
+  String get topupBackToWallet => 'Back to wallet';
 
   @override
   String get topupSuccessTitle => 'Top-up successful';

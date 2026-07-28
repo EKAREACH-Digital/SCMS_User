@@ -26,9 +26,12 @@ class ApiConfig {
 
   static String get _debugHost {
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      // Only the Android emulator maps the host to 10.0.2.2. A real Android
-      // device would need the LAN IP via --dart-define instead.
+      // Android emulator maps host to 10.0.2.2
       return '10.0.2.2';
+    }
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+      // Real iPhone needs the Mac's LAN/hotspot IP
+      return '172.20.10.3';
     }
     return 'localhost';
   }

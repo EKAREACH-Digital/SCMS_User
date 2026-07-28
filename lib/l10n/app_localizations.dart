@@ -494,6 +494,12 @@ abstract class AppLocalizations {
   /// **'Open ABA Mobile'**
   String get topupOpenAba;
 
+  /// No description provided for @topupPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing your payment…'**
+  String get topupPreparing;
+
   /// No description provided for @topupWaiting.
   ///
   /// In en, this message translates to:
@@ -535,6 +541,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This QR has expired. Please start again.'**
   String get topupExpired;
+
+  /// No description provided for @topupNotCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment not completed'**
+  String get topupNotCompletedTitle;
+
+  /// No description provided for @topupCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You cancelled the payment. Nothing was charged.'**
+  String get topupCancelledBody;
+
+  /// No description provided for @topupTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get topupTryAgain;
+
+  /// No description provided for @topupBackToWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to wallet'**
+  String get topupBackToWallet;
 
   /// No description provided for @topupSuccessTitle.
   ///

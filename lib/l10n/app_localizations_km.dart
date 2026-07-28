@@ -217,6 +217,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get topupOpenAba => 'បើក ABA Mobile';
 
   @override
+  String get topupPreparing => 'កំពុងរៀបចំការទូទាត់…';
+
+  @override
   String get topupWaiting => 'កំពុងរង់ចាំការទូទាត់…';
 
   @override
@@ -238,6 +241,19 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get topupExpired => 'QR នេះបានផុតកំណត់។ សូមចាប់ផ្តើមឡើងវិញ។';
+
+  @override
+  String get topupNotCompletedTitle => 'ការទូទាត់មិនបានបញ្ចប់';
+
+  @override
+  String get topupCancelledBody =>
+      'អ្នកបានបោះបង់ការទូទាត់។ គ្មានការកាត់ប្រាក់ឡើយ។';
+
+  @override
+  String get topupTryAgain => 'ព្យាយាមម្តងទៀត';
+
+  @override
+  String get topupBackToWallet => 'ត្រលប់ទៅកាបូប';
 
   @override
   String get topupSuccessTitle => 'ការបញ្ចូលទឹកប្រាក់ជោគជ័យ';

@@ -78,6 +78,7 @@
   "topupPayWithAba": "Pay with ABA",
   "topupScanHint": "Scan this QR with any banking app, or tap below to open ABA Mobile on this phone.",
   "topupOpenAba": "Open ABA Mobile",
+  "topupPreparing": "Preparing your payment…",
   "topupWaiting": "Waiting for payment…",
   "topupCancel": "Cancel payment",
   "topupInvalidAmount": "Please enter a valid amount",
@@ -85,6 +86,10 @@
   "topupAbaNotFound": "ABA Mobile isn't installed on this device. Scan the QR with another phone instead.",
   "topupFailed": "The payment failed or was cancelled.",
   "topupExpired": "This QR has expired. Please start again.",
+  "topupNotCompletedTitle": "Payment not completed",
+  "topupCancelledBody": "You cancelled the payment. Nothing was charged.",
+  "topupTryAgain": "Try again",
+  "topupBackToWallet": "Back to wallet",
   "topupSuccessTitle": "Top-up successful",
   "topupSuccessBody": "{amount} has been added to your wallet.",
   "@topupSuccessBody": {
