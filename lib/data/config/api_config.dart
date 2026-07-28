@@ -98,6 +98,15 @@ class ApiConfig {
   static String walletTransactions(String walletId) =>
       '/wallet/$walletId/transactions';
 
+  // Payments — gateway-backed wallet top-ups (ABA PayWay). The gateway itself
+  // is never contacted from the app; the backend signs and proxies everything.
+
+  /// `POST /payments/topup` — opens a payment session, returns KHQR + deeplink.
+  static const String paymentsTopUp = '/payments/topup';
+
+  /// `GET /payments/status/:tranId` — PENDING | PAID | FAILED | NOT_FOUND.
+  static String paymentStatus(String tranId) => '/payments/status/$tranId';
+
   // Alerts feed — a merge of admin announcements (broadcast) and the user's own
   // event notifications (order status, wallet top-ups/payments, low balance).
 

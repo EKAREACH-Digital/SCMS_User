@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../topup/topup_screen.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/order/order_repository.dart';
 import '../../../data/repositories/wallet/wallet_repository.dart';
@@ -2159,7 +2160,7 @@ class _TopUpPaymentSheet extends StatefulWidget {
 
   final double amount;
   final String label;
-  final void Function(String method) onConfirm;
+  final void Function(_TopUpMethod method) onConfirm;
 
   @override
   State<_TopUpPaymentSheet> createState() => _TopUpPaymentSheetState();
@@ -2286,7 +2287,7 @@ class _TopUpPaymentSheetState extends State<_TopUpPaymentSheet> {
                   radius: 14,
                   onPressed: () {
                     Navigator.pop(context);
-                    widget.onConfirm(_kTopUpMethods[_selected!].name);
+                    widget.onConfirm(_kTopUpMethods[_selected!]);
                   },
                 ),
               ),
@@ -2472,8 +2473,21 @@ Future<void> _doTopUp(
   BuildContext ctx,
   double amount,
   String label,
-  String method,
+  _TopUpMethod method,
 ) async {
+  // ABA is a real gateway payment: hand off to the PayWay screen, which opens
+  // a session on the backend and waits for the bank to confirm. The other
+  // methods still use the direct wallet credit until they're integrated.
+  if (method.code == 'ABA') {
+    HapticFeedback.selectionClick();
+    await Navigator.of(ctx).pushNamed(TopUpScreen.routeName, arguments: amount);
+    if (ctx.mounted) {
+      // The screen credits via the backend, so pull the authoritative balance.
+      await ctx.read<BalanceState>().fetchBalance();
+    }
+    return;
+  }
+
   HapticFeedback.mediumImpact();
   showDialog<void>(
     context: ctx,
@@ -2496,7 +2510,7 @@ Future<void> _doTopUp(
     OrderRecord(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       date: _formatNow(),
-      items: 'Wallet Top-up via $method',
+      items: 'Wallet Top-up via ${method.name}',
       total: amount,
       status: success ? 'Completed' : 'Failed',
       createdAt: DateTime.now(),
@@ -2511,7 +2525,7 @@ Future<void> _doTopUp(
       processingDuration: Duration.zero,
       amount: amount,
       title: 'Top-up Successful!',
-      message: '\$${amount.toStringAsFixed(2)} added via $method',
+      message: '\$${amount.toStringAsFixed(2)} added via ${method.name}',
       buttonLabel: 'Continue',
       onDismiss: () {},
     );

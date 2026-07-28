@@ -6,6 +6,7 @@ import 'data/repositories/coupon/coupon_repository.dart';
 import 'data/repositories/menu/menu_repository.dart';
 import 'data/repositories/notification/notification_repository.dart';
 import 'data/repositories/order/order_repository.dart';
+import 'data/repositories/payment/payment_repository.dart';
 import 'data/repositories/wallet/wallet_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'models/cart_model.dart';
@@ -30,6 +31,7 @@ import 'ui/screens/settings/notification_settings_screen.dart';
 import 'ui/screens/settings/payment_methods_screen.dart';
 import 'ui/screens/settings/set_password_screen.dart';
 import 'ui/screens/splash/splash_screen.dart';
+import 'ui/screens/topup/topup_screen.dart';
 import 'ui/states/active_coupon_state.dart';
 import 'ui/states/app_settings_state.dart';
 import 'ui/states/balance_state.dart';
@@ -49,6 +51,7 @@ class SmartCanteenApp extends StatefulWidget {
     required this.walletRepository,
     required this.orderRepository,
     required this.notificationRepository,
+    required this.paymentRepository,
   });
 
   final AuthRepository authRepository;
@@ -57,6 +60,7 @@ class SmartCanteenApp extends StatefulWidget {
   final WalletRepository walletRepository;
   final OrderRepository orderRepository;
   final NotificationRepository notificationRepository;
+  final PaymentRepository paymentRepository;
 
   @override
   State<SmartCanteenApp> createState() => _SmartCanteenAppState();
@@ -83,6 +87,7 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
         Provider<OrderRepository>.value(value: widget.orderRepository),
         Provider<NotificationRepository>.value(
             value: widget.notificationRepository),
+        Provider<PaymentRepository>.value(value: widget.paymentRepository),
 
         // Global states
         ChangeNotifierProvider.value(value: _cart),
@@ -148,6 +153,7 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
                   const NotificationSettingsScreen(),
               SetPasswordScreen.routeName: (_) => const SetPasswordScreen(),
               AboutScreen.routeName: (_) => const AboutScreen(),
+              TopUpScreen.routeName: (_) => const TopUpScreen(),
             },
           ),
         ),

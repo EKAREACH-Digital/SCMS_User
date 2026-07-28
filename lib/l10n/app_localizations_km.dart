@@ -201,6 +201,56 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
+  String get topupTitle => 'បញ្ចូលទឹកប្រាក់';
+
+  @override
+  String get topupAmountLabel => 'ចំនួនទឹកប្រាក់ (ដុល្លារ)';
+
+  @override
+  String get topupPayWithAba => 'បង់ប្រាក់តាម ABA';
+
+  @override
+  String get topupScanHint =>
+      'ស្កេន QR នេះដោយប្រើកម្មវិធីធនាគារណាមួយ ឬចុចខាងក្រោមដើម្បីបើក ABA Mobile នៅលើទូរស័ព្ទនេះ។';
+
+  @override
+  String get topupOpenAba => 'បើក ABA Mobile';
+
+  @override
+  String get topupWaiting => 'កំពុងរង់ចាំការទូទាត់…';
+
+  @override
+  String get topupCancel => 'បោះបង់ការទូទាត់';
+
+  @override
+  String get topupInvalidAmount => 'សូមបញ្ចូលចំនួនទឹកប្រាក់ឱ្យបានត្រឹមត្រូវ';
+
+  @override
+  String get topupStartError =>
+      'មិនអាចចាប់ផ្តើមការបញ្ចូលទឹកប្រាក់បានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get topupAbaNotFound =>
+      'ABA Mobile មិនត្រូវបានដំឡើងនៅលើឧបករណ៍នេះទេ។ សូមស្កេន QR ដោយប្រើទូរស័ព្ទផ្សេង។';
+
+  @override
+  String get topupFailed => 'ការទូទាត់បរាជ័យ ឬត្រូវបានបោះបង់។';
+
+  @override
+  String get topupExpired => 'QR នេះបានផុតកំណត់។ សូមចាប់ផ្តើមឡើងវិញ។';
+
+  @override
+  String get topupSuccessTitle => 'ការបញ្ចូលទឹកប្រាក់ជោគជ័យ';
+
+  @override
+  String topupSuccessBody(String amount) {
+    return '$amount ត្រូវបានបញ្ចូលទៅក្នុងកាបូបរបស់អ្នក។';
+  }
+
+  @override
+  String get topupDone => 'រួចរាល់';
+
+  @override
   String get qrTitle => 'សំបុត្រអាហាររបស់ខ្ញុំ';
 
   @override

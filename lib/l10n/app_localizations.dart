@@ -464,6 +464,96 @@ abstract class AppLocalizations {
   /// **'Processing {amount}…'**
   String homeProcessing(String amount);
 
+  /// No description provided for @topupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up wallet'**
+  String get topupTitle;
+
+  /// No description provided for @topupAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (USD)'**
+  String get topupAmountLabel;
+
+  /// No description provided for @topupPayWithAba.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with ABA'**
+  String get topupPayWithAba;
+
+  /// No description provided for @topupScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this QR with any banking app, or tap below to open ABA Mobile on this phone.'**
+  String get topupScanHint;
+
+  /// No description provided for @topupOpenAba.
+  ///
+  /// In en, this message translates to:
+  /// **'Open ABA Mobile'**
+  String get topupOpenAba;
+
+  /// No description provided for @topupWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for payment…'**
+  String get topupWaiting;
+
+  /// No description provided for @topupCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel payment'**
+  String get topupCancel;
+
+  /// No description provided for @topupInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
+  String get topupInvalidAmount;
+
+  /// No description provided for @topupStartError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not start the top-up. Please try again.'**
+  String get topupStartError;
+
+  /// No description provided for @topupAbaNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'ABA Mobile isn\'t installed on this device. Scan the QR with another phone instead.'**
+  String get topupAbaNotFound;
+
+  /// No description provided for @topupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The payment failed or was cancelled.'**
+  String get topupFailed;
+
+  /// No description provided for @topupExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR has expired. Please start again.'**
+  String get topupExpired;
+
+  /// No description provided for @topupSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-up successful'**
+  String get topupSuccessTitle;
+
+  /// No description provided for @topupSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} has been added to your wallet.'**
+  String topupSuccessBody(String amount);
+
+  /// No description provided for @topupDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get topupDone;
+
   /// No description provided for @qrTitle.
   ///
   /// In en, this message translates to:

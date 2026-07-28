@@ -89,5 +89,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>abamobilebank</string>
+</array>
 </dict>
 </plist>

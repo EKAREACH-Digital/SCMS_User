@@ -73,6 +73,27 @@
     }
   },
 
+  "topupTitle": "Top up wallet",
+  "topupAmountLabel": "Amount (USD)",
+  "topupPayWithAba": "Pay with ABA",
+  "topupScanHint": "Scan this QR with any banking app, or tap below to open ABA Mobile on this phone.",
+  "topupOpenAba": "Open ABA Mobile",
+  "topupWaiting": "Waiting for payment…",
+  "topupCancel": "Cancel payment",
+  "topupInvalidAmount": "Please enter a valid amount",
+  "topupStartError": "Could not start the top-up. Please try again.",
+  "topupAbaNotFound": "ABA Mobile isn't installed on this device. Scan the QR with another phone instead.",
+  "topupFailed": "The payment failed or was cancelled.",
+  "topupExpired": "This QR has expired. Please start again.",
+  "topupSuccessTitle": "Top-up successful",
+  "topupSuccessBody": "{amount} has been added to your wallet.",
+  "@topupSuccessBody": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "topupDone": "Done",
+
   "qrTitle": "My Meal Ticket",
   "qrRefreshed": "QR code refreshed",
   "qrViewReceipt": "View Receipt",

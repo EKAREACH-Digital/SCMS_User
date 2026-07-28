@@ -196,6 +196,55 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get topupTitle => 'Top up wallet';
+
+  @override
+  String get topupAmountLabel => 'Amount (USD)';
+
+  @override
+  String get topupPayWithAba => 'Pay with ABA';
+
+  @override
+  String get topupScanHint =>
+      'Scan this QR with any banking app, or tap below to open ABA Mobile on this phone.';
+
+  @override
+  String get topupOpenAba => 'Open ABA Mobile';
+
+  @override
+  String get topupWaiting => 'Waiting for payment…';
+
+  @override
+  String get topupCancel => 'Cancel payment';
+
+  @override
+  String get topupInvalidAmount => 'Please enter a valid amount';
+
+  @override
+  String get topupStartError => 'Could not start the top-up. Please try again.';
+
+  @override
+  String get topupAbaNotFound =>
+      'ABA Mobile isn\'t installed on this device. Scan the QR with another phone instead.';
+
+  @override
+  String get topupFailed => 'The payment failed or was cancelled.';
+
+  @override
+  String get topupExpired => 'This QR has expired. Please start again.';
+
+  @override
+  String get topupSuccessTitle => 'Top-up successful';
+
+  @override
+  String topupSuccessBody(String amount) {
+    return '$amount has been added to your wallet.';
+  }
+
+  @override
+  String get topupDone => 'Done';
+
+  @override
   String get qrTitle => 'My Meal Ticket';
 
   @override
