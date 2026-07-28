@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../data/dtos/order_dto.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
 import '../../../ui/states/meal_coupons_state.dart';
 import '../../../ui/states/order_history_state.dart';
@@ -120,7 +121,7 @@ class _QrScreenState extends State<QrScreen>
     context.read<MealCouponsState>().fetchActive();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('QR code refreshed'),
+        content: Text(AppLocalizations.of(context)!.qrRefreshed),
         behavior: SnackBarBehavior.floating,
         backgroundColor: _kGreen,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -163,9 +164,9 @@ class _QrScreenState extends State<QrScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'My Meal Ticket',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+            Text(
+              AppLocalizations.of(context)!.qrTitle,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
             ),
             Text(
               _fmtDate(DateTime.now()),
@@ -296,7 +297,7 @@ class _CouponPager extends StatelessWidget {
           onPressed: index > 0 ? () => onChanged(index - 1) : null,
         ),
         Text(
-          'Ticket ${index + 1} of $count',
+          AppLocalizations.of(context)!.qrTicketOfCount(index + 1, count),
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -364,14 +365,15 @@ class _OutlinedReceiptButtonState extends State<_OutlinedReceiptButton> {
                       ),
                     ],
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.receipt_long_outlined, size: 18, color: _kGreen),
-                SizedBox(width: 8),
+                const Icon(Icons.receipt_long_outlined,
+                    size: 18, color: _kGreen),
+                const SizedBox(width: 8),
                 Text(
-                  'View Receipt',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.qrViewReceipt,
+                  style: const TextStyle(
                     color: _kGreen,
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
@@ -607,7 +609,7 @@ class _TicketCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Show this code at the canteen counter\nto collect your meal',
+                        AppLocalizations.of(context)!.qrHint,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.85),
@@ -1045,7 +1047,7 @@ class _OrderSummaryCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Order Summary',
+                    AppLocalizations.of(context)!.qrOrderSummary,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
@@ -1082,7 +1084,7 @@ class _OrderSummaryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Paid',
+                AppLocalizations.of(context)!.qrTotalPaid,
                 style: TextStyle(fontSize: 13, color: context.mutedColor),
               ),
               TweenAnimationBuilder<double>(
@@ -1228,7 +1230,7 @@ class _EmptyOrderCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'No orders yet',
+            AppLocalizations.of(context)!.qrEmptyTitle,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -1237,7 +1239,7 @@ class _EmptyOrderCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Place an order from the menu\nto generate your ticket',
+            AppLocalizations.of(context)!.qrEmptyBody,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: context.mutedColor),
           ),
@@ -1307,7 +1309,7 @@ class _ReceiptSheet extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Transaction Receipt',
+                          AppLocalizations.of(context)!.qrReceiptTitle,
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,

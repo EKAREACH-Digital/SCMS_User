@@ -52,6 +52,10 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
       fontFamily: 'Poppins',
+      // Khmer has no glyphs in the Latin default, so km text would render as
+      // tofu boxes on iOS. Resolution is per glyph: Latin keeps the primary
+      // family, Khmer characters fall through to Noto Sans Khmer.
+      fontFamilyFallback: const ['NotoSansKhmer'],
       appBarTheme: const AppBarTheme(
         backgroundColor: background,
         foregroundColor: text,
@@ -95,6 +99,10 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: darkBackground,
       fontFamily: 'Poppins',
+      // Khmer has no glyphs in the Latin default, so km text would render as
+      // tofu boxes on iOS. Resolution is per glyph: Latin keeps the primary
+      // family, Khmer characters fall through to Noto Sans Khmer.
+      fontFamilyFallback: const ['NotoSansKhmer'],
       appBarTheme: const AppBarTheme(
         backgroundColor: darkCard,
         foregroundColor: darkText,

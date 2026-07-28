@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../data/exceptions/api_exception.dart';
 import '../../../model/user/user.dart';
 import '../../../theme/app_theme.dart';
@@ -432,9 +433,9 @@ class _LoginFormState extends State<_LoginForm> {
               side: const BorderSide(color: Color(0xFFE8E8E8), width: 1.5),
               onChanged: widget.onRememberMeChanged,
             ),
-            const Text(
-              'Remember me',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.authRememberMe,
+              style: const TextStyle(
                 color: AppTheme.mutedText,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -726,7 +727,7 @@ class _ForgotPasswordButtonState extends State<_ForgotPasswordButton>
           animation: _colorAnimation,
           builder: (context, child) {
             return Text(
-              'Forgot Password?',
+              AppLocalizations.of(context)!.authForgotPassword,
               style: TextStyle(
                 color: _colorAnimation.value,
                 fontWeight: FontWeight.w600,

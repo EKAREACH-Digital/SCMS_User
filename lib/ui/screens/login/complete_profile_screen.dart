@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../data/dtos/auth_dto.dart';
 import '../../../data/exceptions/api_exception.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
@@ -214,10 +215,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Complete your profile',
+                Text(
+                  AppLocalizations.of(context)!.authCompleteProfileTitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppTheme.greenDark,
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
@@ -226,7 +227,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Add a few details to finish setting up your account.',
+                  AppLocalizations.of(context)!.authCompleteProfileBody,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppTheme.text.withValues(alpha: 0.5),
@@ -378,9 +379,9 @@ class _SchoolField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'School',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.authSchool,
+          style: const TextStyle(
             color: AppTheme.green,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -389,18 +390,19 @@ class _SchoolField extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         if (loading)
-          const _FieldBox(
+          _FieldBox(
             child: Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 18,
                   height: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Text(
-                  'Loading schools…',
-                  style: TextStyle(color: AppTheme.mutedText, fontSize: 14),
+                  AppLocalizations.of(context)!.authLoadingSchools,
+                  style: const TextStyle(
+                      color: AppTheme.mutedText, fontSize: 14),
                 ),
               ],
             ),
@@ -415,7 +417,10 @@ class _SchoolField extends StatelessWidget {
                     style: TextStyle(color: Colors.red.shade700, fontSize: 13),
                   ),
                 ),
-                TextButton(onPressed: onRetry, child: const Text('Retry')),
+                TextButton(
+                  onPressed: onRetry,
+                  child: Text(AppLocalizations.of(context)!.commonRetry),
+                ),
               ],
             ),
           )
@@ -424,9 +429,9 @@ class _SchoolField extends StatelessWidget {
             initialValue: selectedId,
             isExpanded: true,
             icon: const Icon(Icons.arrow_drop_down, color: AppTheme.green),
-            hint: const Text(
-              'Select your school',
-              style: TextStyle(color: AppTheme.mutedText, fontSize: 15),
+            hint: Text(
+              AppLocalizations.of(context)!.authSelectSchool,
+              style: const TextStyle(color: AppTheme.mutedText, fontSize: 15),
             ),
             items: [
               for (final s in schools)

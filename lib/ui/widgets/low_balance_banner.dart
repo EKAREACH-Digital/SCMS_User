@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 
 class LowBalanceBanner extends StatelessWidget {
@@ -17,10 +18,10 @@ class LowBalanceBanner extends StatelessWidget {
         children: [
           const Icon(Icons.warning_amber_rounded, color: Color(0xFFE65100), size: 18),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Low balance — top up to keep ordering',
-              style: TextStyle(fontSize: 12, color: Color(0xFFE65100), fontWeight: FontWeight.w500),
+              AppLocalizations.of(context)!.walletLowBalance,
+              style: const TextStyle(fontSize: 12, color: Color(0xFFE65100), fontWeight: FontWeight.w500),
             ),
           ),
           GestureDetector(
@@ -31,9 +32,9 @@ class LowBalanceBanner extends StatelessWidget {
                 color: AppTheme.green,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
-                'Top Up',
-                style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+              child: Text(
+                AppLocalizations.of(context)!.commonTopUp,
+                style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
               ),
             ),
           ),

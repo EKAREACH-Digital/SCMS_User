@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 
 class SmartCanteenNavigationBarButton extends StatelessWidget {
@@ -13,7 +14,13 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  static const _labels = ['Home', 'Menu', 'QR Pay', 'History', 'Settings'];
+  static List<String> _labels(AppLocalizations l10n) => [
+        l10n.navHome,
+        l10n.navMenu,
+        l10n.navQrPay,
+        l10n.navHistory,
+        l10n.navSettings,
+      ];
   static const _icons = [
     Icons.home_rounded,
     Icons.restaurant_menu_rounded,
@@ -82,7 +89,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'QR Pay',
+                          AppLocalizations.of(context)!.navQrPay,
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -173,7 +180,9 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                               : FontWeight.w400,
                           color: isSelected ? AppTheme.green : context.mutedColor,
                         ),
-                        child: Text(_labels[i]),
+                        child: Text(
+                          _labels(AppLocalizations.of(context)!)[i],
+                        ),
                       ),
                       const SizedBox(height: 3),
                       AnimatedContainer(

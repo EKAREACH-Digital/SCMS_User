@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
 import '../../utils/async_value.dart';
 import '../../widgets/smart_canteen_widgets.dart';
@@ -27,23 +28,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<NotificationViewModel>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Notifications', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(l10n.alertsTitle,
+            style: const TextStyle(fontWeight: FontWeight.w700)),
         actions: [
           TextButton(
             onPressed: vm.markAllRead,
-            child: const Text('Mark all read', style: TextStyle(color: AppTheme.green, fontSize: 13)),
+            child: Text(l10n.alertsMarkAllRead,
+                style: const TextStyle(color: AppTheme.green, fontSize: 13)),
           ),
         ],
       ),
       body: switch (vm.state) {
         AsyncLoading() => const Center(child: CircularProgressIndicator()),
         AsyncError(error: final err) => Center(child: Text('Error: $err')),
-        AsyncData(data: final items) when items.isEmpty => const Center(
-            child: Text('No notifications', style: TextStyle(color: AppTheme.mutedText)),
+        AsyncData(data: final items) when items.isEmpty => Center(
+            child: Text(l10n.alertsEmpty,
+                style: const TextStyle(color: AppTheme.mutedText)),
           ),
         AsyncData(data: final items) => ListView.separated(
             padding: const EdgeInsets.all(16),

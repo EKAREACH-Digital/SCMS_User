@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/order/order_repository.dart';
 import '../../../data/repositories/wallet/wallet_repository.dart';
@@ -550,7 +551,7 @@ class _SectionHeader extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'View all',
+                    AppLocalizations.of(context)!.commonViewAll,
                     style: const TextStyle(
                       fontSize: 13,
                       color: AppTheme.green,
@@ -675,20 +676,21 @@ class _BalanceCardState extends State<_BalanceCard> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'My Wallet',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.walletMyWallet,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        'CADT Scholar',
-                        style: TextStyle(color: Colors.white60, fontSize: 11),
+                        AppLocalizations.of(context)!.homeScholarBadge,
+                        style: const TextStyle(
+                            color: Colors.white60, fontSize: 11),
                       ),
                     ],
                   ),
@@ -904,14 +906,14 @@ class _ActiveBadgeState extends State<_ActiveBadge>
               ),
             ],
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.circle, color: Color(0xFF69F0AE), size: 7),
-              SizedBox(width: 5),
+              const Icon(Icons.circle, color: Color(0xFF69F0AE), size: 7),
+              const SizedBox(width: 5),
               Text(
-                'Active',
-                style: TextStyle(
+                AppLocalizations.of(context)!.commonActive,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -1349,18 +1351,18 @@ class _PromoBannerState extends State<_PromoBanner>
                             ),
                             child: child,
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.star_rounded,
                                 color: Colors.white,
                                 size: 13,
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
-                                'EXCLUSIVE',
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.homePromoExclusive,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
@@ -1373,9 +1375,9 @@ class _PromoBannerState extends State<_PromoBanner>
                       ),
                       const SizedBox(height: 16),
                       // Headline
-                      const Text(
-                        'Fresh Daily Campus Food',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.homePromoTitle,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
                           fontSize: 22,
@@ -1392,9 +1394,9 @@ class _PromoBannerState extends State<_PromoBanner>
                       ),
                       const SizedBox(height: 8),
                       // Subtext
-                      const Text(
-                        '20% off for CADT Scholars this week only',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.homePromoBody,
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 13,
                           height: 1.5,
@@ -1407,11 +1409,12 @@ class _PromoBannerState extends State<_PromoBanner>
                         onTap: () {
                           HapticFeedback.lightImpact();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Discount coupon applied!'),
+                            SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .homeCouponApplied),
                               behavior: SnackBarBehavior.floating,
-                              backgroundColor: Color(0xFF1B5E20),
-                              duration: Duration(seconds: 2),
+                              backgroundColor: const Color(0xFF1B5E20),
+                              duration: const Duration(seconds: 2),
                             ),
                           );
                         },
@@ -1431,20 +1434,20 @@ class _PromoBannerState extends State<_PromoBanner>
                               ),
                             ],
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Claim Now',
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.homeClaimNow,
+                                style: const TextStyle(
                                   color: Color(0xFF1B5E20),
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14,
                                   letterSpacing: 0.3,
                                 ),
                               ),
-                              SizedBox(width: 6),
-                              Icon(
+                              const SizedBox(width: 6),
+                              const Icon(
                                 Icons.arrow_forward_rounded,
                                 color: Color(0xFF1B5E20),
                                 size: 16,
@@ -1559,7 +1562,7 @@ class _MenuSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: _SectionHeader(
             title: "Today's Menu",
-            actionLabel: 'View all',
+            actionLabel: AppLocalizations.of(context)!.commonViewAll,
             onAction: onViewAll,
           ),
         ),
@@ -1741,18 +1744,18 @@ class _FoodCardState extends State<_FoodCard> {
                             ),
                           ],
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.add_rounded,
                               color: Colors.white,
                               size: 16,
                             ),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                             Text(
-                              'Add',
-                              style: TextStyle(
+                              AppLocalizations.of(context)!.commonAdd,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -1970,7 +1973,7 @@ class _TopUpSheetState extends State<_TopUpSheet> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Top Up Balance',
+              AppLocalizations.of(context)!.walletTopUpBalance,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -1979,7 +1982,7 @@ class _TopUpSheetState extends State<_TopUpSheet> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Select an amount to add to your wallet',
+              AppLocalizations.of(context)!.walletTopUpPrompt,
               style: TextStyle(color: context.mutedColor, fontSize: 13),
             ),
             const SizedBox(height: 18),
@@ -2023,9 +2026,10 @@ class _TopUpSheetState extends State<_TopUpSheet> {
                     ),
                   ),
                   icon: const Icon(Icons.edit_rounded, size: 18),
-                  label: const Text(
-                    'Enter Custom Amount',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  label: Text(
+                    AppLocalizations.of(context)!.walletEnterCustomAmount,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 15),
                   ),
                 ),
               ),
@@ -2199,7 +2203,7 @@ class _TopUpPaymentSheetState extends State<_TopUpPaymentSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose Payment Method',
+                    AppLocalizations.of(context)!.walletChoosePaymentMethod,
                     style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
@@ -2208,7 +2212,7 @@ class _TopUpPaymentSheetState extends State<_TopUpPaymentSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Select how you want to top up your wallet',
+                    AppLocalizations.of(context)!.walletChoosePaymentPrompt,
                     style: TextStyle(fontSize: 12.5, color: context.mutedColor),
                   ),
                 ],
@@ -2242,7 +2246,7 @@ class _TopUpPaymentSheetState extends State<_TopUpPaymentSheet> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Top-up Amount',
+                    AppLocalizations.of(context)!.walletTopUpAmount,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -2513,17 +2517,17 @@ Future<void> _doTopUp(
     );
   } else {
     ScaffoldMessenger.of(ctx).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Color(0xFFE53935),
+        backgroundColor: const Color(0xFFE53935),
         content: Row(
           children: [
-            Icon(Icons.error_rounded, color: Colors.white, size: 18),
-            SizedBox(width: 8),
+            const Icon(Icons.error_rounded, color: Colors.white, size: 18),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Top-up failed. Please try again.',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                AppLocalizations.of(ctx)!.walletTopUpFailed,
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -2620,7 +2624,7 @@ class _ProcessingDialogState extends State<_ProcessingDialog>
           ),
           const SizedBox(height: 6),
           Text(
-            'Please wait a moment',
+            AppLocalizations.of(context)!.commonPleaseWait,
             style: TextStyle(fontSize: 12, color: context.mutedColor),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 
 class CouponExpiredOverlay extends StatelessWidget {
@@ -33,15 +34,15 @@ class CouponExpiredOverlay extends StatelessWidget {
                   child: const Icon(Icons.timer_off_rounded, color: Color(0xFFE53935), size: 32),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Coupon Expired',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.text),
+                Text(
+                  AppLocalizations.of(context)!.couponExpiredTitle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.text),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Your QR ticket has expired. Please purchase a new coupon to continue.',
+                Text(
+                  AppLocalizations.of(context)!.couponExpiredBody,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppTheme.mutedText, fontSize: 13, height: 1.5),
+                  style: const TextStyle(color: AppTheme.mutedText, fontSize: 13, height: 1.5),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -55,7 +56,10 @@ class CouponExpiredOverlay extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text('Get New Coupon', style: TextStyle(fontWeight: FontWeight.w600)),
+                    child: Text(
+                      AppLocalizations.of(context)!.couponExpiredAction,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ],

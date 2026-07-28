@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../states/balance_state.dart';
 import '../utils/async_value.dart';
@@ -139,7 +140,7 @@ class _PaymentMethodSheetState extends State<PaymentMethodSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose Payment Method',
+                    AppLocalizations.of(context)!.walletChoosePaymentMethod,
                     style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
@@ -149,7 +150,7 @@ class _PaymentMethodSheetState extends State<PaymentMethodSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Select your preferred payment option below',
+                    AppLocalizations.of(context)!.walletPaymentPrompt,
                     style: TextStyle(fontSize: 12.5, color: context.mutedColor),
                   ),
                 ],
@@ -234,7 +235,7 @@ class _TotalAmountRow extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            'Total Amount',
+            AppLocalizations.of(context)!.walletTotalAmount,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
@@ -268,7 +269,7 @@ class _OrDivider extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            'or pay with bank',
+            AppLocalizations.of(context)!.walletPayWithBank,
             style: TextStyle(
               fontSize: 11,
               color: context.mutedColor,

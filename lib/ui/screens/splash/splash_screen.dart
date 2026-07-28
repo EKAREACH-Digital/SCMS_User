@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/local/token_storage.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/user/user.dart';
 import '../../../theme/app_theme.dart';
 import '../../states/notification_prefs_state.dart';
@@ -227,10 +228,10 @@ class _SplashScreenState extends State<SplashScreen>
                             opacity: _subtitleFade,
                             child: SlideTransition(
                               position: _subtitleSlide,
-                              child: const Text(
-                                'Scan Eat Enjoy — The Smart Way',
+                              child: Text(
+                                AppLocalizations.of(context)!.splashTagline,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   color: AppTheme.mutedText,
                                   fontWeight: FontWeight.w500,

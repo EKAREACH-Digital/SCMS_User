@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/repositories/order/order_repository.dart';
 import '../../../data/repositories/wallet/wallet_repository.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/food_item.dart';
 import '../../../theme/app_theme.dart';
 import '../../../ui/states/order_history_state.dart';
@@ -12,14 +13,23 @@ import '../../../ui/states/order_history_state.dart';
 const Color _kRed = Color(0xFFE53935); // expenses
 const Color _kGray = Color(0xFF9E9E9E); // pending / neutral
 
+/// [OrderRecord.status] carries the English token the state layer produces
+/// ('Completed' / 'Pending' / 'Failed'), which is also what the comparisons in
+/// this file branch on. Translate it only at the point of display.
+String _statusLabel(AppLocalizations l10n, String status) => switch (status) {
+      'Completed' => l10n.statusCompleted,
+      'Failed' => l10n.statusFailed,
+      _ => l10n.statusPending,
+    };
+
 /// How the transaction list is ordered.
 enum _SortBy { newest, amountHigh, amountLow }
 
 extension on _SortBy {
-  String get label => switch (this) {
-        _SortBy.newest => 'Most recent',
-        _SortBy.amountHigh => 'Amount: high to low',
-        _SortBy.amountLow => 'Amount: low to high',
+  String label(AppLocalizations l10n) => switch (this) {
+        _SortBy.newest => l10n.historySortNewest,
+        _SortBy.amountHigh => l10n.historySortAmountHigh,
+        _SortBy.amountLow => l10n.historySortAmountLow,
       };
 
   IconData get icon => switch (this) {
@@ -199,7 +209,7 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Order History',
+                        AppLocalizations.of(context)!.historyTitle,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
@@ -209,7 +219,7 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Your transactions & top-ups',
+                        AppLocalizations.of(context)!.historySubtitle,
                         style: TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.w500,
@@ -306,7 +316,7 @@ class _SummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _SummaryStat(
-                  label: 'Total Spent',
+                  label: AppLocalizations.of(context)!.historyTotalSpent,
                   amount: spent,
                   color: _kRed,
                   icon: Icons.south_west_rounded,
@@ -320,7 +330,7 @@ class _SummaryCard extends StatelessWidget {
               ),
               Expanded(
                 child: _SummaryStat(
-                  label: 'Top-ups',
+                  label: AppLocalizations.of(context)!.historyTopUps,
                   amount: topUps,
                   color: AppTheme.green,
                   icon: Icons.north_east_rounded,
@@ -574,7 +584,8 @@ class _OrderCardState extends State<_OrderCard> {
                       ),
                       const SizedBox(height: 5),
                       _StatusBadge(
-                        label: order.status,
+                        label: _statusLabel(
+                            AppLocalizations.of(context)!, order.status),
                         color: statusColor,
                         pulse: isCompleted,
                       ),
@@ -741,7 +752,7 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              "Couldn't load history",
+              AppLocalizations.of(context)!.historyErrorTitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -835,7 +846,9 @@ class _RetryButtonState extends State<_RetryButton> {
             ),
             const SizedBox(width: 8),
             Text(
-              _busy ? 'Retrying…' : 'Try again',
+              _busy
+                  ? AppLocalizations.of(context)!.historyRetrying
+                  : AppLocalizations.of(context)!.historyRetry,
               style: const TextStyle(
                 fontSize: 13.5,
                 fontWeight: FontWeight.w700,
@@ -876,7 +889,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'No orders yet',
+            AppLocalizations.of(context)!.historyEmptyTitle,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -885,7 +898,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Your orders and top-ups will appear here',
+            AppLocalizations.of(context)!.historyEmptyBody,
             style: TextStyle(
               fontSize: 13,
               color: context.mutedColor,
@@ -1002,7 +1015,9 @@ class _DetailsSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    isDeposit ? 'Top-up Details' : 'Order Details',
+                    isDeposit
+                        ? AppLocalizations.of(context)!.historyTopUpDetails
+                        : AppLocalizations.of(context)!.historyOrderDetails,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
@@ -1058,7 +1073,7 @@ class _SortSheet extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Text(
-              'Sort By',
+              AppLocalizations.of(context)!.commonSortBy,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -1068,7 +1083,7 @@ class _SortSheet extends StatelessWidget {
             const SizedBox(height: 12),
             for (final value in _SortBy.values)
               _SortTile(
-                label: value.label,
+                label: value.label(AppLocalizations.of(context)!),
                 icon: value.icon,
                 selected: current == value,
                 onTap: () {
@@ -1151,11 +1166,12 @@ class _FoodOrderDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _DetailRow(
-          label: 'Items',
+          label: l10n.historyItems,
           value: order.items,
           valueStyle: const TextStyle(
             fontSize: 13,
@@ -1165,7 +1181,7 @@ class _FoodOrderDetails extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _DetailRow(
-          label: 'Total Amount',
+          label: l10n.historyTotalAmount,
           value: '\$${order.total.toStringAsFixed(2)}',
           valueStyle: const TextStyle(
             fontSize: 14,
@@ -1175,7 +1191,7 @@ class _FoodOrderDetails extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _DetailRow(
-          label: 'In KHR',
+          label: l10n.historyInKhr,
           value: '៛${(order.total * 4000).toStringAsFixed(0)}',
           valueStyle: TextStyle(
             fontSize: 12,
@@ -1185,8 +1201,8 @@ class _FoodOrderDetails extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _DetailRow(
-          label: 'Payment Method',
-          value: 'Wallet',
+          label: l10n.historyPaymentMethod,
+          value: l10n.historyMethodWallet,
           valueStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -1195,8 +1211,8 @@ class _FoodOrderDetails extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _DetailRow(
-          label: 'Status',
-          value: order.status,
+          label: l10n.historyStatus,
+          value: _statusLabel(l10n, order.status),
           valueStyle: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -1220,6 +1236,7 @@ class _DepositDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1241,7 +1258,7 @@ class _DepositDetails extends StatelessWidget {
         const SizedBox(height: 12),
         Center(
           child: Text(
-            'Top-Up Successful',
+            l10n.historyTopUpSuccessful,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
@@ -1251,7 +1268,7 @@ class _DepositDetails extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _DetailRow(
-          label: 'Amount Added',
+          label: l10n.historyAmountAdded,
           value: '+\$${order.total.toStringAsFixed(2)}',
           valueStyle: const TextStyle(
             fontSize: 14,
@@ -1261,7 +1278,7 @@ class _DepositDetails extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _DetailRow(
-          label: 'In KHR',
+          label: l10n.historyInKhr,
           value: '+៛${(order.total * 4000).toStringAsFixed(0)}',
           valueStyle: TextStyle(
             fontSize: 12,
@@ -1271,8 +1288,8 @@ class _DepositDetails extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _DetailRow(
-          label: 'Payment Method',
-          value: 'Bank Transfer',
+          label: l10n.historyPaymentMethod,
+          value: l10n.historyMethodBankTransfer,
           valueStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -1281,7 +1298,7 @@ class _DepositDetails extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _DetailRow(
-          label: 'Transaction ID',
+          label: l10n.historyTransactionId,
           value: order.id.length >= 8
               ? order.id.substring(0, 8).toUpperCase()
               : order.id.toUpperCase(),

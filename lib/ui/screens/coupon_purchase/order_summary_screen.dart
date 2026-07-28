@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../data/dtos/order_dto.dart';
 import '../../../data/exceptions/api_exception.dart';
 import '../../../data/repositories/order/order_repository.dart';
@@ -182,18 +183,18 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                     color: AppTheme.border,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Your cart is empty',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.cartEmptyTitle,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.mutedText,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Add items from the menu to get started',
-                    style: TextStyle(fontSize: 12, color: AppTheme.mutedText),
+                  Text(
+                    AppLocalizations.of(context)!.cartEmptyBody,
+                    style: const TextStyle(fontSize: 12, color: AppTheme.mutedText),
                   ),
                   const SizedBox(height: 24),
                   SmartCanteenButton(
@@ -213,9 +214,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Your Order',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.cartYourOrder,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: AppTheme.text,
@@ -507,9 +508,9 @@ class _PaymentSummarySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Meal Session',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.cartMealSession,
+            style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppTheme.mutedText,

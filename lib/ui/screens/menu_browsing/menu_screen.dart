@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/food_item.dart';
 import '../../../theme/app_theme.dart';
@@ -94,7 +95,7 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'No items found',
+              AppLocalizations.of(context)!.menuEmptyTitle,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -103,7 +104,7 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Try adjusting your filters or search',
+              AppLocalizations.of(context)!.menuEmptyBody,
               style: TextStyle(
                 fontSize: 13,
                 color: context.mutedColor,
@@ -802,7 +803,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Food Type',
+                    AppLocalizations.of(context)!.menuFoodType,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -858,7 +859,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Price',
+                            AppLocalizations.of(context)!.menuPrice,
                             style: TextStyle(
                               fontSize: 12,
                               color: context.mutedColor,
@@ -965,7 +966,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nutrition Info',
+          AppLocalizations.of(context)!.menuNutritionInfo,
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
@@ -1033,7 +1034,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Allergen Info',
+          AppLocalizations.of(context)!.menuAllergenInfo,
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
@@ -1060,7 +1061,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'May contain peanuts, shellfish, dairy',
+                  AppLocalizations.of(context)!.menuAllergenBody,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.orange.shade700,
@@ -1499,7 +1500,7 @@ class _SortSheet extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Text(
-              'Sort By',
+              AppLocalizations.of(context)!.commonSortBy,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -1832,7 +1833,7 @@ class _MenuLoadError extends StatelessWidget {
           const Icon(Icons.cloud_off_rounded, size: 40, color: AppTheme.green),
           const SizedBox(height: 12),
           Text(
-            "Couldn't load the menu",
+            AppLocalizations.of(context)!.menuErrorTitle,
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
@@ -1840,7 +1841,10 @@ class _MenuLoadError extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          TextButton(onPressed: onRetry, child: const Text('Retry')),
+          TextButton(
+            onPressed: onRetry,
+            child: Text(AppLocalizations.of(context)!.commonRetry),
+          ),
         ],
       ),
     );

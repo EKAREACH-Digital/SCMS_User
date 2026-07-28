@@ -7,6 +7,7 @@ import 'data/repositories/menu/menu_repository.dart';
 import 'data/repositories/notification/notification_repository.dart';
 import 'data/repositories/order/order_repository.dart';
 import 'data/repositories/wallet/wallet_repository.dart';
+import 'l10n/app_localizations.dart';
 import 'models/cart_model.dart';
 import 'theme/app_theme.dart';
 import 'ui/screens/alerts/notification_screen.dart';
@@ -123,6 +124,9 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
             darkTheme: AppTheme.darkTheme,
             themeMode:
                 settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            locale: settings.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             initialRoute: SplashScreen.routeName,
             routes: {
               SplashScreen.routeName: (_) => const SplashScreen(),

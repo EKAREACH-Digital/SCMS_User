@@ -1,0 +1,145 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Smart Canteen",
+  "splashTagline": "Scan Eat Enjoy — The Smart Way",
+
+  "commonRetry": "Retry",
+  "commonAdd": "Add",
+  "commonViewAll": "View all",
+  "commonActive": "Active",
+  "commonSortBy": "Sort By",
+  "commonPleaseWait": "Please wait a moment",
+  "commonCancel": "Cancel",
+  "commonTopUp": "Top Up",
+
+  "navHome": "Home",
+  "navMenu": "Menu",
+  "navQrPay": "QR Pay",
+  "navHistory": "History",
+  "navSettings": "Settings",
+
+  "historyTitle": "Order History",
+  "historySubtitle": "Your transactions & top-ups",
+  "historyTotalSpent": "Total Spent",
+  "historyTopUps": "Top-ups",
+  "historyEmptyTitle": "No orders yet",
+  "historyEmptyBody": "Your orders and top-ups will appear here",
+  "historyErrorTitle": "Couldn't load history",
+  "historyRetry": "Try again",
+  "historyRetrying": "Retrying…",
+  "historySortNewest": "Most recent",
+  "historySortAmountHigh": "Amount: high to low",
+  "historySortAmountLow": "Amount: low to high",
+  "historyOrderDetails": "Order Details",
+  "historyTopUpDetails": "Top-up Details",
+  "historyTopUpSuccessful": "Top-Up Successful",
+  "historyItems": "Items",
+  "historyTotalAmount": "Total Amount",
+  "historyInKhr": "In KHR",
+  "historyPaymentMethod": "Payment Method",
+  "historyStatus": "Status",
+  "historyAmountAdded": "Amount Added",
+  "historyTransactionId": "Transaction ID",
+  "historyMethodWallet": "Wallet",
+  "historyMethodBankTransfer": "Bank Transfer",
+  "statusCompleted": "Completed",
+  "statusPending": "Pending",
+  "statusFailed": "Failed",
+
+  "walletMyWallet": "My Wallet",
+  "walletTopUpBalance": "Top Up Balance",
+  "walletTopUpPrompt": "Select an amount to add to your wallet",
+  "walletEnterCustomAmount": "Enter Custom Amount",
+  "walletChoosePaymentMethod": "Choose Payment Method",
+  "walletChoosePaymentPrompt": "Select how you want to top up your wallet",
+  "walletTopUpAmount": "Top-up Amount",
+  "walletTopUpFailed": "Top-up failed. Please try again.",
+  "walletLowBalance": "Low balance — top up to keep ordering",
+  "walletTotalAmount": "Total Amount",
+  "walletPaymentPrompt": "Select your preferred payment option below",
+  "walletPayWithBank": "or pay with bank",
+
+  "homeScholarBadge": "CADT Scholar",
+  "homePromoExclusive": "EXCLUSIVE",
+  "homePromoTitle": "Fresh Daily Campus Food",
+  "homePromoBody": "20% off for CADT Scholars this week only",
+  "homeCouponApplied": "Discount coupon applied!",
+  "homeClaimNow": "Claim Now",
+  "homeProcessing": "Processing {amount}…",
+  "@homeProcessing": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "qrTitle": "My Meal Ticket",
+  "qrRefreshed": "QR code refreshed",
+  "qrViewReceipt": "View Receipt",
+  "qrHint": "Show this code at the canteen counter\nto collect your meal",
+  "qrOrderSummary": "Order Summary",
+  "qrTotalPaid": "Total Paid",
+  "qrEmptyTitle": "No orders yet",
+  "qrEmptyBody": "Place an order from the menu\nto generate your ticket",
+  "qrReceiptTitle": "Transaction Receipt",
+  "qrTicketOfCount": "Ticket {index} of {count}",
+  "@qrTicketOfCount": {
+    "placeholders": {
+      "index": { "type": "int" },
+      "count": { "type": "int" }
+    }
+  },
+
+  "menuEmptyTitle": "No items found",
+  "menuEmptyBody": "Try adjusting your filters or search",
+  "menuFoodType": "Food Type",
+  "menuPrice": "Price",
+  "menuNutritionInfo": "Nutrition Info",
+  "menuAllergenInfo": "Allergen Info",
+  "menuAllergenBody": "May contain peanuts, shellfish, dairy",
+  "menuErrorTitle": "Couldn't load the menu",
+
+  "cartEmptyTitle": "Your cart is empty",
+  "cartEmptyBody": "Add items from the menu to get started",
+  "cartYourOrder": "Your Order",
+  "cartMealSession": "Meal Session",
+  "cartProceedToPayment": "Proceed to Payment",
+  "cartItemsInCart": "{count, plural, =1{1 item in cart} other{{count} items in cart}}",
+  "@cartItemsInCart": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "cartSubtotal": "Subtotal",
+  "cartScholarDiscount": "Scholar Discount",
+  "cartServiceFee": "Service Fee",
+  "cartTotal": "Total",
+
+  "couponExpiredTitle": "Coupon Expired",
+  "couponExpiredBody": "Your QR ticket has expired. Please purchase a new coupon to continue.",
+  "couponExpiredAction": "Get New Coupon",
+
+  "alertsTitle": "Notifications",
+  "alertsMarkAllRead": "Mark all read",
+  "alertsEmpty": "No notifications",
+
+  "settingsTitle": "Settings",
+  "settingsDarkMode": "Dark Mode",
+  "settingsLanguage": "Language",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageKhmer": "ភាសាខ្មែរ",
+  "settingsChangePhoto": "Change Profile Photo",
+  "settingsLogOut": "Log Out",
+  "settingsLogOutConfirm": "Are you sure you want to log out of your account?",
+  "settingsMyProfile": "My Profile",
+
+  "authRememberMe": "Remember me",
+  "authForgotPassword": "Forgot Password?",
+  "authCompleteProfileTitle": "Complete your profile",
+  "authCompleteProfileBody": "Add a few details to finish setting up your account.",
+  "authSchool": "School",
+  "authLoadingSchools": "Loading schools…",
+  "authSelectSchool": "Select your school",
+  "authPasswordReset": "Password reset — sign in with your new password",
+  "authResendCode": "Didn't get it? Send another code"
+}

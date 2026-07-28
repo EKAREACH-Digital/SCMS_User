@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
 import '../../../ui/states/app_settings_state.dart';
 import '../../../ui/states/balance_state.dart';
@@ -55,14 +56,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _confirmLogout() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await AppDialog.show(
       context,
-      title: 'Log Out',
+      title: l10n.settingsLogOut,
       body: Text(
-        'Are you sure you want to log out of your account?',
+        l10n.settingsLogOutConfirm,
         style: TextStyle(color: context.mutedColor, fontSize: 14, height: 1.4),
       ),
-      confirmLabel: 'Log Out',
+      confirmLabel: l10n.settingsLogOut,
       isDestructive: true,
     );
     if (confirmed == true && mounted) {
@@ -100,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Change Profile Photo',
+                AppLocalizations.of(ctx)!.settingsChangePhoto,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -264,6 +266,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   isDark: settings.isDarkMode,
                   onToggle: settings.toggleDarkMode,
                 ),
+                _LanguageTile(
+                  current: settings.language,
+                  onSelected: settings.setLanguage,
+                ),
               ],
             ),
           ),
@@ -333,9 +339,9 @@ class _Header extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text(
-                'Settings',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.settingsTitle,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -655,7 +661,7 @@ class _DarkModeTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dark Mode',
+                  AppLocalizations.of(context)!.settingsDarkMode,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: context.textColor,
@@ -671,6 +677,121 @@ class _DarkModeTile extends StatelessWidget {
             ),
           ),
           AppPillToggle(value: isDark, onChanged: (_) => onToggle()),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Language tile with inline EN / ខ្មែរ segmented control ─────────────────
+
+class _LanguageTile extends StatelessWidget {
+  const _LanguageTile({required this.current, required this.onSelected});
+
+  final AppLanguage current;
+  final ValueChanged<AppLanguage> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.green.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.translate_rounded,
+              color: AppTheme.green,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsLanguage,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: context.textColor,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  current.nativeLabel,
+                  style: TextStyle(color: context.mutedColor, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          _LanguageSegment(current: current, onSelected: onSelected),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageSegment extends StatelessWidget {
+  const _LanguageSegment({required this.current, required this.onSelected});
+
+  final AppLanguage current;
+  final ValueChanged<AppLanguage> onSelected;
+
+  /// Short labels, each written in its own script so the inactive option stays
+  /// recognisable to someone who can't read the active language.
+  static String _shortLabel(AppLanguage lang) => switch (lang) {
+        AppLanguage.english => 'EN',
+        AppLanguage.khmer => 'ខ្មែរ',
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: context.bgColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.borderColor),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final lang in AppLanguage.values)
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onSelected(lang);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                decoration: BoxDecoration(
+                  color: lang == current ? AppTheme.green : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  _shortLabel(lang),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: lang == current
+                        ? Colors.white
+                        : context.mutedColor,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -718,14 +839,14 @@ class _LogoutButtonState extends State<_LogoutButton> {
               ),
             ],
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.logout_rounded, color: Colors.white, size: 20),
-              SizedBox(width: 8),
+              const Icon(Icons.logout_rounded, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
               Text(
-                'Log Out',
-                style: TextStyle(
+                AppLocalizations.of(context)!.settingsLogOut,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,

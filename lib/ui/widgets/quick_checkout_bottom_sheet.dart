@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 
 class QuickCheckoutBottomSheet extends StatelessWidget {
@@ -62,16 +63,16 @@ class QuickCheckoutBottomSheet extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            '$itemCount item${itemCount == 1 ? '' : 's'} in cart',
+            AppLocalizations.of(context)!.cartItemsInCart(itemCount),
             style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppTheme.text),
           ),
           const SizedBox(height: 16),
-          _Row(label: 'Subtotal', value: '\$${subtotal.toStringAsFixed(2)}'),
-          if (discount > 0) _Row(label: 'Scholar Discount', value: '-\$${discount.toStringAsFixed(2)}', valueColor: AppTheme.green),
-          _Row(label: 'Service Fee', value: '\$${serviceFee.toStringAsFixed(2)}'),
+          _Row(label: AppLocalizations.of(context)!.cartSubtotal, value: '\$${subtotal.toStringAsFixed(2)}'),
+          if (discount > 0) _Row(label: AppLocalizations.of(context)!.cartScholarDiscount, value: '-\$${discount.toStringAsFixed(2)}', valueColor: AppTheme.green),
+          _Row(label: AppLocalizations.of(context)!.cartServiceFee, value: '\$${serviceFee.toStringAsFixed(2)}'),
           const Divider(height: 24, color: AppTheme.border),
           _Row(
-            label: 'Total',
+            label: AppLocalizations.of(context)!.cartTotal,
             value: '\$${total.toStringAsFixed(2)}',
             labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppTheme.text),
             valueColor: AppTheme.green,
@@ -88,7 +89,10 @@ class QuickCheckoutBottomSheet extends StatelessWidget {
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
-              child: const Text('Proceed to Payment', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              child: Text(
+                AppLocalizations.of(context)!.cartProceedToPayment,
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
         ],
