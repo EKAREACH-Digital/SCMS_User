@@ -129,6 +129,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusCompleted => 'Completed';
 
   @override
+  String get statusRedeemed => 'Redeemed';
+
+  @override
   String get statusPending => 'Pending';
 
   @override

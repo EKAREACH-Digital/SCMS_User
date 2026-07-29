@@ -16,8 +16,14 @@ const Color _kGray = Color(0xFF9E9E9E); // pending / neutral
 /// [OrderRecord.status] carries the English token the state layer produces
 /// ('Completed' / 'Pending' / 'Failed'), which is also what the comparisons in
 /// this file branch on. Translate it only at the point of display.
-String _statusLabel(AppLocalizations l10n, String status) => switch (status) {
-      'Completed' => l10n.statusCompleted,
+String _statusLabel(AppLocalizations l10n, OrderRecord record) =>
+    switch (record.status) {
+      // A finished meal order is "Redeemed" — the same word the staff
+      // dashboard uses when it scans the ticket. A finished top-up is just
+      // "Completed"; nothing was redeemed.
+      'Completed' => record.type == 'deposit'
+          ? l10n.statusCompleted
+          : l10n.statusRedeemed,
       'Failed' => l10n.statusFailed,
       _ => l10n.statusPending,
     };
@@ -585,7 +591,7 @@ class _OrderCardState extends State<_OrderCard> {
                       const SizedBox(height: 5),
                       _StatusBadge(
                         label: _statusLabel(
-                            AppLocalizations.of(context)!, order.status),
+                            AppLocalizations.of(context)!, order),
                         color: statusColor,
                         pulse: isCompleted,
                       ),
@@ -1212,7 +1218,7 @@ class _FoodOrderDetails extends StatelessWidget {
         const SizedBox(height: 8),
         _DetailRow(
           label: l10n.historyStatus,
-          value: _statusLabel(l10n, order.status),
+          value: _statusLabel(l10n, order),
           valueStyle: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,

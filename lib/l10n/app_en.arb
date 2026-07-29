@@ -44,6 +44,7 @@
   "historyMethodWallet": "Wallet",
   "historyMethodBankTransfer": "Bank Transfer",
   "statusCompleted": "Completed",
+  "statusRedeemed": "Redeemed",
   "statusPending": "Pending",
   "statusFailed": "Failed",
 

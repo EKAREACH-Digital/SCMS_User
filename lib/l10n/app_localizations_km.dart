@@ -130,6 +130,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get statusCompleted => 'បានបញ្ចប់';
 
   @override
+  String get statusRedeemed => 'បានទទួល';
+
+  @override
   String get statusPending => 'កំពុងរង់ចាំ';
 
   @override

@@ -338,6 +338,12 @@ abstract class AppLocalizations {
   /// **'Completed'**
   String get statusCompleted;
 
+  /// No description provided for @statusRedeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeemed'**
+  String get statusRedeemed;
+
   /// No description provided for @statusPending.
   ///
   /// In en, this message translates to:

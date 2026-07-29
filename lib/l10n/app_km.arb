@@ -44,6 +44,7 @@
   "historyMethodWallet": "កាបូបអេឡិចត្រូនិក",
   "historyMethodBankTransfer": "ផ្ទេរតាមធនាគារ",
   "statusCompleted": "បានបញ្ចប់",
+  "statusRedeemed": "បានទទួល",
   "statusPending": "កំពុងរង់ចាំ",
   "statusFailed": "បរាជ័យ",
 
