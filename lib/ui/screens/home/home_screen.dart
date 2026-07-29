@@ -2497,7 +2497,7 @@ Future<void> _doTopUp(
 
   bool success = true;
   try {
-    await ctx.read<BalanceState>().topUp(amount);
+    await ctx.read<BalanceState>().topUp(amount, method: method.name);
   } catch (_) {
     success = false;
   }
@@ -2515,6 +2515,7 @@ Future<void> _doTopUp(
       status: success ? 'Completed' : 'Failed',
       createdAt: DateTime.now(),
       type: 'deposit',
+      logoAsset: method.logo,
     ),
   );
 

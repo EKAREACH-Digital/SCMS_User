@@ -445,6 +445,10 @@ class _LogoBadge extends StatelessWidget {
         width: 50,
         height: 50,
         padding: const EdgeInsets.all(8),
+        // A circular BoxDecoration clips the decoration, not the child — a
+        // logo with an opaque square background would spill past the circle
+        // without this.
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.circle,

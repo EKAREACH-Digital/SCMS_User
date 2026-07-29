@@ -91,15 +91,25 @@ class OrderLineDto {
   final String name;
   final int quantity;
 
-  const OrderLineDto({required this.name, required this.quantity});
+  /// The dish's photo (`image_url` on the joined menu item). The backend
+  /// already returns the full menu item on `GET /orders/my`, so history can
+  /// show the same picture the menu does.
+  final String? imageUrl;
+
+  const OrderLineDto({
+    required this.name,
+    required this.quantity,
+    this.imageUrl,
+  });
 
   factory OrderLineDto.fromJson(Map<String, dynamic> json) {
     final menuItem = json['menuItem'] ?? json['menu_item'];
+    final asMap = menuItem is Map<String, dynamic> ? menuItem : null;
+    final image = asMap?['image_url'] as String?;
     return OrderLineDto(
-      name: menuItem is Map<String, dynamic>
-          ? (menuItem['name'] as String? ?? 'Item')
-          : 'Item',
+      name: asMap?['name'] as String? ?? 'Item',
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      imageUrl: (image != null && image.isNotEmpty) ? image : null,
     );
   }
 }

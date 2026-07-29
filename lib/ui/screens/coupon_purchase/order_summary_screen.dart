@@ -141,6 +141,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             createdAt: DateTime.now(),
             session: session.label,
             imagePath: firstEntry?.item.imagePath,
+            imageUrl: firstEntry?.item.imageUrl,
             colorSeed: firstEntry?.item.colorSeed ?? 0,
           ),
         );

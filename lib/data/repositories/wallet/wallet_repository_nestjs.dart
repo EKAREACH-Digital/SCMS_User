@@ -30,10 +30,11 @@ class WalletRepositoryNestjs implements WalletRepository {
   }
 
   @override
-  Future<WalletBalanceDto> topUp(double amountUsd) async {
+  Future<WalletBalanceDto> topUp(double amountUsd, {String? method}) async {
     final walletId = await _resolveWalletId();
     final response = await _post(ApiConfig.walletTopUp(walletId), {
       'amount': amountUsd,
+      if (method != null && method.isNotEmpty) 'notes': 'Top-up via $method',
     });
     return _toBalanceDto(response.data['data'] as Map<String, dynamic>);
   }

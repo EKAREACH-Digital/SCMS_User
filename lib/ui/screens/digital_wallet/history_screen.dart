@@ -11,7 +11,10 @@ import '../../../ui/states/order_history_state.dart';
 
 // ── Shared color cues ──────────────────────────────────────────────────────
 const Color _kRed = Color(0xFFE53935); // expenses
-const Color _kGray = Color(0xFF9E9E9E); // pending / neutral
+const Color _kGray = Color(0xFF9E9E9E); // neutral
+// Pending: amber reads as "in progress" and stays legible on both the light
+// and dark card backgrounds, unlike a pure yellow.
+const Color _kAmber = Color(0xFFF9A825);
 
 /// [OrderRecord.status] carries the English token the state layer produces
 /// ('Completed' / 'Pending' / 'Failed'), which is also what the comparisons in
@@ -473,17 +476,17 @@ class _OrderCardState extends State<_OrderCard> {
     final isFailed = order.status == 'Failed';
     final isCompleted = order.status == 'Completed';
 
-    // Color cues: green = income/top-up, red = expense, gray = pending.
+    // Color cues: green = income/top-up, red = expense, amber = pending.
     final statusColor = isCompleted
         ? (isDeposit ? AppTheme.green : _kRed)
         : isFailed
             ? _kRed
-            : _kGray;
+            : _kAmber;
 
     final amountColor = isFailed
         ? _kGray
         : isPending
-            ? _kGray
+            ? _kAmber
             : isDeposit
                 ? AppTheme.green
                 : _kRed;
@@ -528,7 +531,7 @@ class _OrderCardState extends State<_OrderCard> {
                       width: 52,
                       height: 52,
                       child: isDeposit
-                          ? const _DepositThumbnail()
+                          ? _DepositThumbnail(logoAsset: order.logoAsset)
                           : _FoodThumbnail(order: order),
                     ),
                   ),
@@ -925,6 +928,23 @@ class _FoodThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Remote photo first — it's the same picture the menu shows. A bundled
+    // asset is only present on optimistically-added orders.
+    if (order.imageUrl != null) {
+      return Image.network(
+        order.imageUrl!,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, progress) =>
+            progress == null ? child : _placeholder(),
+        errorBuilder: (_, _, _) => order.imagePath != null
+            ? Image.asset(
+                order.imagePath!,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => _placeholder(),
+              )
+            : _placeholder(),
+      );
+    }
     if (order.imagePath != null) {
       return Image.asset(
         order.imagePath!,
@@ -957,7 +977,33 @@ class _FoodThumbnail extends StatelessWidget {
 }
 
 class _DepositThumbnail extends StatelessWidget {
-  const _DepositThumbnail();
+  const _DepositThumbnail({this.logoAsset});
+
+  /// Bank logo for the method the top-up came through. Null for older records
+  /// with no recognisable method, which keep the generic wallet icon.
+  final String? logoAsset;
+
+  @override
+  Widget build(BuildContext context) {
+    if (logoAsset != null) {
+      return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(6),
+        child: ClipOval(
+          child: Image.asset(
+            logoAsset!,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => const _WalletGlyph(),
+          ),
+        ),
+      );
+    }
+    return const _WalletGlyph();
+  }
+}
+
+class _WalletGlyph extends StatelessWidget {
+  const _WalletGlyph();
 
   @override
   Widget build(BuildContext context) {
@@ -1014,7 +1060,7 @@ class _DetailsSheet extends StatelessWidget {
                     width: 44,
                     height: 44,
                     child: isDeposit
-                        ? const _DepositThumbnail()
+                        ? _DepositThumbnail(logoAsset: order.logoAsset)
                         : _FoodThumbnail(order: order),
                   ),
                 ),
@@ -1226,7 +1272,7 @@ class _FoodOrderDetails extends StatelessWidget {
                 ? AppTheme.green
                 : order.status == 'Failed'
                     ? _kRed
-                    : _kGray,
+                    : _kAmber,
           ),
         ),
       ],

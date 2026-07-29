@@ -29,8 +29,8 @@ class BalanceState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> topUp(double amountUsd) async {
-    final dto = await _walletRepository.topUp(amountUsd);
+  Future<void> topUp(double amountUsd, {String? method}) async {
+    final dto = await _walletRepository.topUp(amountUsd, method: method);
     _balanceUsd = AsyncData(dto.balanceUsd);
     notifyListeners();
   }

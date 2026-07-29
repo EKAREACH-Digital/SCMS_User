@@ -17,6 +17,8 @@ class OrderRecord {
     this.type = 'order',
     this.session,
     this.imagePath,
+    this.imageUrl,
+    this.logoAsset,
     this.colorSeed = 0,
   });
 
@@ -37,8 +39,16 @@ class OrderRecord {
   /// 'Breakfast' or 'Lunch' for food orders; null for deposits.
   final String? session;
 
-  /// First item's asset path — null falls back to gradient placeholder.
+  /// First item's bundled asset path — set for optimistically-added orders.
   final String? imagePath;
+
+  /// First item's remote photo, from the backend's `image_url`. Preferred over
+  /// [imagePath]; both null falls back to the gradient placeholder.
+  final String? imageUrl;
+
+  /// Payment-method logo for a top-up (`asset/payment method/*.png`), so a
+  /// deposit shows the bank it came through rather than a generic icon.
+  final String? logoAsset;
 
   /// Controls which gradient/icon slot is used for the placeholder.
   final int colorSeed;
@@ -113,6 +123,11 @@ class OrderHistoryState extends ChangeNotifier {
     final label = o.items
         .map((i) => i.quantity > 1 ? '${i.name} ×${i.quantity}' : i.name)
         .join(', ');
+    // Show the first dish that actually has a photo — an order whose first
+    // line happens to lack one shouldn't fall back to a blank placeholder.
+    final photo = o.items
+        .map((i) => i.imageUrl)
+        .firstWhere((url) => url != null, orElse: () => null);
     return OrderRecord(
       id: o.id,
       date: _fmtDate(o.createdAt),
@@ -121,8 +136,30 @@ class OrderHistoryState extends ChangeNotifier {
       status: _mapStatus(o.status),
       createdAt: o.createdAt,
       session: _capitalize(o.mealSession),
+      imageUrl: photo,
       colorSeed: index,
     );
+  }
+
+  /// Bundled logos for the top-up methods the app offers.
+  static const _methodLogos = <String, String>{
+    'aba': 'asset/payment method/aba.png',
+    'bakong': 'asset/payment method/bakong.png',
+    'acleda': 'asset/payment method/acleda.png',
+  };
+
+  /// Picks a bank logo from the transaction note.
+  ///
+  /// The backend stores the method in free text (`notes`), e.g.
+  /// "ABA PayWay top-up PW…" — there's no structured method column on
+  /// wallet_transactions, so match on the name. Null keeps the generic
+  /// wallet icon.
+  static String? _logoForDescription(String description) {
+    final text = description.toLowerCase();
+    for (final entry in _methodLogos.entries) {
+      if (text.contains(entry.key)) return entry.value;
+    }
+    return null;
   }
 
   OrderRecord _toDepositRecord(TransactionDto t) {
@@ -134,6 +171,7 @@ class OrderHistoryState extends ChangeNotifier {
       status: 'Completed',
       createdAt: t.createdAt,
       type: 'deposit',
+      logoAsset: _logoForDescription(t.description),
     );
   }
 
