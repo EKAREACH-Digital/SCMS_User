@@ -26,13 +26,16 @@ class ApiConfig {
 
   static String get _debugHost {
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      // Android emulator maps host to 10.0.2.2
+      // Only the Android emulator maps the host machine to 10.0.2.2.
       return '10.0.2.2';
     }
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
-      // Real iPhone needs the Mac's LAN/hotspot IP
-      return '172.20.10.3';
-    }
+    // iOS simulator, desktop and web all share the host's network stack.
+    //
+    // A *physical* device can't reach either alias — it needs the Mac's
+    // current LAN address, which changes with the network and so must not be
+    // hard-coded here. Pass it at launch instead:
+    //   flutter run -t lib/main_prod.dart \
+    //     --dart-define=API_BASE_URL=http://<mac-lan-ip>:3000/api/v1
     return 'localhost';
   }
 

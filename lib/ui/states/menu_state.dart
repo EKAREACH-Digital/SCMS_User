@@ -6,8 +6,9 @@ import '../../models/food_item.dart';
 import '../utils/async_value.dart';
 
 /// Loads the backend menu once and exposes it as [FoodItem]s so the existing
-/// menu UI (and the cart) work unchanged. The backend has no images/ratings, so
-/// items render with the card's gradient + icon placeholders.
+/// menu UI (and the cart) work unchanged. Each item carries its own photo; the
+/// backend has no ratings, so cards fall back to gradient + icon placeholders
+/// for anything it doesn't provide.
 class MenuState extends ChangeNotifier {
   final MenuRepository _menuRepository;
 
@@ -56,9 +57,9 @@ class MenuState extends ChangeNotifier {
         tags: dto.categoryName != null ? [dto.categoryName!] : const <String>[],
         category: (dto.categoryName ?? 'other').toLowerCase(),
         imagePath: null,
-        // TEMP: one shared photo for every dish (backend has no per-item image
-        // yet). When MenuItemDto gains a real image_url, use dto.imageUrl here.
-        imageUrl: kTestFoodImageUrl,
+        // The item's own photo, falling back to the shared placeholder for the
+        // handful of dishes seeded without one.
+        imageUrl: dto.imageUrl ?? kFallbackFoodImageUrl,
         colorSeed: index,
       );
 }
