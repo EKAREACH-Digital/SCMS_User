@@ -24,23 +24,49 @@ class AppShellScope extends InheritedWidget {
   bool updateShouldNotify(AppShellScope old) => old.setTab != setTab;
 }
 
+/// Tab indices for [AppShell]'s pager. Kept in one place so call sites don't
+/// pass bare integers that silently break if the tab order changes.
+abstract final class AppTab {
+  static const home = 0;
+  static const menu = 1;
+  static const qr = 2;
+  static const history = 3;
+  static const settings = 4;
+}
+
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({super.key, this.initialTab = 0});
 
   static const routeName = '/home';
+
+  /// Tab to open on. Lets other screens land the user on a specific tab
+  /// *inside* the shell — pushing the tab's own route instead would build it
+  /// standalone, without the navigation bar.
+  final int initialTab;
+
+  /// Returns to the shell on [tab], clearing whatever is stacked above it.
+  static void goToTab(BuildContext context, int tab) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      routeName,
+      (_) => false,
+      arguments: tab,
+    );
+  }
 
   @override
   State<AppShell> createState() => _AppShellState();
 }
 
 class _AppShellState extends State<AppShell> {
-  int _index = 0;
+  late int _index;
   late final PageController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _index = widget.initialTab;
+    _controller = PageController(initialPage: widget.initialTab);
   }
 
   @override

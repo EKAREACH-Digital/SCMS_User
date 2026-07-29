@@ -139,7 +139,12 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
               SignUpScreen.routeName: (_) => const SignUpScreen(),
               ForgotPasswordScreen.routeName: (_) =>
                   const ForgotPasswordScreen(),
-              AppShell.routeName: (_) => const AppShell(),
+              // `arguments` selects the tab, so callers can return to the
+              // shell on a specific tab instead of pushing a bare screen.
+              AppShell.routeName: (ctx) {
+                final tab = ModalRoute.of(ctx)?.settings.arguments;
+                return AppShell(initialTab: tab is int ? tab : 0);
+              },
               MenuScreen.routeName: (_) => const MenuScreen(),
               OrderSummaryScreen.routeName: (_) => const OrderSummaryScreen(),
               QrScreen.routeName: (_) => const QrScreen(),

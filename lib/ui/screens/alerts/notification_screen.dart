@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
+import '../shell/app_shell.dart';
 import '../../utils/async_value.dart';
 import '../../widgets/smart_canteen_widgets.dart';
 import 'view_model/notification_view_model.dart';
@@ -59,15 +60,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       },
       bottomNavigationBar: SmartCanteenNavigationBarButton(
         currentIndex: -1,
-        onTap: (i) {
-          switch (i) {
-            case 0: Navigator.pushReplacementNamed(context, '/home');
-            case 1: Navigator.pushReplacementNamed(context, '/menu');
-            case 2: Navigator.pushNamed(context, '/qr');
-            case 3: Navigator.pushNamed(context, '/history');
-            case 4: Navigator.pushNamed(context, '/settings');
-          }
-        },
+        onTap: (i) => AppShell.goToTab(context, i),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../shell/app_shell.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/dtos/order_dto.dart';
 import '../../../data/exceptions/api_exception.dart';
@@ -14,7 +15,6 @@ import '../../../ui/states/menu_state.dart';
 import '../../../ui/states/order_history_state.dart';
 import '../../../ui/utils/async_value.dart';
 import '../../../ui/utils/meal_session.dart';
-import '../digital_wallet/qr_screen.dart';
 import '../../widgets/payment_method_sheet.dart';
 import '../../widgets/payment_success_dialog.dart';
 import '../../widgets/smart_canteen_widgets.dart';
@@ -154,8 +154,10 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
       // Runs once — whether the user taps the button or it auto-dismisses.
       onDismiss: () {
         if (mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, QrScreen.routeName, (_) => false);
+          // Return to the shell on the QR tab. Pushing QrScreen's own route
+          // here used to clear the stack down to a bare QR screen, leaving no
+          // navigation bar and no way back short of restarting the app.
+          AppShell.goToTab(context, AppTab.qr);
         }
       },
     );
@@ -205,7 +207,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   SmartCanteenButton(
                     label: 'Browse Menu',
                     onPressed: () =>
-                        Navigator.pushReplacementNamed(context, '/menu'),
+                        AppShell.goToTab(context, AppTab.menu),
                     height: 48,
                     radius: 14,
                   ),
@@ -275,20 +277,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             ),
       bottomNavigationBar: SmartCanteenNavigationBarButton(
         currentIndex: 1,
-        onTap: (i) {
-          switch (i) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/home');
-            case 1:
-              Navigator.pushReplacementNamed(context, '/menu');
-            case 2:
-              Navigator.pushReplacementNamed(context, '/qr');
-            case 3:
-              Navigator.pushReplacementNamed(context, '/history');
-            case 4:
-              Navigator.pushReplacementNamed(context, '/settings');
-          }
-        },
+        // Always return to the shell on the chosen tab. Pushing each tab's
+        // own route builds it standalone, without a navigation bar.
+        onTap: (i) => AppShell.goToTab(context, i),
       ),
     );
   }
