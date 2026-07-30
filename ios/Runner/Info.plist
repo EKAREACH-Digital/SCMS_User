@@ -15,6 +15,8 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<!-- MSAL redirect for Microsoft (Entra ID) sign-in. -->
+				<string>msauth.com.example.smartCanteenUserFrontend</string>
 				<!-- Reversed iOS OAuth client ID — lets Google Sign-In return to the app. -->
 				<string>com.googleusercontent.apps.421411286734-i0r7db6pd4ijhcgugquadfnkdnca1dfu</string>
 			</array>
@@ -92,6 +94,9 @@
 	<key>LSApplicationQueriesSchemes</key>
 <array>
   <string>abamobilebank</string>
+  <!-- MSAL checks for the Microsoft Authenticator app over these. -->
+  <string>msauthv2</string>
+  <string>msauthv3</string>
 </array>
 </dict>
 </plist>

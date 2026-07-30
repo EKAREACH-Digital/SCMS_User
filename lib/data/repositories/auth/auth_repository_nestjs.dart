@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:msal_auth/msal_auth.dart';
 
 import '../../config/api_client.dart';
 import '../../config/api_config.dart';
 import '../../config/google_auth_config.dart';
+import '../../config/microsoft_auth_config.dart';
 import '../../dtos/auth_dto.dart';
 import '../../exceptions/api_exception.dart';
 import '../../local/token_storage.dart';
@@ -330,4 +332,50 @@ class AuthRepositoryNestjs implements AuthRepository {
     // vague string, since this is a network-layer failure, not a backend one.
     return ApiException('${e.type.name}: ${e.message ?? e.error ?? e}');
   }
+
+  SingleAccountPca? _msalPca;
+
+Future<SingleAccountPca> _ensureMsal() async {
+  return _msalPca ??= await SingleAccountPca.create(
+    clientId: MicrosoftAuthConfig.clientId,
+    androidConfig: AndroidConfig(
+      configFilePath: 'assets/msal_config.json',
+      // msauth://<applicationId>/<url-encoded signature hash>. Must match the
+      // Android platform entry in the Azure app registration exactly, and the
+      // hash is tied to the signing key — the debug key here, so a release
+      // build needs its own entry added in Azure.
+      redirectUri:
+          'msauth://com.example.smart_canteen_user_frontend/'
+          '2pmj9i4rSx0yEb%2FviWBYkE%2FZQrk%3D',
+    ),
+    appleConfig: AppleConfig(authority: MicrosoftAuthConfig.authority),
+  );
+}
+
+@override
+Future<AuthTokenDto> loginWithMicrosoft() async {
+  final pca = await _ensureMsal();
+
+  final AuthenticationResult result;
+  try {
+    result = await pca.acquireToken(
+      scopes: MicrosoftAuthConfig.scopes,
+    );
+  } on MsalUserCancelException {
+    throw const ApiException('Microsoft sign-in was cancelled');
+  } on MsalException catch (e) {
+    throw ApiException('Microsoft sign-in failed: ${e.message}');
+  }
+
+  final idToken = result.idToken;
+  if (idToken == null || idToken.isEmpty) {
+    throw const ApiException(
+      'Microsoft returned no ID token. Check the Azure app registration '
+      '(redirect URI, tenant, and that openid/profile/email scopes are granted).',
+    );
+  }
+
+  final response = await _post(ApiConfig.microsoftLogin, {'id_token': idToken});
+  return _extractTokens(response);
+}
 }

@@ -43,6 +43,7 @@ dependencies:
   qr_flutter: ^4.1.0
   http: ^1.2.0
   url_launcher: ^6.3.0
+  msal_auth: ^3.5.1
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +93,10 @@ flutter:
     - asset/drinks/
     - asset/payment method/
     - asset/auth_logo/
+    # MSAL's Android config, loaded at runtime by AndroidConfig.configFilePath.
+    # Separate from `asset/` above because msal_auth resolves it as a Flutter
+    # asset path and the two directory names must not be confused.
+    - assets/msal_config.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

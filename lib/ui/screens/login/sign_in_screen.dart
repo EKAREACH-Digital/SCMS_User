@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
@@ -22,21 +24,20 @@ const _primaryGradient = LinearGradient(
 const _googleBlue = Color(0xFF4285F4);
 const _microsoftBlue = Color(0xFF0078D4);
 
-void _showComingSoon(BuildContext context, String feature) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('$feature — coming soon'),
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: AppTheme.green,
-    ),
-  );
-}
 
 /// Turns a caught error into copy a user can act on. [ApiException] carries
 /// the backend's actual message (see backend `AllExceptionsFilter`); anything
 /// else (timeouts, no connection, Google Sign-In failures) gets a fallback.
 String _describeError(Object error) {
   if (error is ApiException) return error.message;
+  // Native sign-in plugins (MSAL, Google) surface setup problems as
+  // PlatformException. Swallowing those into "something went wrong" hides the
+  // one detail that identifies the cause, so show it in debug builds.
+  if (error is PlatformException) {
+    final detail = error.message ?? error.code;
+    if (kDebugMode) return 'Sign-in failed: $detail';
+    debugPrint('Sign-in PlatformException: ${error.code} — $detail');
+  }
   return 'Something went wrong. Please try again.';
 }
 
@@ -389,6 +390,13 @@ class _LoginFormState extends State<_LoginForm> {
     );
   }
 
+  Future<void> _handleMicrosoftLogin() async {
+    await _submit(
+      (vm) => vm.loginWithMicrosoft(),
+      onSuccess: (user) => _routeAfterAuth(context, user),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -465,9 +473,9 @@ class _LoginFormState extends State<_LoginForm> {
         const SmartCanteenDividerText(label: 'OR CONTINUE WITH'),
         const SizedBox(height: 20),
         _SocialRow(
-          suffix: 'Sign-In',
           isBusy: _isSubmitting,
           onGoogleTap: () => _handleGoogleLogin(),
+          onMicrosoftTap: () => _handleMicrosoftLogin(),
         ),
       ],
     );
@@ -553,6 +561,14 @@ class _SignUpFormState extends State<_SignUpForm> {
     );
   }
 
+  Future<void> _handleMicrosoftSignUp() async {
+    await _submit(
+      action: (vm) => vm.loginWithMicrosoft(),
+      stateOf: (vm) => vm.loginState,
+      onSuccess: (user) => _routeAfterAuth(context, user),
+    );
+  }
+
   Future<void> _handleGoogleSignUp() async {
     await _submit(
       action: (vm) => vm.loginWithGoogle(),
@@ -626,9 +642,9 @@ class _SignUpFormState extends State<_SignUpForm> {
         const SmartCanteenDividerText(label: 'OR CONTINUE WITH'),
         const SizedBox(height: 20),
         _SocialRow(
-          suffix: 'Sign-Up',
           isBusy: _isSubmitting,
           onGoogleTap: () => _handleGoogleSignUp(),
+          onMicrosoftTap: () => _handleMicrosoftSignUp(),
         ),
       ],
     );
@@ -639,13 +655,13 @@ class _SignUpFormState extends State<_SignUpForm> {
 
 class _SocialRow extends StatelessWidget {
   const _SocialRow({
-    required this.suffix,
     required this.onGoogleTap,
+    required this.onMicrosoftTap,
     this.isBusy = false,
   });
 
-  final String suffix;
   final VoidCallback onGoogleTap;
+  final VoidCallback onMicrosoftTap;
   final bool isBusy;
 
   @override
@@ -663,9 +679,7 @@ class _SocialRow extends StatelessWidget {
           label: 'Microsoft',
           brandColor: _microsoftBlue,
           icon: const _MicrosoftLogo(),
-          onTap: isBusy
-              ? null
-              : () => _showComingSoon(context, 'Microsoft $suffix'),
+          onTap: isBusy ? null : onMicrosoftTap,
         ),
       ],
     );

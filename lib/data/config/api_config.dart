@@ -45,6 +45,7 @@ class ApiConfig {
   static const String refreshToken = '/auth/refresh';
   static const String logout = '/auth/logout';
   static const String googleLogin = '/auth/google';
+  static const String microsoftLogin = '/auth/microsoft';
   static const String profile = '/users/me';
 
   /// `POST /auth/complete-profile` — onboarding: saves name/phone/school and

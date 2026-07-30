@@ -38,6 +38,16 @@ class AuthRepositoryMock implements AuthRepository {
   }
 
   @override
+  Future<AuthTokenDto> loginWithMicrosoft() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return const AuthTokenDto(
+      accessToken: 'mock-microsoft-access-token',
+      refreshToken: 'mock-refresh-token',
+      expiresIn: 3600,
+    );
+  }
+
+  @override
   Future<AuthTokenDto> refreshToken(String refreshToken) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return const AuthTokenDto(

@@ -71,6 +71,24 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Runs the native Microsoft (MSAL) flow and exchanges the resulting ID
+  /// token for our own session, then loads the profile so the caller can route
+  /// on `profile_completed` exactly as it does after Google sign-in.
+  Future<void> loginWithMicrosoft() async {
+    _loginState = const AsyncLoading();
+    notifyListeners();
+
+    try {
+      await _authRepository.loginWithMicrosoft();
+      final profileDto = await _authRepository.getProfile();
+      _loginState = AsyncData(User.fromDto(profileDto));
+    } catch (e, s) {
+      _loginState = AsyncError(e, s);
+    }
+
+    notifyListeners();
+  }
+
   /// Saves the onboarding details (name, phone, school) via
   /// `POST /auth/complete-profile`, which also marks the account
   /// `profile_completed` and returns a fresh token pair. An optional
