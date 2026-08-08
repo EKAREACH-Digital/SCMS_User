@@ -2469,6 +2469,11 @@ class _TopUpMethodCardState extends State<_TopUpMethodCard> {
 
 // ── Top-up async helpers ──────────────────────────────────────────────────────
 
+/// How long the processing dialog stays up at minimum, so the pulse animation
+/// completes a few cycles and the credit reads as something that happened.
+/// Only applies to the direct wallet methods — ABA has its own waiting stage.
+const _minProcessingTime = Duration(seconds: 3);
+
 Future<void> _doTopUp(
   BuildContext ctx,
   double amount,
@@ -2496,10 +2501,19 @@ Future<void> _doTopUp(
   );
 
   bool success = true;
+  final startedAt = DateTime.now();
   try {
     await ctx.read<BalanceState>().topUp(amount, method: method.name);
   } catch (_) {
     success = false;
+  }
+
+  // The wallet credit is a single fast write, so the dialog would otherwise
+  // flash by before it reads as anything. Hold it for a minimum beat — a
+  // floor, not an added delay, so a slow network doesn't stack on top.
+  final elapsed = DateTime.now().difference(startedAt);
+  if (elapsed < _minProcessingTime) {
+    await Future<void>.delayed(_minProcessingTime - elapsed);
   }
 
   if (!ctx.mounted) return;
