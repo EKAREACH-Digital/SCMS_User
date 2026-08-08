@@ -198,14 +198,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       label: 'Balance',
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.stars_rounded,
-                      end: 320,
-                      label: 'Points',
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -217,12 +209,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: SettingsSection(
               title: 'Profile',
               children: [
-                SettingsTile(
-                  icon: Icons.edit_outlined,
-                  title: 'Edit Profile',
-                  subtitle: 'Update your name, email & photo',
-                  onTap: () => _open(const EditProfileScreen()),
-                ),
+                // Editing lives on the pen icon in the header above, so a
+                // duplicate row here would be a second door to one room.
                 SettingsTile(
                   icon: Icons.credit_card_outlined,
                   title: 'Payment Methods',

@@ -4,11 +4,11 @@ enum CardBrand { visa, mastercard, amex, generic }
 
 extension CardBrandX on CardBrand {
   String get label => switch (this) {
-        CardBrand.visa => 'Visa',
-        CardBrand.mastercard => 'Mastercard',
-        CardBrand.amex => 'Amex',
-        CardBrand.generic => 'Card',
-      };
+    CardBrand.visa => 'Visa',
+    CardBrand.mastercard => 'Mastercard',
+    CardBrand.amex => 'Amex',
+    CardBrand.generic => 'Card',
+  };
 }
 
 class SavedCard {
@@ -44,7 +44,7 @@ class PaymentMethodsState extends ChangeNotifier {
       id: 'seed-visa',
       brand: CardBrand.visa,
       last4: '4242',
-      holder: 'John Doe',
+      holder: 'Sokhunmony Soun',
       expiry: '08/27',
     ),
   ];

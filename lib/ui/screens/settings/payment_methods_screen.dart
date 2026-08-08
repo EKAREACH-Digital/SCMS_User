@@ -322,11 +322,17 @@ class _AddCardSheetState extends State<_AddCardSheet> {
   final _holderController = TextEditingController();
   final _expiryController = TextEditingController();
 
+  /// Collected to validate the card, then discarded with the sheet — a CVV is
+  /// never stored, not even in memory beyond this form. It is the one field a
+  /// card issuer treats as proof the card is in hand.
+  final _cvvController = TextEditingController();
+
   @override
   void dispose() {
     _numberController.dispose();
     _holderController.dispose();
     _expiryController.dispose();
+    _cvvController.dispose();
     super.dispose();
   }
 
@@ -421,21 +427,48 @@ class _AddCardSheetState extends State<_AddCardSheet> {
                       : null,
                 ),
                 const SizedBox(height: 14),
-                _SheetField(
-                  label: 'Expiry (MM/YY)',
-                  controller: _expiryController,
-                  hint: 'MM/YY',
-                  icon: Icons.calendar_today_rounded,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(4),
-                    _ExpiryFormatter(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: _SheetField(
+                        label: 'Expiry (MM/YY)',
+                        controller: _expiryController,
+                        hint: 'MM/YY',
+                        icon: Icons.calendar_today_rounded,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(4),
+                          _ExpiryFormatter(),
+                        ],
+                        validator: (v) =>
+                            RegExp(r'^(0[1-9]|1[0-2])\/\d{2}$')
+                                    .hasMatch(v ?? '')
+                                ? null
+                                : 'MM/YY',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _SheetField(
+                        label: 'CVV',
+                        controller: _cvvController,
+                        hint: '123',
+                        icon: Icons.lock_outline_rounded,
+                        keyboardType: TextInputType.number,
+                        obscureText: true,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(4),
+                        ],
+                        // Amex prints four digits, every other brand three.
+                        validator: (v) => RegExp(r'^\d{3,4}$').hasMatch(v ?? '')
+                            ? null
+                            : '3–4 digits',
+                      ),
+                    ),
                   ],
-                  validator: (v) =>
-                      RegExp(r'^(0[1-9]|1[0-2])\/\d{2}$').hasMatch(v ?? '')
-                          ? null
-                          : 'MM/YY',
                 ),
                 const SizedBox(height: 24),
                 SmartCanteenButton(
@@ -466,6 +499,7 @@ class _SheetField extends StatelessWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.none,
     this.validator,
+    this.obscureText = false,
   });
 
   final String label;
@@ -476,6 +510,7 @@ class _SheetField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
   final String? Function(String?)? validator;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -497,6 +532,8 @@ class _SheetField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           textCapitalization: textCapitalization,
+          validator: validator,
+          obscureText: obscureText,
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
