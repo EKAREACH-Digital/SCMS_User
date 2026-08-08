@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../alerts/notification_screen.dart';
 import '../topup/topup_screen.dart';
 import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/order/order_repository.dart';
@@ -132,7 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     cartCount: cart.totalItems,
                     onCartTap: () =>
                         Navigator.pushNamed(context, '/order-summary'),
-                    onNotifTap: () {},
+                    onNotifTap: () => Navigator.pushNamed(
+                      context,
+                      NotificationScreen.routeName,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Padding(
@@ -2534,6 +2538,17 @@ Future<void> _doTopUp(
   );
 
   if (success) {
+    // Carries the bank's logo so the alert is recognisable at a glance,
+    // rather than a generic wallet icon shared with every other entry.
+    ctx.read<NotificationViewModel>().addLocal(
+          id: 'local-topup-${DateTime.now().microsecondsSinceEpoch}',
+          title: 'Top-up successful',
+          body:
+              '\$${amount.toStringAsFixed(2)} added to your wallet via ${method.name}.',
+          type: 'wallet',
+          imageAsset: method.logo,
+        );
+
     // Hand off from the processing dialog straight to the success modal.
     PaymentSuccessDialog.show(
       ctx,

@@ -5,6 +5,7 @@ import '../shell/app_shell.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/dtos/order_dto.dart';
 import '../../../data/exceptions/api_exception.dart';
+import '../../../data/local/order_alert_service.dart';
 import '../../../data/repositories/order/order_repository.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/food_item.dart';
@@ -111,6 +112,22 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
       await balance.payment(order.totalAmount);
       mealCoupons.addFromOrder(order.coupons);
       _recordLocalHistory(cart, order, session);
+
+      // One "ready to collect" alert per line on the receipt. Scheduled before
+      // the cart is cleared, since the labels come from it.
+      OrderAlertService.instance.scheduleForOrder(
+        orderId: order.id,
+        items: cart.entries
+            .map((e) => OrderAlertItem(
+                  label: e.quantity > 1
+                      ? '${e.item.name} ×${e.quantity}'
+                      : e.item.name,
+                  imageUrl: e.item.imageUrl,
+                  imageAsset: e.item.imagePath,
+                ))
+            .toList(),
+      );
+
       cart.clear();
       if (!mounted) return;
       _showPaymentSuccess(order.totalAmount);

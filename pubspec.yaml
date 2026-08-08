@@ -44,6 +44,8 @@ dependencies:
   http: ^1.2.0
   url_launcher: ^6.3.0
   msal_auth: ^3.5.1
+  flutter_local_notifications: ^22.3.0
+  timezone: ^0.11.1
 
 dev_dependencies:
   flutter_test:

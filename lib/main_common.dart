@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'data/local/order_alert_service.dart';
 import 'data/repositories/auth/auth_repository.dart';
 import 'data/repositories/coupon/coupon_repository.dart';
 import 'data/repositories/menu/menu_repository.dart';
@@ -70,8 +71,17 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
   final _cart = CartModel();
 
   @override
+  void initState() {
+    super.initState();
+    // Asks for notification permission and registers the Android channel.
+    // Fire-and-forget: a refusal must not hold up the first frame.
+    OrderAlertService.instance.init();
+  }
+
+  @override
   void dispose() {
     _cart.dispose();
+    OrderAlertService.instance.dispose();
     super.dispose();
   }
 
@@ -115,9 +125,21 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
           create: (_) =>
               WalletViewModel(widget.walletRepository, widget.couponRepository),
         ),
-        ChangeNotifierProvider(
-            create: (_) =>
-                NotificationViewModel(widget.notificationRepository)),
+        ChangeNotifierProvider(create: (_) {
+          final vm = NotificationViewModel(widget.notificationRepository);
+          // Fold each order-ready alert into the Alerts feed as it comes due,
+          // so the tab shows the same message the OS just delivered.
+          OrderAlertService.instance.onAlert.listen(
+            (alert) => vm.addLocal(
+              id: 'local-${alert.orderId}-${alert.dueAt.microsecondsSinceEpoch}',
+              title: alert.title,
+              body: alert.body,
+              imageUrl: alert.imageUrl,
+              imageAsset: alert.imageAsset,
+            ),
+          );
+          return vm;
+        }),
       ],
       child: CartProvider(
         cart: _cart,

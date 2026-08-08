@@ -102,15 +102,7 @@ class AlertTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: _iconBg(item.type),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(_icon(item.type), size: 20, color: AppTheme.green),
-            ),
+            _Thumbnail(item: item, fallbackBg: _iconBg(item.type), fallbackIcon: _icon(item.type)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -147,4 +139,86 @@ class AlertTile extends StatelessWidget {
       _ => Icons.notifications_outlined,
     };
   }
+}
+
+/// The 40×40 leading square: the dish photo or bank logo when the alert has
+/// one, otherwise the category icon.
+///
+/// A remote photo that fails to load falls back to the icon rather than
+/// leaving a broken box — alerts arrive on the same patchy connections the
+/// rest of the app has to survive.
+class _Thumbnail extends StatelessWidget {
+  const _Thumbnail({
+    required this.item,
+    required this.fallbackBg,
+    required this.fallbackIcon,
+  });
+
+  final NotificationItem item;
+  final Color fallbackBg;
+  final IconData fallbackIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    final image = _image();
+    if (image == null) return _fallback();
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(width: 40, height: 40, child: image),
+    );
+  }
+
+  Widget? _image() {
+    final url = item.imageUrl;
+    if (url != null && url.isNotEmpty) {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => _assetOrFallback(),
+        loadingBuilder: (_, child, progress) =>
+            progress == null ? child : _fallback(),
+      );
+    }
+    final asset = item.imageAsset;
+    if (asset != null && asset.isNotEmpty) return _assetImage(asset);
+    return null;
+  }
+
+  /// Assets here are bank logos as often as they are dishes, so the mark is
+  /// fitted whole on the category tint rather than cropped to fill — a
+  /// cover-cropped logo loses the part that identifies it.
+  Widget _assetImage(String asset) => Container(
+        width: 40,
+        height: 40,
+        color: fallbackBg,
+        padding: const EdgeInsets.all(6),
+        child: Image.asset(
+          asset,
+          fit: BoxFit.contain,
+          errorBuilder: (_, _, _) => Icon(
+            fallbackIcon,
+            size: 20,
+            color: AppTheme.green,
+          ),
+        ),
+      );
+
+  /// A dish whose remote photo failed still has its bundled image to fall back
+  /// on before we give up and show the generic icon.
+  Widget _assetOrFallback() {
+    final asset = item.imageAsset;
+    if (asset != null && asset.isNotEmpty) return _assetImage(asset);
+    return _fallback();
+  }
+
+  Widget _fallback() => Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: fallbackBg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(fallbackIcon, size: 20, color: AppTheme.green),
+      );
 }
