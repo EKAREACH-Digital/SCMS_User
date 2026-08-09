@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../data/repositories/order/order_repository.dart';
 import '../../../data/repositories/wallet/wallet_repository.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../models/food_item.dart';
+import '../../../model/food/food_item.dart';
 import '../../../theme/app_theme.dart';
 import '../../../ui/states/order_history_state.dart';
 

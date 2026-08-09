@@ -10,7 +10,7 @@ import 'data/repositories/order/order_repository.dart';
 import 'data/repositories/payment/payment_repository.dart';
 import 'data/repositories/wallet/wallet_repository.dart';
 import 'l10n/app_localizations.dart';
-import 'models/cart_model.dart';
+import 'model/cart/cart_model.dart';
 import 'theme/app_theme.dart';
 import 'ui/screens/alerts/notification_screen.dart';
 import 'ui/screens/alerts/view_model/notification_view_model.dart';

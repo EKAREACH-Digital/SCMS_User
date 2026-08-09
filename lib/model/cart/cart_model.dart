@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../ui/utils/meal_session.dart';
-import 'food_item.dart';
+import '../../ui/utils/meal_session.dart';
+import '../food/food_item.dart';
 
 class CartEntry {
   final FoodItem item;

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../../models/cart_model.dart';
-import '../../../models/food_item.dart';
+import '../../../model/cart/cart_model.dart';
+import '../../../model/food/food_item.dart';
 import '../../../theme/app_theme.dart';
 import '../../../ui/states/menu_state.dart';
 import '../../../ui/utils/async_value.dart';

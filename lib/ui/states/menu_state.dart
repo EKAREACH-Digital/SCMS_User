@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/dtos/menu_dto.dart';
 import '../../data/repositories/menu/menu_repository.dart';
-import '../../models/food_item.dart';
+import '../../model/food/food_item.dart';
 import '../utils/async_value.dart';
 
 /// Loads the backend menu once and exposes it as [FoodItem]s so the existing
