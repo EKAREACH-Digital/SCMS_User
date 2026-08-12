@@ -650,6 +650,114 @@ abstract class AppLocalizations {
   /// **'Ticket {index} of {count}'**
   String qrTicketOfCount(int index, int count);
 
+  /// No description provided for @weeklyMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week\'s Menu'**
+  String get weeklyMenuTitle;
+
+  /// No description provided for @weeklyMenuOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly menu'**
+  String get weeklyMenuOpen;
+
+  /// No description provided for @weeklyMenuEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No menu published yet'**
+  String get weeklyMenuEmptyTitle;
+
+  /// No description provided for @weeklyMenuEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The canteen hasn\'t published a menu for this week. Check back soon.'**
+  String get weeklyMenuEmptyBody;
+
+  /// No description provided for @weeklyMenuErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the weekly menu'**
+  String get weeklyMenuErrorTitle;
+
+  /// No description provided for @weeklyMenuNothingToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing scheduled for this day'**
+  String get weeklyMenuNothingToday;
+
+  /// No description provided for @weeklyMenuAllWeekNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Every dish on this menu is served all week, so each day shows the same list.'**
+  String get weeklyMenuAllWeekNote;
+
+  /// No description provided for @weeklyMenuToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get weeklyMenuToday;
+
+  /// No description provided for @slotBreakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get slotBreakfast;
+
+  /// No description provided for @slotLunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get slotLunch;
+
+  /// No description provided for @slotDinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get slotDinner;
+
+  /// No description provided for @dayMon.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get dayMon;
+
+  /// No description provided for @dayTue.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get dayTue;
+
+  /// No description provided for @dayWed.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get dayWed;
+
+  /// No description provided for @dayThu.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get dayThu;
+
+  /// No description provided for @dayFri.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get dayFri;
+
+  /// No description provided for @daySat.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get daySat;
+
+  /// No description provided for @daySun.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get daySun;
+
   /// No description provided for @menuEmptyTitle.
   ///
   /// In en, this message translates to:

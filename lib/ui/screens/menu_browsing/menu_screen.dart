@@ -9,6 +9,7 @@ import '../../../theme/app_theme.dart';
 import '../../../ui/states/menu_state.dart';
 import '../../../ui/utils/async_value.dart';
 import '../../widgets/cart_bar.dart';
+import 'weekly_menu_screen.dart';
 
 enum _SortBy { recommended, priceLowHigh, priceHighLow, rating }
 
@@ -199,6 +200,37 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
         actions: [
+          // Read-only view of what the canteen is serving each day this week.
+          Tooltip(
+            message: AppLocalizations.of(context)!.weeklyMenuOpen,
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                Navigator.pushNamed(context, WeeklyMenuScreen.routeName);
+              },
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: context.cardColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.calendar_month_rounded,
+                  size: 20,
+                  color: context.textColor,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Stack(
