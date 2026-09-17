@@ -15,12 +15,12 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static List<String> _labels(AppLocalizations l10n) => [
-        l10n.navHome,
-        l10n.navMenu,
-        l10n.navQrPay,
-        l10n.navHistory,
-        l10n.navSettings,
-      ];
+    l10n.navHome,
+    l10n.navMenu,
+    l10n.navQrPay,
+    l10n.navHistory,
+    l10n.navSettings,
+  ];
   static const _icons = [
     Icons.home_rounded,
     Icons.restaurant_menu_rounded,
@@ -68,7 +68,10 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                           height: 52,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF1B5E20), Color(0xFF4CAF50)],
+                              colors: [
+                                AppTheme.greenDark,
+                                AppTheme.primaryLight,
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -142,8 +145,9 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: AppTheme.green
-                                        .withValues(alpha: 0.32),
+                                    color: AppTheme.green.withValues(
+                                      alpha: 0.32,
+                                    ),
                                     blurRadius: 10,
                                     spreadRadius: 0,
                                   ),
@@ -178,11 +182,11 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                           fontWeight: isSelected
                               ? FontWeight.w600
                               : FontWeight.w400,
-                          color: isSelected ? AppTheme.green : context.mutedColor,
+                          color: isSelected
+                              ? AppTheme.green
+                              : context.mutedColor,
                         ),
-                        child: Text(
-                          _labels(AppLocalizations.of(context)!)[i],
-                        ),
+                        child: Text(_labels(AppLocalizations.of(context)!)[i]),
                       ),
                       const SizedBox(height: 3),
                       AnimatedContainer(

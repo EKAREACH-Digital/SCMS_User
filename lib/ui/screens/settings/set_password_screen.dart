@@ -93,10 +93,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
               children: [
-                SettingsFadeIn(
-                  index: 0,
-                  child: _ExplainerCard(email: email),
-                ),
+                SettingsFadeIn(index: 0, child: _ExplainerCard(email: email)),
                 const SizedBox(height: 26),
                 SettingsFadeIn(
                   index: 1,
@@ -150,7 +147,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   child: SmartCanteenButton(
                     label: _saving ? 'Saving…' : 'Set Password',
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                      colors: [AppTheme.greenDark, AppTheme.primaryLight],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -160,12 +157,16 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           )
-                        : const Icon(Icons.check_rounded,
-                            color: Colors.white, size: 20),
+                        : const Icon(
+                            Icons.check_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                     onPressed: _saving ? null : _save,
                   ),
                 ),
@@ -222,8 +223,11 @@ class _ExplainerCard extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              Icon(Icons.mail_outline_rounded,
-                  size: 16, color: context.mutedColor),
+              Icon(
+                Icons.mail_outline_rounded,
+                size: 16,
+                color: context.mutedColor,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -287,7 +291,9 @@ class _ErrorBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFE53935).withValues(alpha: 0.09),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE53935).withValues(alpha: 0.3)),
+        border: Border.all(
+          color: const Color(0xFFE53935).withValues(alpha: 0.3),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

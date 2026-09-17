@@ -24,9 +24,8 @@ String _statusLabel(AppLocalizations l10n, OrderRecord record) =>
       // A finished meal order is "Redeemed" — the same word the staff
       // dashboard uses when it scans the ticket. A finished top-up is just
       // "Completed"; nothing was redeemed.
-      'Completed' => record.type == 'deposit'
-          ? l10n.statusCompleted
-          : l10n.statusRedeemed,
+      'Completed' =>
+        record.type == 'deposit' ? l10n.statusCompleted : l10n.statusRedeemed,
       'Failed' => l10n.statusFailed,
       _ => l10n.statusPending,
     };
@@ -36,16 +35,16 @@ enum _SortBy { newest, amountHigh, amountLow }
 
 extension on _SortBy {
   String label(AppLocalizations l10n) => switch (this) {
-        _SortBy.newest => l10n.historySortNewest,
-        _SortBy.amountHigh => l10n.historySortAmountHigh,
-        _SortBy.amountLow => l10n.historySortAmountLow,
-      };
+    _SortBy.newest => l10n.historySortNewest,
+    _SortBy.amountHigh => l10n.historySortAmountHigh,
+    _SortBy.amountLow => l10n.historySortAmountLow,
+  };
 
   IconData get icon => switch (this) {
-        _SortBy.newest => Icons.schedule_rounded,
-        _SortBy.amountHigh => Icons.arrow_downward_rounded,
-        _SortBy.amountLow => Icons.arrow_upward_rounded,
-      };
+    _SortBy.newest => Icons.schedule_rounded,
+    _SortBy.amountHigh => Icons.arrow_downward_rounded,
+    _SortBy.amountLow => Icons.arrow_upward_rounded,
+  };
 }
 
 class HistoryScreen extends StatefulWidget {
@@ -71,9 +70,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   /// Fetches history. Also the retry action on the error state.
   Future<void> _load() {
     return context.read<OrderHistoryState>().loadFromBackend(
-          context.read<OrderRepository>(),
-          context.read<WalletRepository>(),
-        );
+      context.read<OrderRepository>(),
+      context.read<WalletRepository>(),
+    );
   }
 
   List<OrderRecord> _sorted(List<OrderRecord> orders) {
@@ -127,10 +126,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: orders.isNotEmpty
                 ? _buildList(sorted, spent, topUps)
                 : state.isLoading
-                    ? const _LoadingState()
-                    : state.error != null
-                        ? _ErrorState(message: state.error!, onRetry: _load)
-                        : const _EmptyState(),
+                ? const _LoadingState()
+                : state.error != null
+                ? _ErrorState(message: state.error!, onRetry: _load)
+                : const _EmptyState(),
           ),
         ],
       ),
@@ -256,7 +255,10 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                       decoration: BoxDecoration(
                         gradient: widget.isSortActive
                             ? const LinearGradient(
-                                colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                                colors: [
+                                  AppTheme.greenDark,
+                                  AppTheme.primaryLight,
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               )
@@ -364,7 +366,9 @@ class _SummaryCard extends StatelessWidget {
                       if (fraction > 0)
                         Expanded(
                           flex: (fraction * 1000).round(),
-                          child: Container(color: _kRed.withValues(alpha: 0.85)),
+                          child: Container(
+                            color: _kRed.withValues(alpha: 0.85),
+                          ),
                         ),
                       if (fraction < 1)
                         Expanded(
@@ -403,8 +407,9 @@ class _SummaryStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: alignEnd
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -480,16 +485,16 @@ class _OrderCardState extends State<_OrderCard> {
     final statusColor = isCompleted
         ? (isDeposit ? AppTheme.green : _kRed)
         : isFailed
-            ? _kRed
-            : _kAmber;
+        ? _kRed
+        : _kAmber;
 
     final amountColor = isFailed
         ? _kGray
         : isPending
-            ? _kAmber
-            : isDeposit
-                ? AppTheme.green
-                : _kRed;
+        ? _kAmber
+        : isDeposit
+        ? AppTheme.green
+        : _kRed;
     final amountLabel = isDeposit
         ? '+\$${order.total.toStringAsFixed(2)}'
         : '-\$${order.total.toStringAsFixed(2)}';
@@ -594,7 +599,9 @@ class _OrderCardState extends State<_OrderCard> {
                       const SizedBox(height: 5),
                       _StatusBadge(
                         label: _statusLabel(
-                            AppLocalizations.of(context)!, order),
+                          AppLocalizations.of(context)!,
+                          order,
+                        ),
                         color: statusColor,
                         pulse: isCompleted,
                       ),
@@ -823,7 +830,7 @@ class _RetryButtonState extends State<_RetryButton> {
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+            colors: [AppTheme.greenDark, AppTheme.primaryLight],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -1201,8 +1208,11 @@ class _SortTile extends StatelessWidget {
             ),
             const Spacer(),
             if (selected)
-              const Icon(Icons.check_circle_rounded,
-                  color: AppTheme.green, size: 20),
+              const Icon(
+                Icons.check_circle_rounded,
+                color: AppTheme.green,
+                size: 20,
+              ),
           ],
         ),
       ),
@@ -1271,8 +1281,8 @@ class _FoodOrderDetails extends StatelessWidget {
             color: order.status == 'Completed'
                 ? AppTheme.green
                 : order.status == 'Failed'
-                    ? _kRed
-                    : _kAmber,
+                ? _kRed
+                : _kAmber,
           ),
         ),
       ],
@@ -1369,11 +1379,7 @@ class _DepositDetails extends StatelessWidget {
 // ── Detail row helper ──────────────────────────────────────────────────────
 
 class _DetailRow extends StatelessWidget {
-  const _DetailRow({
-    required this.label,
-    required this.value,
-    this.valueStyle,
-  });
+  const _DetailRow({required this.label, required this.value, this.valueStyle});
 
   final String label;
   final String value;
@@ -1398,11 +1404,9 @@ class _DetailRow extends StatelessWidget {
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: valueStyle ??
-                const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+            style:
+                valueStyle ??
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -1413,11 +1417,7 @@ class _DetailRow extends StatelessWidget {
 // ── Staggered fade-in wrapper for list items ───────────────────────────────
 
 class _FadeInItem extends StatefulWidget {
-  const _FadeInItem({
-    super.key,
-    required this.index,
-    required this.child,
-  });
+  const _FadeInItem({super.key, required this.index, required this.child});
 
   final int index;
   final Widget child;

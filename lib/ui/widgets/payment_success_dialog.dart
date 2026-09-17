@@ -245,7 +245,9 @@ class _PaymentSuccessDialogState extends State<PaymentSuccessDialog>
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.green.withValues(alpha: 0.30 + 0.25 * glow),
+                      color: AppTheme.green.withValues(
+                        alpha: 0.30 + 0.25 * glow,
+                      ),
                       blurRadius: 16 + 14 * glow,
                       spreadRadius: 1 + 2 * glow,
                     ),
@@ -298,7 +300,7 @@ class _PaymentSuccessDialogState extends State<PaymentSuccessDialog>
             label: widget.buttonLabel,
             height: 52,
             gradient: const LinearGradient(
-              colors: [Color(0xFF4CAF50), Color(0xFF1B5E20)],
+              colors: [AppTheme.tertiaryLight, AppTheme.tertiaryDark],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

@@ -44,9 +44,9 @@ const _kOptions = [
     tagline: 'Deduct from Smart Canteen balance',
     shortCode: 'SC',
     icon: Icons.account_balance_wallet_rounded,
-    gradientStart: Color(0xFF1B5E20),
-    gradientEnd: Color(0xFF4CAF50),
-    brandColor: Color(0xFF2E7D32),
+    gradientStart: AppTheme.greenDark,
+    gradientEnd: AppTheme.primaryLight,
+    brandColor: AppTheme.green,
     isWallet: true,
   ),
   // ── Banks ─────────────────────────────────────────────────────────────────
@@ -406,8 +406,11 @@ class _PaymentCardState extends State<_PaymentCard> {
                           color: AppTheme.green,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.check_rounded,
-                            size: 15, color: Colors.white),
+                        child: const Icon(
+                          Icons.check_rounded,
+                          size: 15,
+                          color: Colors.white,
+                        ),
                       )
                     : Container(
                         key: const ValueKey('arrow'),
@@ -417,8 +420,11 @@ class _PaymentCardState extends State<_PaymentCard> {
                           color: context.surfaceColor,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.chevron_right_rounded,
-                            size: 16, color: context.mutedColor),
+                        child: Icon(
+                          Icons.chevron_right_rounded,
+                          size: 16,
+                          color: context.mutedColor,
+                        ),
                       ),
               ),
             ],
@@ -453,7 +459,9 @@ class _LogoBadge extends StatelessWidget {
           color: Colors.white,
           shape: BoxShape.circle,
           border: Border.all(
-            color: selected ? AppTheme.green : option.brandColor.withValues(alpha: 0.15),
+            color: selected
+                ? AppTheme.green
+                : option.brandColor.withValues(alpha: 0.15),
             width: selected ? 1.6 : 1,
           ),
           boxShadow: [
@@ -487,8 +495,9 @@ class _LogoBadge extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: (selected ? AppTheme.green : option.brandColor)
-                .withValues(alpha: 0.35),
+            color: (selected ? AppTheme.green : option.brandColor).withValues(
+              alpha: 0.35,
+            ),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),

@@ -1,57 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Brand greens (same in both themes)
-  static const Color green = Color(0xFF4CAF50);
-  static const Color greenDark = Color(0xFF2E7D32);
+  // Campus Burnt Amber design tokens.
+  static const Color primary = Color(0xFFB36200);
+  static const Color secondary = Color(0xFFFFF3E5);
+  static const Color tertiary = Color(0xFF10B981);
+  static const Color tertiaryDark = Color(0xFF047857);
+  static const Color tertiaryLight = Color(0xFF34D399);
+  static const Color background = Color(0xFFFAF7F4);
+  static const Color card = Color(0xFFFFFFFF);
+  static const Color text = Color(0xFF1C130A);
+  static const Color border = Color(0xFFEEDAC8);
 
-  // Light surface tint
-  static const Color accentBlue = Color(0xFFA6CDFF);
+  // Compatibility aliases for existing widgets. New code should use the
+  // design-token names above or Theme.of(context).colorScheme.
+  static const Color green = primary;
+  static const Color greenDark = Color(0xFF8C4D00);
+  static const Color primaryLight = Color(0xFFD17A00);
+  static const Color greenSurface = secondary;
 
-  // ── Light palette ──────────────────────────────────────────────────────────
-  static const Color background = Color(0xFFF7F8FA);
-  static const Color card = Colors.white;
-  static const Color greenSurface = Color(0xFFE8F5E9);
-  static const Color text = Color(0xFF1A1F1A);
-  static const Color mutedText = Color(0xFF8A8A8A);
-  static const Color border = Color(0xFFE4EDE4);
+  static const Color accentBlue = tertiary;
 
-  // ── Dark palette ───────────────────────────────────────────────────────────
-  static const Color darkBackground = Color(0xFF0F1612);
-  static const Color darkCard = Color(0xFF1A2318);
-  static const Color darkGreenSurface = Color(0xFF1B2E1E);
-  static const Color darkText = Color(0xFFE8F0E8);
-  static const Color darkMutedText = Color(0xFF7A8A7A);
-  static const Color darkBorder = Color(0xFF2A3A2A);
+  static const Color mutedText = Color(0xFF735F4D);
+
+  static const Color darkBackground = Color(0xFF1C130A);
+  static const Color darkCard = Color(0xFF2A1D12);
+  static const Color darkGreenSurface = Color(0xFF3A2614);
+  static const Color darkText = Color(0xFFFFF3E5);
+  static const Color darkMutedText = Color(0xFFD2B99E);
+  static const Color darkBorder = Color(0xFF65482F);
 
   // ── Gradients (same in both themes) ────────────────────────────────────────
   static final LinearGradient balanceCardGradient = const LinearGradient(
-    colors: [Color(0xFF1B5E20), Color(0xFF2E7D32), Color(0xFF388E3C)],
+    colors: [greenDark, primary, primaryLight],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static final LinearGradient headerGradient = const LinearGradient(
-    colors: [Color(0xFF1B5E20), Color(0xFF2E7D32), Color(0xFF43A047)],
+    colors: [greenDark, primary, primaryLight],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   // ── Light theme ────────────────────────────────────────────────────────────
   static ThemeData get lightTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: green,
-      brightness: Brightness.light,
+    final colorScheme = const ColorScheme.light(
       primary: green,
-      secondary: accentBlue,
-      surface: background,
+      secondary: secondary,
+      tertiary: tertiary,
+      surface: card,
+      onPrimary: Colors.white,
+      onSecondary: text,
+      onSurface: text,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
-      fontFamily: 'Poppins',
+      textTheme: GoogleFonts.plusJakartaSansTextTheme().apply(
+        bodyColor: text,
+        displayColor: text,
+      ),
+      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
       // Khmer has no glyphs in the Latin default, so km text would render as
       // tofu boxes on iOS. Resolution is per glyph: Latin keeps the primary
       // family, Khmer characters fall through to Noto Sans Khmer.
@@ -62,11 +75,48 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: primary,
+          side: const BorderSide(color: primary),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: card,
+        selectedItemColor: primary,
+        unselectedItemColor: mutedText,
+        type: BottomNavigationBarType.fixed,
+      ),
+      navigationBarTheme: const NavigationBarThemeData(
+        backgroundColor: card,
+        indicatorColor: secondary,
+        labelTextStyle: WidgetStatePropertyAll(
+          TextStyle(fontWeight: FontWeight.w600),
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: card,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: border),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: card,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: border),
@@ -85,20 +135,24 @@ class AppTheme {
 
   // ── Dark theme ─────────────────────────────────────────────────────────────
   static ThemeData get darkTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: green,
-      brightness: Brightness.dark,
+    final colorScheme = const ColorScheme.dark(
       primary: green,
-      secondary: accentBlue,
+      secondary: secondary,
+      tertiary: tertiary,
       surface: darkBackground,
       onSurface: darkText,
+      onPrimary: Colors.white,
+      onSecondary: text,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: darkBackground,
-      fontFamily: 'Poppins',
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(
+        ThemeData.dark().textTheme,
+      ).apply(bodyColor: darkText, displayColor: darkText),
+      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
       // Khmer has no glyphs in the Latin default, so km text would render as
       // tofu boxes on iOS. Resolution is per glyph: Latin keeps the primary
       // family, Khmer characters fall through to Noto Sans Khmer.
@@ -109,11 +163,39 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: secondary,
+          side: const BorderSide(color: primary),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      navigationBarTheme: const NavigationBarThemeData(
+        backgroundColor: darkCard,
+        indicatorColor: darkGreenSurface,
+      ),
+      cardTheme: CardThemeData(
+        color: darkCard,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: darkBorder),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: darkCard,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: darkBorder),

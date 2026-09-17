@@ -16,14 +16,13 @@ import 'view_model/auth_view_model.dart';
 
 /// Brand gradient used for the primary action buttons (#4CAF50 → #81C784).
 const _primaryGradient = LinearGradient(
-  colors: [AppTheme.green, Color(0xFF81C784)],
+  colors: [AppTheme.green, AppTheme.primaryLight],
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );
 
 const _googleBlue = Color(0xFF4285F4);
 const _microsoftBlue = Color(0xFF0078D4);
-
 
 /// Turns a caught error into copy a user can act on. [ApiException] carries
 /// the backend's actual message (see backend `AllExceptionsFilter`); anything
@@ -230,12 +229,13 @@ class _AuthHeader extends StatelessWidget {
           transitionBuilder: (child, animation) => FadeTransition(
             opacity: animation,
             child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, -0.15),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-              ),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0, -0.15),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                  ),
               child: child,
             ),
           ),
@@ -775,8 +775,11 @@ class _MicrosoftLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     // A hair of space between the squares, as in the real mark.
     final square = (size - 2) / 2;
-    Widget tile(Color color) =>
-        SizedBox(width: square, height: square, child: ColoredBox(color: color));
+    Widget tile(Color color) => SizedBox(
+      width: square,
+      height: square,
+      child: ColoredBox(color: color),
+    );
 
     return SizedBox(
       width: size,

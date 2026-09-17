@@ -14,10 +14,10 @@ import '../../../ui/states/user_profile_state.dart';
 import '../../widgets/smart_canteen_widgets.dart';
 
 // ── Screen-scoped palette (green theme) ──────────────────────────────────────
-const Color _kGreen = Color(0xFF4CAF50); // AppTheme.green
-const Color _kGreenMid = Color(0xFF388E3C);
-const Color _kGreenDeep = Color(0xFF2E7D32);
-const Color _kMint = Color(0xFFC8E6C9); // light mint accent
+const Color _kGreen = AppTheme.tertiary;
+const Color _kGreenMid = AppTheme.tertiaryLight;
+const Color _kGreenDeep = AppTheme.tertiaryDark;
+const Color _kMint = Color(0xFFD1FAE5);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // QrScreen
@@ -31,8 +31,7 @@ class QrScreen extends StatefulWidget {
   State<QrScreen> createState() => _QrScreenState();
 }
 
-class _QrScreenState extends State<QrScreen>
-    with TickerProviderStateMixin {
+class _QrScreenState extends State<QrScreen> with TickerProviderStateMixin {
   /// Selected filter: [kAllSessions] or a MealSession key. Defaults to showing
   /// everything — filtering by the session that happens to be open right now
   /// hid tickets the user had just bought, especially all-day drinks, which are
@@ -58,9 +57,10 @@ class _QrScreenState extends State<QrScreen>
       vsync: this,
       duration: const Duration(milliseconds: 650),
     );
-    _pulseAnim = Tween<double>(begin: 1.0, end: 1.06).animate(
-      CurvedAnimation(parent: _pulseCtrl, curve: Curves.elasticOut),
-    );
+    _pulseAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.06,
+    ).animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.elasticOut));
     _spinCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -69,14 +69,14 @@ class _QrScreenState extends State<QrScreen>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _entranceFade =
-        CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeInOut);
-    _entranceSlide = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOutCubic),
+    _entranceFade = CurvedAnimation(
+      parent: _entranceCtrl,
+      curve: Curves.easeInOut,
     );
+    _entranceSlide =
+        Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero).animate(
+          CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOutCubic),
+        );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _entranceCtrl.forward();
@@ -131,8 +131,9 @@ class _QrScreenState extends State<QrScreen>
     final index = sessionCoupons.isEmpty
         ? 0
         : _couponIndex.clamp(0, sessionCoupons.length - 1);
-    final CouponDto? coupon =
-        sessionCoupons.isNotEmpty ? sessionCoupons[index] : null;
+    final CouponDto? coupon = sessionCoupons.isNotEmpty
+        ? sessionCoupons[index]
+        : null;
     // "Paid/active" = there's a live coupon to show for this session.
     final isPaid = coupon != null;
 
@@ -178,10 +179,10 @@ class _QrScreenState extends State<QrScreen>
                   qrData: coupon?.qrToken,
                   subtitle: coupon != null
                       ? '${coupon.menuItemName ?? 'Meal ticket'}'
-                          '${coupon.couponCode != null ? '  ·  ${coupon.couponCode}' : ''}'
+                            '${coupon.couponCode != null ? '  ·  ${coupon.couponCode}' : ''}'
                       : _session == kAllSessions
-                          ? 'No active tickets yet'
-                          : 'No active ticket for this session',
+                      ? 'No active tickets yet'
+                      : 'No active ticket for this session',
                 ),
               ),
             ),
@@ -244,8 +245,18 @@ class _QrScreenState extends State<QrScreen>
 
 String _fmtDate(DateTime dt) {
   const m = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   const d = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   return '${d[dt.weekday - 1]}, ${m[dt.month - 1]} ${dt.day}, ${dt.year}';
@@ -255,12 +266,12 @@ String _fmtDate(DateTime dt) {
 const kAllSessions = 'all';
 
 String _sessionLabel(String key) => switch (key) {
-      kAllSessions => 'All tickets',
-      'breakfast' => 'Breakfast',
-      'lunch' => 'Lunch',
-      'dinner' => 'Dinner',
-      _ => key,
-    };
+  kAllSessions => 'All tickets',
+  'breakfast' => 'Breakfast',
+  'lunch' => 'Lunch',
+  'dinner' => 'Dinner',
+  _ => key,
+};
 
 /// Dot pager to switch between multiple tickets in the same session.
 class _CouponPager extends StatelessWidget {
@@ -355,8 +366,11 @@ class _OutlinedReceiptButtonState extends State<_OutlinedReceiptButton> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.receipt_long_outlined,
-                    size: 18, color: _kGreen),
+                const Icon(
+                  Icons.receipt_long_outlined,
+                  size: 18,
+                  color: _kGreen,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   AppLocalizations.of(context)!.qrViewReceipt,
@@ -480,9 +494,7 @@ class _TicketCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: _kMint.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: _kMint.withValues(alpha: 0.3),
-                    ),
+                    border: Border.all(color: _kMint.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -491,8 +503,8 @@ class _TicketCard extends StatelessWidget {
                         sessionLabel == 'Breakfast'
                             ? Icons.wb_sunny_outlined
                             : sessionLabel == 'Dinner'
-                                ? Icons.nightlight_outlined
-                                : Icons.lunch_dining_outlined,
+                            ? Icons.nightlight_outlined
+                            : Icons.lunch_dining_outlined,
                         color: _kMint,
                         size: 12,
                       ),
@@ -680,9 +692,10 @@ class _StatusBadgeState extends State<_StatusBadge>
       duration: const Duration(milliseconds: 1500),
     );
     _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
-    _scale = Tween<double>(begin: 0.85, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutBack),
-    );
+    _scale = Tween<double>(
+      begin: 0.85,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutBack));
     _start();
   }
 
@@ -771,10 +784,7 @@ class _QrPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _QrPainter(),
-      child: const SizedBox.expand(),
-    );
+    return CustomPaint(painter: _QrPainter(), child: const SizedBox.expand());
   }
 }
 
@@ -815,12 +825,7 @@ class _QrPainter extends CustomPainter {
         if (pattern[r][c] == 1) {
           canvas.drawRRect(
             RRect.fromRectAndRadius(
-              Rect.fromLTWH(
-                c * cell + 1,
-                r * cell + 1,
-                cell - 2,
-                cell - 2,
-              ),
+              Rect.fromLTWH(c * cell + 1, r * cell + 1, cell - 2, cell - 2),
               const Radius.circular(2),
             ),
             paint,
@@ -839,10 +844,7 @@ class _QrPainter extends CustomPainter {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _SessionSelector extends StatelessWidget {
-  const _SessionSelector({
-    required this.selected,
-    required this.onSelect,
-  });
+  const _SessionSelector({required this.selected, required this.onSelect});
 
   final String selected;
   final ValueChanged<String> onSelect;
@@ -961,8 +963,7 @@ class _AllTicketsChip extends StatelessWidget {
               ),
               const Spacer(),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? _kGreenDeep.withValues(alpha: 0.12)
@@ -1043,9 +1044,7 @@ class _SessionChip extends StatelessWidget {
               decoration: BoxDecoration(
                 // Opaque light-green fill when selected so the green text stays
                 // readable inside the gradient border.
-                color: isSelected
-                    ? const Color(0xFFEAF6EB)
-                    : context.cardColor,
+                color: isSelected ? const Color(0xFFEAF6EB) : context.cardColor,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
@@ -1110,10 +1109,7 @@ class _OrderSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = order.items
-        .split(', ')
-        .where((s) => s.isNotEmpty)
-        .toList();
+    final items = order.items.split(', ').where((s) => s.isNotEmpty).toList();
 
     return FancyCard(
       padding: const EdgeInsets.all(20),
@@ -1266,11 +1262,7 @@ class _ItemRow extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
-  const _DetailRow({
-    required this.label,
-    required this.value,
-    this.icon,
-  });
+  const _DetailRow({required this.label, required this.value, this.icon});
 
   final String label;
   final String value;
@@ -1287,10 +1279,7 @@ class _DetailRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 13, color: context.mutedColor),
-        ),
+        Text(label, style: TextStyle(fontSize: 13, color: context.mutedColor)),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1434,36 +1423,38 @@ class _ReceiptSheet extends StatelessWidget {
                         .split(', ')
                         .where((s) => s.isNotEmpty)
                         .map((raw) {
-                      final parts = raw.split(' ×');
-                      final name = parts[0].trim();
-                      final qty =
-                          parts.length > 1 ? int.tryParse(parts[1]) ?? 1 : 1;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                name,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: context.textColor,
+                          final parts = raw.split(' ×');
+                          final name = parts[0].trim();
+                          final qty = parts.length > 1
+                              ? int.tryParse(parts[1]) ?? 1
+                              : 1;
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    name,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: context.textColor,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  '×$qty',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: context.mutedColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '×$qty',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: context.mutedColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                          );
+                        })
+                        .toList(),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -1484,10 +1475,7 @@ class _ReceiptSheet extends StatelessWidget {
                       : const Color(0xFFFF9800),
                 ),
                 const SizedBox(height: 12),
-                const _ReceiptRow(
-                  label: 'Payment Method',
-                  value: 'Wallet',
-                ),
+                const _ReceiptRow(label: 'Payment Method', value: 'Wallet'),
                 const SizedBox(height: 12),
                 _ReceiptRow(
                   label: 'Reference',
@@ -1528,10 +1516,7 @@ class _ReceiptRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 13, color: context.mutedColor),
-        ),
+        Text(label, style: TextStyle(fontSize: 13, color: context.mutedColor)),
         Text(
           value,
           style: TextStyle(

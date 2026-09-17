@@ -17,7 +17,7 @@ import 'view_model/auth_view_model.dart';
 
 /// Brand gradient used for the primary action button (#4CAF50 → #81C784).
 const _primaryGradient = LinearGradient(
-  colors: [AppTheme.green, Color(0xFF81C784)],
+  colors: [AppTheme.green, AppTheme.primaryLight],
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );
@@ -64,9 +64,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final existingName = [widget.user.firstName, widget.user.lastName]
-        .where((p) => p != null && p.trim().isNotEmpty)
-        .join(' ');
+    final existingName = [
+      widget.user.firstName,
+      widget.user.lastName,
+    ].where((p) => p != null && p.trim().isNotEmpty).join(' ');
     _nameController = TextEditingController(text: existingName);
     _phoneController = TextEditingController(text: widget.user.phone ?? '');
     _passwordController = TextEditingController();
@@ -158,9 +159,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     if (ok) {
       // Keep the local display state in sync so the name shows across the app.
       context.read<UserProfileState>().updateProfile(
-            name: name,
-            email: widget.user.email,
-          );
+        name: name,
+        email: widget.user.email,
+      );
       Navigator.pushReplacementNamed(context, AppShell.routeName);
       return;
     }
@@ -316,7 +317,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                               color: AppTheme.mutedText,
                             ),
                             onPressed: () => setState(
-                                () => _obscurePassword = !_obscurePassword),
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
                             tooltip: _obscurePassword
                                 ? 'Show password'
                                 : 'Hide password',
@@ -373,7 +375,6 @@ class _SchoolField extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final VoidCallback onRetry;
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -402,7 +403,9 @@ class _SchoolField extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.authLoadingSchools,
                   style: const TextStyle(
-                      color: AppTheme.mutedText, fontSize: 14),
+                    color: AppTheme.mutedText,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),

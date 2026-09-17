@@ -163,7 +163,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!mounted) return;
       setState(() => _saving = false);
       _showSnack(
-        e is ApiException ? e.message : 'Could not update profile. Please try again.',
+        e is ApiException
+            ? e.message
+            : 'Could not update profile. Please try again.',
         isError: true,
       );
     }
@@ -194,11 +196,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   SettingsFadeIn(
                     index: 0,
-                    child: Center(child: _AvatarPicker(
-                      photo: _photo,
-                      initials: context.read<UserProfileState>().initials,
-                      onTap: _showImageSourceSheet,
-                    )),
+                    child: Center(
+                      child: _AvatarPicker(
+                        photo: _photo,
+                        initials: context.read<UserProfileState>().initials,
+                        onTap: _showImageSourceSheet,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 32),
                   SettingsFadeIn(
@@ -223,7 +227,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       hint: 'Enter your email',
                       keyboardType: TextInputType.emailAddress,
                       readOnly: true,
-                      helper: 'Email is linked to your account and can’t be changed here.',
+                      helper:
+                          'Email is linked to your account and can’t be changed here.',
                     ),
                   ),
                   const SizedBox(height: 36),
@@ -232,7 +237,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: SmartCanteenButton(
                       label: _saving ? 'Saving…' : 'Save Changes',
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                        colors: [AppTheme.greenDark, AppTheme.primaryLight],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -242,12 +247,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             )
-                          : const Icon(Icons.check_rounded,
-                              color: Colors.white, size: 20),
+                          : const Icon(
+                              Icons.check_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                       onPressed: _saving ? null : _save,
                     ),
                   ),
@@ -285,12 +294,19 @@ class _AvatarPicker extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppTheme.green.withValues(alpha: 0.12),
-              border: Border.all(color: AppTheme.green.withValues(alpha: 0.3), width: 2),
+              border: Border.all(
+                color: AppTheme.green.withValues(alpha: 0.3),
+                width: 2,
+              ),
             ),
             child: ClipOval(
               child: photo != null
-                  ? Image.file(photo!,
-                      fit: BoxFit.cover, width: 104, height: 104)
+                  ? Image.file(
+                      photo!,
+                      fit: BoxFit.cover,
+                      width: 104,
+                      height: 104,
+                    )
                   : Center(
                       child: Text(
                         initials,
@@ -314,7 +330,11 @@ class _AvatarPicker extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: context.bgColor, width: 2.5),
               ),
-              child: const Icon(Icons.edit_rounded, size: 16, color: Colors.white),
+              child: const Icon(
+                Icons.edit_rounded,
+                size: 16,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -408,8 +428,9 @@ class _SheetOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isDestructive ? const Color(0xFFE53935) : AppTheme.green;
-    final bgColor =
-        isDestructive ? const Color(0xFFFFEBEE) : context.surfaceColor;
+    final bgColor = isDestructive
+        ? const Color(0xFFFFEBEE)
+        : context.surfaceColor;
 
     return Material(
       color: Colors.transparent,

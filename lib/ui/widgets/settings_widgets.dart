@@ -5,11 +5,7 @@ import '../../theme/app_theme.dart';
 
 /// Staggered fade + slide-up wrapper used across the settings screens.
 class SettingsFadeIn extends StatefulWidget {
-  const SettingsFadeIn({
-    super.key,
-    required this.index,
-    required this.child,
-  });
+  const SettingsFadeIn({super.key, required this.index, required this.child});
 
   final int index;
   final Widget child;
@@ -35,8 +31,7 @@ class _SettingsFadeInState extends State<SettingsFadeIn>
     _slide = Tween<Offset>(
       begin: const Offset(0, 0.10),
       end: Offset.zero,
-    ).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
     final delay = Duration(milliseconds: 90 * widget.index.clamp(0, 8));
     Future.delayed(delay, () {
       if (mounted) _controller.forward();
@@ -214,17 +209,22 @@ class _SettingsTileState extends State<SettingsTile> {
             color: Colors.transparent,
             child: InkWell(
               onTap: widget.onTap,
-              onTapDown:
-                  widget.onTap == null ? null : (_) => setState(() => _pressed = true),
-              onTapUp:
-                  widget.onTap == null ? null : (_) => setState(() => _pressed = false),
-              onTapCancel:
-                  widget.onTap == null ? null : () => setState(() => _pressed = false),
+              onTapDown: widget.onTap == null
+                  ? null
+                  : (_) => setState(() => _pressed = true),
+              onTapUp: widget.onTap == null
+                  ? null
+                  : (_) => setState(() => _pressed = false),
+              onTapCancel: widget.onTap == null
+                  ? null
+                  : () => setState(() => _pressed = false),
               splashColor: widget.iconColor.withValues(alpha: 0.1),
               highlightColor: widget.iconColor.withValues(alpha: 0.04),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -234,7 +234,11 @@ class _SettingsTileState extends State<SettingsTile> {
                         color: widget.iconColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(widget.icon, color: widget.iconColor, size: 20),
+                      child: Icon(
+                        widget.icon,
+                        color: widget.iconColor,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -253,7 +257,9 @@ class _SettingsTileState extends State<SettingsTile> {
                           Text(
                             widget.subtitle,
                             style: TextStyle(
-                                color: context.mutedColor, fontSize: 11),
+                              color: context.mutedColor,
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       ),
@@ -303,7 +309,7 @@ class SettingsHeader extends StatelessWidget {
       ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF66BB6A), Color(0xFF2E7D32), Color(0xFF1B5E20)],
+          colors: [AppTheme.primaryLight, AppTheme.green, AppTheme.greenDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -320,8 +326,11 @@ class SettingsHeader extends StatelessWidget {
               child: const SizedBox(
                 width: 38,
                 height: 38,
-                child: Icon(Icons.arrow_back_rounded,
-                    color: Colors.white, size: 20),
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),

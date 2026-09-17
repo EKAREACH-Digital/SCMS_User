@@ -47,9 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context.read<BalanceState>().fetchBalance();
         context.read<MenuState>().load();
         context.read<OrderHistoryState>().loadFromBackend(
-              context.read<OrderRepository>(),
-              context.read<WalletRepository>(),
-            );
+          context.read<OrderRepository>(),
+          context.read<WalletRepository>(),
+        );
         _loadProfile();
         context.read<NotificationViewModel>().refreshUnreadCount();
       }
@@ -85,16 +85,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   static const _filterLabels = [
-    'All', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Drinks', 'Desserts',
+    'All',
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Snacks',
+    'Drinks',
+    'Desserts',
   ];
   static const _filterCats = [
-    '', 'breakfast', 'lunch', 'dinner', 'snacks', 'drinks', 'desserts',
+    '',
+    'breakfast',
+    'lunch',
+    'dinner',
+    'snacks',
+    'drinks',
+    'desserts',
   ];
 
   List<FoodItem> _filteredItems(List<FoodItem> all) {
     final cat = _filterCats[_selectedFilter];
-    final items =
-        cat.isEmpty ? all : all.where((f) => f.category == cat).toList();
+    final items = cat.isEmpty
+        ? all
+        : all.where((f) => f.category == cat).toList();
     return items.take(4).toList();
   }
 
@@ -172,12 +185,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   _MenuSection(
                     selectedFilter: _selectedFilter,
                     onFilterChanged: (i) => setState(() => _selectedFilter = i),
-                    filteredItems: _filteredItems(
-                      switch (context.watch<MenuState>().items) {
-                        AsyncData<List<FoodItem>>(:final data) => data,
-                        _ => const <FoodItem>[],
-                      },
-                    ),
+                    filteredItems: _filteredItems(switch (context
+                        .watch<MenuState>()
+                        .items) {
+                      AsyncData<List<FoodItem>>(:final data) => data,
+                      _ => const <FoodItem>[],
+                    }),
                     filterLabels: _filterLabels,
                     onViewAll: () => AppShellScope.maybeOf(context)?.setTab(1),
                   ),
@@ -317,7 +330,7 @@ class _HeaderState extends State<_Header> with SingleTickerProviderStateMixin {
                 height: 50,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF2E7D32), Color(0xFF4CAF50)],
+                    colors: [AppTheme.greenDark, AppTheme.primaryLight],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -402,8 +415,9 @@ class _HeaderState extends State<_Header> with SingleTickerProviderStateMixin {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFE53935)
-                                .withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFFE53935,
+                            ).withValues(alpha: 0.4),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -630,7 +644,7 @@ class _BalanceCardState extends State<_BalanceCard> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.42),
+            color: AppTheme.greenDark.withValues(alpha: 0.42),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
@@ -695,7 +709,9 @@ class _BalanceCardState extends State<_BalanceCard> {
                       Text(
                         AppLocalizations.of(context)!.homeScholarBadge,
                         style: const TextStyle(
-                            color: Colors.white60, fontSize: 11),
+                          color: Colors.white60,
+                          fontSize: 11,
+                        ),
                       ),
                     ],
                   ),
@@ -905,7 +921,7 @@ class _ActiveBadgeState extends State<_ActiveBadge>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF69F0AE).withValues(alpha: _glow.value),
+                color: AppTheme.tertiaryLight.withValues(alpha: _glow.value),
                 blurRadius: 10,
                 spreadRadius: 0.5,
               ),
@@ -914,7 +930,7 @@ class _ActiveBadgeState extends State<_ActiveBadge>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.circle, color: Color(0xFF69F0AE), size: 7),
+              const Icon(Icons.circle, color: AppTheme.tertiaryLight, size: 7),
               const SizedBox(width: 5),
               Text(
                 AppLocalizations.of(context)!.commonActive,
@@ -988,7 +1004,7 @@ class _BalanceBtnState extends State<_BalanceBtn> {
                 child: Icon(
                   widget.icon,
                   size: 15,
-                  color: isPrimary ? const Color(0xFF2E7D32) : Colors.white,
+                  color: isPrimary ? AppTheme.greenDark : Colors.white,
                 ),
               ),
               const SizedBox(width: 5),
@@ -997,7 +1013,7 @@ class _BalanceBtnState extends State<_BalanceBtn> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: isPrimary ? const Color(0xFF2E7D32) : Colors.white,
+                  color: isPrimary ? AppTheme.greenDark : Colors.white,
                 ),
               ),
             ],
@@ -1050,7 +1066,7 @@ class _MealPassCardState extends State<_MealPassCard> {
             color: widget.isActive ? null : context.cardColor,
             gradient: widget.isActive
                 ? const LinearGradient(
-                    colors: [Color(0xFF2E7D32), Color(0xFF4CAF50)],
+                    colors: [AppTheme.greenDark, AppTheme.primaryLight],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -1276,7 +1292,7 @@ class _PromoBannerState extends State<_PromoBanner>
                     'asset/foods/exlusive.png',
                     fit: BoxFit.cover,
                     errorBuilder: (_, _, _) =>
-                        const ColoredBox(color: Color(0xFF2E7D32)),
+                        const ColoredBox(color: AppTheme.greenDark),
                   ),
                 ),
                 // ── Blurred copy, faded out left→right (blur 4 → 0) ──────────
@@ -1295,7 +1311,7 @@ class _PromoBannerState extends State<_PromoBanner>
                         'asset/foods/exlusive.png',
                         fit: BoxFit.cover,
                         errorBuilder: (_, _, _) =>
-                            const ColoredBox(color: Color(0xFF2E7D32)),
+                            const ColoredBox(color: AppTheme.greenDark),
                       ),
                     ),
                   ),
@@ -1306,8 +1322,8 @@ class _PromoBannerState extends State<_PromoBanner>
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xFF1B5E20).withValues(alpha: 0.92),
-                          const Color(0xFF43A047).withValues(alpha: 0.72),
+                          AppTheme.greenDark.withValues(alpha: 0.92),
+                          AppTheme.primaryLight.withValues(alpha: 0.72),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -1366,7 +1382,9 @@ class _PromoBannerState extends State<_PromoBanner>
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                AppLocalizations.of(context)!.homePromoExclusive,
+                                AppLocalizations.of(
+                                  context,
+                                )!.homePromoExclusive,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -1415,10 +1433,11 @@ class _PromoBannerState extends State<_PromoBanner>
                           HapticFeedback.lightImpact();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .homeCouponApplied),
+                              content: Text(
+                                AppLocalizations.of(context)!.homeCouponApplied,
+                              ),
                               behavior: SnackBarBehavior.floating,
-                              backgroundColor: const Color(0xFF1B5E20),
+                              backgroundColor: AppTheme.greenDark,
                               duration: const Duration(seconds: 2),
                             ),
                           );
@@ -1445,7 +1464,7 @@ class _PromoBannerState extends State<_PromoBanner>
                               Text(
                                 AppLocalizations.of(context)!.homeClaimNow,
                                 style: const TextStyle(
-                                  color: Color(0xFF1B5E20),
+                                  color: AppTheme.greenDark,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14,
                                   letterSpacing: 0.3,
@@ -1454,7 +1473,7 @@ class _PromoBannerState extends State<_PromoBanner>
                               const SizedBox(width: 6),
                               const Icon(
                                 Icons.arrow_forward_rounded,
-                                color: Color(0xFF1B5E20),
+                                color: AppTheme.greenDark,
                                 size: 16,
                               ),
                             ],
@@ -2034,7 +2053,9 @@ class _TopUpSheetState extends State<_TopUpSheet> {
                   label: Text(
                     AppLocalizations.of(context)!.walletEnterCustomAmount,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ),
@@ -2541,13 +2562,13 @@ Future<void> _doTopUp(
     // Carries the bank's logo so the alert is recognisable at a glance,
     // rather than a generic wallet icon shared with every other entry.
     ctx.read<NotificationViewModel>().addLocal(
-          id: 'local-topup-${DateTime.now().microsecondsSinceEpoch}',
-          title: 'Top-up successful',
-          body:
-              '\$${amount.toStringAsFixed(2)} added to your wallet via ${method.name}.',
-          type: 'wallet',
-          imageAsset: method.logo,
-        );
+      id: 'local-topup-${DateTime.now().microsecondsSinceEpoch}',
+      title: 'Top-up successful',
+      body:
+          '\$${amount.toStringAsFixed(2)} added to your wallet via ${method.name}.',
+      type: 'wallet',
+      imageAsset: method.logo,
+    );
 
     // Hand off from the processing dialog straight to the success modal.
     PaymentSuccessDialog.show(

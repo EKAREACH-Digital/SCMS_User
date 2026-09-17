@@ -31,10 +31,22 @@ class _MenuScreenState extends State<MenuScreen> {
   // Mirrors the real backend categories so nothing is hidden (Dinner was
   // missing before). The chip row scrolls horizontally.
   static const _filters = [
-    'All', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Drinks', 'Desserts',
+    'All',
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Snacks',
+    'Drinks',
+    'Desserts',
   ];
   static const _cats = [
-    '', 'breakfast', 'lunch', 'dinner', 'snacks', 'drinks', 'desserts',
+    '',
+    'breakfast',
+    'lunch',
+    'dinner',
+    'snacks',
+    'drinks',
+    'desserts',
   ];
 
   @override
@@ -180,10 +192,7 @@ class _MenuScreenState extends State<MenuScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppTheme.green.withValues(alpha: 0.08),
-                Colors.white,
-              ],
+              colors: [AppTheme.green.withValues(alpha: 0.08), Colors.white],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -239,7 +248,9 @@ class _MenuScreenState extends State<MenuScreen> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFE53935).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFFE53935,
+                            ).withValues(alpha: 0.4),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -294,14 +305,15 @@ class _MenuScreenState extends State<MenuScreen> {
               Expanded(
                 child: switch (menuAsync) {
                   AsyncLoading<List<FoodItem>>() => const Center(
-                      child: CircularProgressIndicator(color: AppTheme.green),
-                    ),
+                    child: CircularProgressIndicator(color: AppTheme.green),
+                  ),
                   AsyncError<List<FoodItem>>() => _MenuLoadError(
-                      onRetry: () =>
-                          context.read<MenuState>().load(force: true),
-                    ),
-                  AsyncData<List<FoodItem>>(:final data) =>
-                    _buildItemsBody(context, _visibleItems(data)),
+                    onRetry: () => context.read<MenuState>().load(force: true),
+                  ),
+                  AsyncData<List<FoodItem>>(:final data) => _buildItemsBody(
+                    context,
+                    _visibleItems(data),
+                  ),
                 },
               ),
             ],
@@ -339,7 +351,8 @@ class FoodItemCard extends StatefulWidget {
   State<FoodItemCard> createState() => _FoodItemCardState();
 }
 
-class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderStateMixin {
+class _FoodItemCardState extends State<FoodItemCard>
+    with SingleTickerProviderStateMixin {
   bool _isPressed = false;
   bool _isFavorite = false;
   late AnimationController _expandController;
@@ -453,18 +466,19 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                     height: 110,
                     child: Stack(
                       children: [
-                        _FoodImage(
-                          item: widget.item,
-                          aspectRatio: 1.0,
-                        ),
+                        _FoodImage(item: widget.item, aspectRatio: 1.0),
                         Positioned(
                           top: 8,
                           right: 8,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFB74D).withValues(alpha: 0.95),
+                              color: const Color(
+                                0xFFFFB74D,
+                              ).withValues(alpha: 0.95),
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: [
                                 BoxShadow(
@@ -534,10 +548,14 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                color: _getTagColor(tag).withValues(alpha: 0.15),
+                                color: _getTagColor(
+                                  tag,
+                                ).withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                  color: _getTagColor(tag).withValues(alpha: 0.3),
+                                  color: _getTagColor(
+                                    tag,
+                                  ).withValues(alpha: 0.3),
                                   width: 0.8,
                                 ),
                               ),
@@ -584,7 +602,9 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                                   color: AppTheme.green.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppTheme.green.withValues(alpha: 0.3),
+                                    color: AppTheme.green.withValues(
+                                      alpha: 0.3,
+                                    ),
                                     width: 1.5,
                                   ),
                                 ),
@@ -607,7 +627,9 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                                     Container(
                                       width: 1,
                                       height: 24,
-                                      color: AppTheme.green.withValues(alpha: 0.2),
+                                      color: AppTheme.green.withValues(
+                                        alpha: 0.2,
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 36,
@@ -626,7 +648,9 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                                     Container(
                                       width: 1,
                                       height: 24,
-                                      color: AppTheme.green.withValues(alpha: 0.2),
+                                      color: AppTheme.green.withValues(
+                                        alpha: 0.2,
+                                      ),
                                     ),
                                     GestureDetector(
                                       onTap: _increment,
@@ -680,14 +704,13 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                   child: SizedBox(
                     width: double.infinity,
                     height: 200,
-                    child: _FoodImage(
-                      item: widget.item,
-                      aspectRatio: 16 / 9,
-                    ),
+                    child: _FoodImage(item: widget.item, aspectRatio: 16 / 9),
                   ),
                 ),
                 Positioned(
@@ -735,7 +758,9 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                         ],
                       ),
                       child: Icon(
-                        _isFavorite ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+                        _isFavorite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_outline_rounded,
                         color: _isFavorite ? Colors.red : Colors.black,
                         size: 20,
                       ),
@@ -746,7 +771,10 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                   top: 16,
                   right: 64,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFB74D).withValues(alpha: 0.95),
                       borderRadius: BorderRadius.circular(10),
@@ -816,7 +844,10 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
                     runSpacing: 8,
                     children: widget.item.tags.map((tag) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: _getTagColor(tag).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
@@ -979,9 +1010,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
           decoration: BoxDecoration(
             color: AppTheme.green.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppTheme.green.withValues(alpha: 0.15),
-            ),
+            border: Border.all(color: AppTheme.green.withValues(alpha: 0.15)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1047,17 +1076,11 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
           decoration: BoxDecoration(
             color: Colors.orange.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.orange.withValues(alpha: 0.15),
-            ),
+            border: Border.all(color: Colors.orange.withValues(alpha: 0.15)),
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.info_rounded,
-                color: Colors.orange,
-                size: 16,
-              ),
+              Icon(Icons.info_rounded, color: Colors.orange, size: 16),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -1078,10 +1101,7 @@ class _FoodItemCardState extends State<FoodItemCard> with SingleTickerProviderSt
 }
 
 class _FoodImage extends StatefulWidget {
-  const _FoodImage({
-    required this.item,
-    this.aspectRatio = 1.0,
-  });
+  const _FoodImage({required this.item, this.aspectRatio = 1.0});
 
   final FoodItem item;
   final double aspectRatio;
@@ -1276,7 +1296,7 @@ class _ModernFilterChipState extends State<_ModernFilterChip> {
           decoration: BoxDecoration(
             gradient: widget.isSelected
                 ? const LinearGradient(
-                    colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                    colors: [AppTheme.greenDark, AppTheme.primaryLight],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -1285,10 +1305,7 @@ class _ModernFilterChipState extends State<_ModernFilterChip> {
             borderRadius: BorderRadius.circular(24),
             border: widget.isSelected
                 ? null
-                : Border.all(
-                    color: context.borderColor,
-                    width: 1.2,
-                  ),
+                : Border.all(color: context.borderColor, width: 1.2),
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
@@ -1430,7 +1447,7 @@ class _SearchBarState extends State<_SearchBar> {
             decoration: BoxDecoration(
               gradient: widget.isSortActive
                   ? const LinearGradient(
-                      colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                      colors: [AppTheme.greenDark, AppTheme.primaryLight],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
@@ -1576,8 +1593,11 @@ class _SortTile extends StatelessWidget {
             ),
             const Spacer(),
             if (selected)
-              const Icon(Icons.check_circle_rounded,
-                  color: AppTheme.green, size: 20),
+              const Icon(
+                Icons.check_circle_rounded,
+                color: AppTheme.green,
+                size: 20,
+              ),
           ],
         ),
       ),
@@ -1588,11 +1608,7 @@ class _SortTile extends StatelessWidget {
 // ── Staggered fade-in wrapper for list items ──────────────────────────────────
 
 class _FadeInItem extends StatefulWidget {
-  const _FadeInItem({
-    super.key,
-    required this.index,
-    required this.child,
-  });
+  const _FadeInItem({super.key, required this.index, required this.child});
 
   final int index;
   final Widget child;
@@ -1761,9 +1777,10 @@ class _BounceAddButtonState extends State<_BounceAddButton>
       value: 1.0,
     );
     // Bounce: shrink then overshoot back via elasticOut.
-    _scale = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _scale = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
   }
 
   @override

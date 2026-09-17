@@ -318,7 +318,7 @@ class _Header extends StatelessWidget {
       decoration: const BoxDecoration(
         // Soft mint → emerald gradient.
         gradient: LinearGradient(
-          colors: [Color(0xFF66BB6A), Color(0xFF2E7D32), Color(0xFF1B5E20)],
+          colors: [AppTheme.primaryLight, AppTheme.green, AppTheme.greenDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -337,10 +337,7 @@ class _Header extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              _IconButtonGlass(
-                icon: Icons.edit_outlined,
-                onTap: onEditProfile,
-              ),
+              _IconButtonGlass(icon: Icons.edit_outlined, onTap: onEditProfile),
             ],
           ),
           const SizedBox(height: 24),
@@ -736,9 +733,9 @@ class _LanguageSegment extends StatelessWidget {
   /// Short labels, each written in its own script so the inactive option stays
   /// recognisable to someone who can't read the active language.
   static String _shortLabel(AppLanguage lang) => switch (lang) {
-        AppLanguage.english => 'EN',
-        AppLanguage.khmer => 'ខ្មែរ',
-      };
+    AppLanguage.english => 'EN',
+    AppLanguage.khmer => 'ខ្មែរ',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -762,8 +759,10 @@ class _LanguageSegment extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: lang == current ? AppTheme.green : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
@@ -773,9 +772,7 @@ class _LanguageSegment extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: lang == current
-                        ? Colors.white
-                        : context.mutedColor,
+                    color: lang == current ? Colors.white : context.mutedColor,
                   ),
                 ),
               ),
@@ -867,8 +864,9 @@ class _PickerOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isDestructive ? _kRed : AppTheme.green;
-    final bgColor =
-        isDestructive ? const Color(0xFFFFEBEE) : context.surfaceColor;
+    final bgColor = isDestructive
+        ? const Color(0xFFFFEBEE)
+        : context.surfaceColor;
 
     return Material(
       color: Colors.transparent,

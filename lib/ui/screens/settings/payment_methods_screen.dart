@@ -52,7 +52,8 @@ class PaymentMethodsScreen extends StatelessWidget {
                             card: card,
                             isDefault: card.id == state.defaultId,
                             onSetDefault: () => state.setDefault(card.id),
-                            onRemove: () => _confirmRemove(context, state, card),
+                            onRemove: () =>
+                                _confirmRemove(context, state, card),
                           ),
                         ),
                       );
@@ -66,12 +67,15 @@ class PaymentMethodsScreen extends StatelessWidget {
               child: SmartCanteenButton(
                 label: 'Add New Card',
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                  colors: [AppTheme.greenDark, AppTheme.primaryLight],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                leading: const Icon(Icons.add_rounded,
-                    color: Colors.white, size: 22),
+                leading: const Icon(
+                  Icons.add_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
                 onPressed: () => _showAddCardSheet(context),
               ),
             ),
@@ -130,7 +134,11 @@ class _CardTile extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF1B5E20), Color(0xFF2E7D32), Color(0xFF43A047)],
+              colors: [
+                AppTheme.greenDark,
+                AppTheme.green,
+                AppTheme.primaryLight,
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -148,8 +156,7 @@ class _CardTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(_brandIcon(card.brand),
-                      color: Colors.white, size: 26),
+                  Icon(_brandIcon(card.brand), color: Colors.white, size: 26),
                   const SizedBox(width: 8),
                   Text(
                     card.brand.label,
@@ -163,7 +170,9 @@ class _CardTile extends StatelessWidget {
                   if (isDefault)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 9, vertical: 3),
+                        horizontal: 9,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.22),
                         borderRadius: BorderRadius.circular(8),
@@ -181,9 +190,11 @@ class _CardTile extends StatelessWidget {
                   else
                     GestureDetector(
                       onTap: onRemove,
-                      child: Icon(Icons.delete_outline_rounded,
-                          color: Colors.white.withValues(alpha: 0.85),
-                          size: 20),
+                      child: Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.white.withValues(alpha: 0.85),
+                        size: 20,
+                      ),
                     ),
                 ],
               ),
@@ -261,11 +272,11 @@ class _CardTile extends StatelessWidget {
   }
 
   IconData _brandIcon(CardBrand brand) => switch (brand) {
-        CardBrand.visa => Icons.credit_card_rounded,
-        CardBrand.mastercard => Icons.credit_card_rounded,
-        CardBrand.amex => Icons.credit_card_rounded,
-        CardBrand.generic => Icons.credit_card_outlined,
-      };
+    CardBrand.visa => Icons.credit_card_rounded,
+    CardBrand.mastercard => Icons.credit_card_rounded,
+    CardBrand.amex => Icons.credit_card_rounded,
+    CardBrand.generic => Icons.credit_card_outlined,
+  };
 }
 
 class _EmptyCards extends StatelessWidget {
@@ -284,8 +295,11 @@ class _EmptyCards extends StatelessWidget {
               color: AppTheme.green.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.credit_card_off_rounded,
-                size: 34, color: AppTheme.green),
+            child: const Icon(
+              Icons.credit_card_off_rounded,
+              size: 34,
+              color: AppTheme.green,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
@@ -443,10 +457,11 @@ class _AddCardSheetState extends State<_AddCardSheet> {
                           _ExpiryFormatter(),
                         ],
                         validator: (v) =>
-                            RegExp(r'^(0[1-9]|1[0-2])\/\d{2}$')
-                                    .hasMatch(v ?? '')
-                                ? null
-                                : 'MM/YY',
+                            RegExp(
+                              r'^(0[1-9]|1[0-2])\/\d{2}$',
+                            ).hasMatch(v ?? '')
+                            ? null
+                            : 'MM/YY',
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -474,7 +489,7 @@ class _AddCardSheetState extends State<_AddCardSheet> {
                 SmartCanteenButton(
                   label: 'Save Card',
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF1B5E20), Color(0xFF43A047)],
+                    colors: [AppTheme.greenDark, AppTheme.primaryLight],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),

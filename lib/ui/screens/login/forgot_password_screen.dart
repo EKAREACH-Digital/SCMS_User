@@ -121,10 +121,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
 
     await _run(() async {
-      await _auth.resetPassword(
-        resetToken: _resetToken!,
-        password: password,
-      );
+      await _auth.resetPassword(resetToken: _resetToken!, password: password);
       if (!mounted) return;
       HapticFeedback.mediumImpact();
       Navigator.pop(context);
@@ -172,8 +169,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onPressed: _busy
                         ? null
                         : _step == _Step.email
-                            ? () => Navigator.pop(context)
-                            : _back,
+                        ? () => Navigator.pop(context)
+                        : _back,
                     icon: const Icon(Icons.arrow_back_rounded, size: 18),
                     label: Text(_step == _Step.email ? 'Sign in' : 'Back'),
                     style: TextButton.styleFrom(
@@ -189,7 +186,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [AppTheme.green, Color(0xFF81C784)],
+                        colors: [AppTheme.green, AppTheme.primaryLight],
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -235,7 +232,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   label: _busy ? 'Please wait…' : _actionLabel,
                   onPressed: _busy ? null : _onAction,
                   gradient: const LinearGradient(
-                    colors: [AppTheme.green, Color(0xFF81C784)],
+                    colors: [AppTheme.green, AppTheme.primaryLight],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -259,37 +256,37 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   IconData get _stepIcon => switch (_step) {
-        _Step.email => Icons.mail_outline_rounded,
-        _Step.code => Icons.mark_email_read_outlined,
-        _Step.password => Icons.lock_reset_rounded,
-      };
+    _Step.email => Icons.mail_outline_rounded,
+    _Step.code => Icons.mark_email_read_outlined,
+    _Step.password => Icons.lock_reset_rounded,
+  };
 
   String get _title => switch (_step) {
-        _Step.email => 'Forgot password?',
-        _Step.code => 'Check your email',
-        _Step.password => 'Set a new password',
-      };
+    _Step.email => 'Forgot password?',
+    _Step.code => 'Check your email',
+    _Step.password => 'Set a new password',
+  };
 
   String get _subtitle => switch (_step) {
-        _Step.email =>
-          'Enter your email and we\'ll send you a 6-digit code to reset your password.',
-        _Step.code =>
-          'We sent a 6-digit code to ${_emailController.text.trim()}. It expires in 15 minutes.',
-        _Step.password =>
-          'Choose a new password. This signs you out everywhere else.',
-      };
+    _Step.email =>
+      'Enter your email and we\'ll send you a 6-digit code to reset your password.',
+    _Step.code =>
+      'We sent a 6-digit code to ${_emailController.text.trim()}. It expires in 15 minutes.',
+    _Step.password =>
+      'Choose a new password. This signs you out everywhere else.',
+  };
 
   String get _actionLabel => switch (_step) {
-        _Step.email => 'Send Code',
-        _Step.code => 'Verify Code',
-        _Step.password => 'Reset Password',
-      };
+    _Step.email => 'Send Code',
+    _Step.code => 'Verify Code',
+    _Step.password => 'Reset Password',
+  };
 
   VoidCallback get _onAction => switch (_step) {
-        _Step.email => _sendCode,
-        _Step.code => _verifyCode,
-        _Step.password => _submitPassword,
-      };
+    _Step.email => _sendCode,
+    _Step.code => _verifyCode,
+    _Step.password => _submitPassword,
+  };
 
   List<Widget> _fields() {
     switch (_step) {
@@ -300,8 +297,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             label: 'Email',
             hintText: 'Enter your email address',
             keyboardType: TextInputType.emailAddress,
-            prefixIcon: const Icon(Icons.mail_outline_rounded,
-                color: AppTheme.green, size: 20),
+            prefixIcon: const Icon(
+              Icons.mail_outline_rounded,
+              color: AppTheme.green,
+              size: 20,
+            ),
           ),
         ];
       case _Step.code:
@@ -311,8 +311,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             label: 'Reset Code',
             hintText: '6-digit code',
             keyboardType: TextInputType.number,
-            prefixIcon: const Icon(Icons.pin_outlined,
-                color: AppTheme.green, size: 20),
+            prefixIcon: const Icon(
+              Icons.pin_outlined,
+              color: AppTheme.green,
+              size: 20,
+            ),
           ),
         ];
       case _Step.password:
@@ -322,8 +325,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             label: 'New Password',
             hintText: 'At least 8 characters',
             obscureText: _obscure,
-            prefixIcon: const Icon(Icons.lock_outline_rounded,
-                color: AppTheme.green, size: 20),
+            prefixIcon: const Icon(
+              Icons.lock_outline_rounded,
+              color: AppTheme.green,
+              size: 20,
+            ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscure
@@ -342,15 +348,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             label: 'Confirm Password',
             hintText: 'Re-enter your password',
             obscureText: _obscure,
-            prefixIcon: const Icon(Icons.lock_outline_rounded,
-                color: AppTheme.green, size: 20),
+            prefixIcon: const Icon(
+              Icons.lock_outline_rounded,
+              color: AppTheme.green,
+              size: 20,
+            ),
           ),
           const SizedBox(height: 12),
           const Text(
             'Use at least 8 characters with an uppercase letter, a lowercase '
             'letter, and a number.',
             style: TextStyle(
-                fontSize: 11.5, height: 1.4, color: AppTheme.mutedText),
+              fontSize: 11.5,
+              height: 1.4,
+              color: AppTheme.mutedText,
+            ),
           ),
         ];
     }
@@ -376,7 +388,9 @@ class _StepDots extends StatelessWidget {
           width: i == index ? 26 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: done ? AppTheme.green : AppTheme.green.withValues(alpha: 0.22),
+            color: done
+                ? AppTheme.green
+                : AppTheme.green.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(4),
           ),
         );
