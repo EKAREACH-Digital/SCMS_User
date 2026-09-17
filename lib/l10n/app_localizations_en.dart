@@ -298,6 +298,62 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get weeklyMenuTitle => 'This Week\'s Menu';
+
+  @override
+  String get weeklyMenuOpen => 'Weekly menu';
+
+  @override
+  String get weeklyMenuEmptyTitle => 'No menu published yet';
+
+  @override
+  String get weeklyMenuEmptyBody =>
+      'The canteen hasn\'t published a menu for this week. Check back soon.';
+
+  @override
+  String get weeklyMenuErrorTitle => 'Couldn\'t load the weekly menu';
+
+  @override
+  String get weeklyMenuNothingToday => 'Nothing scheduled for this day';
+
+  @override
+  String get weeklyMenuAllWeekNote =>
+      'Every dish on this menu is served all week, so each day shows the same list.';
+
+  @override
+  String get weeklyMenuToday => 'Today';
+
+  @override
+  String get slotBreakfast => 'Breakfast';
+
+  @override
+  String get slotLunch => 'Lunch';
+
+  @override
+  String get slotDinner => 'Dinner';
+
+  @override
+  String get dayMon => 'Mon';
+
+  @override
+  String get dayTue => 'Tue';
+
+  @override
+  String get dayWed => 'Wed';
+
+  @override
+  String get dayThu => 'Thu';
+
+  @override
+  String get dayFri => 'Fri';
+
+  @override
+  String get daySat => 'Sat';
+
+  @override
+  String get daySun => 'Sun';
+
+  @override
   String get menuEmptyTitle => 'No items found';
 
   @override

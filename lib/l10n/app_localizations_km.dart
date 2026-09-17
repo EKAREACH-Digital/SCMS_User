@@ -302,6 +302,62 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
+  String get weeklyMenuTitle => 'ម៉ឺនុយប្រចាំសប្តាហ៍';
+
+  @override
+  String get weeklyMenuOpen => 'ម៉ឺនុយប្រចាំសប្តាហ៍';
+
+  @override
+  String get weeklyMenuEmptyTitle => 'មិនទាន់មានម៉ឺនុយត្រូវបានផ្សាយ';
+
+  @override
+  String get weeklyMenuEmptyBody =>
+      'អាហារដ្ឋានមិនទាន់បានផ្សាយម៉ឺនុយសម្រាប់សប្តាហ៍នេះទេ។ សូមពិនិត្យមើលឡើងវិញនៅពេលក្រោយ។';
+
+  @override
+  String get weeklyMenuErrorTitle => 'មិនអាចទាញយកម៉ឺនុយប្រចាំសប្តាហ៍បានទេ';
+
+  @override
+  String get weeklyMenuNothingToday => 'មិនមានអាហារសម្រាប់ថ្ងៃនេះទេ';
+
+  @override
+  String get weeklyMenuAllWeekNote =>
+      'មុខម្ហូបទាំងអស់ក្នុងម៉ឺនុយនេះមានលក់ពេញមួយសប្តាហ៍ ដូច្នេះរាល់ថ្ងៃបង្ហាញបញ្ជីដូចគ្នា។';
+
+  @override
+  String get weeklyMenuToday => 'ថ្ងៃនេះ';
+
+  @override
+  String get slotBreakfast => 'អាហារពេលព្រឹក';
+
+  @override
+  String get slotLunch => 'អាហារថ្ងៃត្រង់';
+
+  @override
+  String get slotDinner => 'អាហារពេលល្ងាច';
+
+  @override
+  String get dayMon => 'ច័ន្ទ';
+
+  @override
+  String get dayTue => 'អង្គារ';
+
+  @override
+  String get dayWed => 'ពុធ';
+
+  @override
+  String get dayThu => 'ព្រហ';
+
+  @override
+  String get dayFri => 'សុក្រ';
+
+  @override
+  String get daySat => 'សៅរ៍';
+
+  @override
+  String get daySun => 'អាទិត្យ';
+
+  @override
   String get menuEmptyTitle => 'រកមិនឃើញទំនិញ';
 
   @override

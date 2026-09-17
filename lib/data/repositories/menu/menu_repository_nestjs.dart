@@ -35,6 +35,49 @@ class MenuRepositoryNestjs implements MenuRepository {
     }
   }
 
+  @override
+  Future<WeeklyMenuDto?> getCurrentWeeklyMenu({String? schoolId}) async {
+    try {
+      // Only published menus are shown; drafts are the manager's work in
+      // progress and must not leak to students.
+      final menusRes = await _dio.get(
+        ApiConfig.menus,
+        queryParameters: {
+          'status': 'published',
+          'limit': 50,
+          'school_id': ?schoolId,
+        },
+      );
+      final menus = (menusRes.data['data'] as List<dynamic>)
+          .map((e) => MenuDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      final today = DateTime.now();
+      MenuDto? current;
+      for (final m in menus) {
+        if (m.coversDate(today)) {
+          current = m;
+          break;
+        }
+      }
+      if (current == null) return null;
+
+      final entriesRes = await _dio.get(
+        ApiConfig.menuMenuItems,
+        queryParameters: {'menu_id': current.id, 'limit': 100},
+      );
+      final entries = (entriesRes.data['data'] as List<dynamic>)
+          .map((e) => MenuEntryDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      return WeeklyMenuDto(menu: current, entries: entries);
+    } on DioException catch (e) {
+      throw _mapError(e);
+    } catch (e) {
+      throw ApiException('Unexpected error loading the weekly menu: $e');
+    }
+  }
+
   ApiException _mapError(DioException e) {
     final data = e.response?.data;
     if (data is Map<String, dynamic>) {

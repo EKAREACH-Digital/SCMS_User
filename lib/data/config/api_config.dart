@@ -162,6 +162,14 @@ class ApiConfig {
   /// `availability_status`, paginated (`limit` max 100).
   static const String menuItems = '/menu-items';
 
+  /// `GET /menus?status=published` — weekly menus (a manager-published
+  /// schedule covering a date range). Readable by students.
+  static const String menus = '/menus';
+
+  /// `GET /menu-menu-items?menu_id=` — the dishes scheduled on a menu, each
+  /// with its `day_of_week` and quantity.
+  static const String menuMenuItems = '/menu-menu-items';
+
   // Orders
   /// `POST /orders` — place an order (auto-mints a QR coupon per item);
   /// `GET /orders/my` — the signed-in user's orders.

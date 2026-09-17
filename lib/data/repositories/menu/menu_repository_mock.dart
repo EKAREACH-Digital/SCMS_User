@@ -18,4 +18,38 @@ class MenuRepositoryMock implements MenuRepository {
     await Future.delayed(const Duration(milliseconds: 600));
     return _items;
   }
+
+  @override
+  Future<WeeklyMenuDto?> getCurrentWeeklyMenu({String? schoolId}) async {
+    await Future.delayed(const Duration(milliseconds: 600));
+    final monday = DateTime.now().subtract(
+      Duration(days: DateTime.now().weekday - 1),
+    );
+    // A deliberate mix: some dishes pinned to a weekday, the drinks left
+    // dayless so the "served every day" path is exercised too.
+    const dayByItem = <String, int?>{
+      '1': 0, '7': 1, '4': 2,          // breakfasts, Mon/Tue/Wed
+      '2': 0, '3': 2, '8': 4,          // lunches,    Mon/Wed/Fri
+      '5': null, '6': null,            // drinks,     every day
+    };
+    return WeeklyMenuDto(
+      menu: MenuDto(
+        id: 'mock-menu-week',
+        name: 'This Week Menu',
+        validFrom: DateTime(monday.year, monday.month, monday.day),
+        validTo: DateTime(monday.year, monday.month, monday.day)
+            .add(const Duration(days: 6)),
+        status: 'published',
+      ),
+      entries: [
+        for (final item in _items)
+          MenuEntryDto(
+            id: 'mock-entry-${item.id}',
+            menuItem: item,
+            dayOfWeek: dayByItem[item.id],
+            quantityAvailable: 20,
+          ),
+      ],
+    );
+  }
 }

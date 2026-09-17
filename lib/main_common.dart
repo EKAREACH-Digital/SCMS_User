@@ -25,6 +25,7 @@ import 'ui/screens/login/sign_in_screen.dart';
 import 'ui/screens/login/sign_up_screen.dart';
 import 'ui/screens/login/view_model/auth_view_model.dart';
 import 'ui/screens/menu_browsing/menu_screen.dart';
+import 'ui/screens/menu_browsing/weekly_menu_screen.dart';
 import 'ui/screens/settings/settings_screen.dart';
 import 'ui/screens/settings/about_screen.dart';
 import 'ui/screens/settings/edit_profile_screen.dart';
@@ -42,6 +43,7 @@ import 'ui/states/notification_prefs_state.dart';
 import 'ui/states/order_history_state.dart';
 import 'ui/states/payment_methods_state.dart';
 import 'ui/states/user_profile_state.dart';
+import 'ui/states/weekly_menu_state.dart';
 
 class SmartCanteenApp extends StatefulWidget {
   const SmartCanteenApp({
@@ -120,6 +122,8 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
         ChangeNotifierProvider(
             create: (_) => MenuState(widget.menuRepository)),
         ChangeNotifierProvider(
+            create: (_) => WeeklyMenuState(widget.menuRepository)),
+        ChangeNotifierProvider(
             create: (_) => PurchaseViewModel(widget.couponRepository)),
         ChangeNotifierProvider(
           create: (_) =>
@@ -168,6 +172,7 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
                 return AppShell(initialTab: tab is int ? tab : 0);
               },
               MenuScreen.routeName: (_) => const MenuScreen(),
+              WeeklyMenuScreen.routeName: (_) => const WeeklyMenuScreen(),
               OrderSummaryScreen.routeName: (_) => const OrderSummaryScreen(),
               QrScreen.routeName: (_) => const QrScreen(),
               HistoryScreen.routeName: (_) => const HistoryScreen(),
