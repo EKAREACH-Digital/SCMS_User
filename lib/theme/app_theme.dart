@@ -22,14 +22,14 @@ class AppTheme {
 
   static const Color accentBlue = tertiary;
 
-  static const Color mutedText = Color(0xFF735F4D);
+  static const Color mutedText = Color(0xFF8C7B70);
 
-  static const Color darkBackground = Color(0xFF1C130A);
-  static const Color darkCard = Color(0xFF2A1D12);
-  static const Color darkGreenSurface = Color(0xFF3A2614);
+  static const Color darkBackground = Color(0xFF140D07);
+  static const Color darkCard = Color(0xFF261C14);
+  static const Color darkGreenSurface = Color(0xFF3A2A1E);
   static const Color darkText = Color(0xFFFFF3E5);
   static const Color darkMutedText = Color(0xFFD2B99E);
-  static const Color darkBorder = Color(0xFF65482F);
+  static const Color darkBorder = Color(0xFF3A2A1E);
 
   // ── Gradients (same in both themes) ────────────────────────────────────────
   static final LinearGradient balanceCardGradient = const LinearGradient(

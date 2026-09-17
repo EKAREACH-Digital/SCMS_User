@@ -36,14 +36,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: context.cardColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.09),
-              blurRadius: 24,
-              offset: const Offset(0, -6),
-            ),
-          ],
+          border: const Border(top: BorderSide(color: AppTheme.border)),
         ),
         child: Row(
           children: List.generate(5, (i) {
@@ -64,25 +57,11 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 52,
-                          height: 52,
+                          width: 58,
+                          height: 38,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppTheme.greenDark,
-                                AppTheme.primaryLight,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.green.withValues(alpha: 0.45),
-                                blurRadius: 14,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                            color: AppTheme.primary,
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
                             Icons.qr_code_2,
@@ -124,17 +103,9 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                         curve: Curves.easeInOut,
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          // Soft gradient ring on the active tab
-                          gradient: isSelected
-                              ? LinearGradient(
-                                  colors: [
-                                    AppTheme.green.withValues(alpha: 0.18),
-                                    AppTheme.green.withValues(alpha: 0.08),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )
-                              : null,
+                          color: isSelected
+                              ? AppTheme.secondary
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isSelected
