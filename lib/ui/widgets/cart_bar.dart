@@ -64,7 +64,7 @@ class _CartBarState extends State<CartBar> with SingleTickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: context.cardColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: AppTheme.green.withValues(alpha: 0.2),
             width: 1.5,
@@ -187,7 +187,7 @@ class _CartBarButtonState extends State<_CartBarButton> {
                     color: AppTheme.green.withValues(alpha: 0.4),
                     width: 1.2,
                   ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             widget.label,

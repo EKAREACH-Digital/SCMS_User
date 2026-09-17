@@ -451,7 +451,26 @@ class _FoodItemCardState extends State<FoodItemCard>
   };
 
   Color _getTagColor(String tag) {
-    return _getTagColors()[tag] ?? AppTheme.green;
+    switch (tag.toLowerCase()) {
+      case 'high protein':
+      case 'healthy':
+        return Colors.teal;
+      case 'chef choice':
+      case 'grilled':
+        return const Color(0xFFB7793E);
+      case 'vegetarian':
+      case 'vegan':
+      case 'fresh':
+        return const Color(0xFF3E8E62);
+      case 'gluten free':
+      case 'traditional':
+        return const Color(0xFFB58B5A);
+      case 'chilled':
+      case 'cold':
+        return const Color(0xFF6F7C86);
+      default:
+        return _getTagColors()[tag] ?? AppTheme.green;
+    }
   }
 
   @override
@@ -476,7 +495,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           child: Container(
             decoration: BoxDecoration(
               color: context.cardColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
@@ -488,56 +507,17 @@ class _FoodItemCardState extends State<FoodItemCard>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                  ),
-                  child: SizedBox(
-                    width: 110,
-                    height: 110,
-                    child: Stack(
-                      children: [
-                        _FoodImage(item: widget.item, aspectRatio: 1.0),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(
-                                0xFFFFB74D,
-                              ).withValues(alpha: 0.95),
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.15),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const _ShimmerStar(size: 13),
-                                const SizedBox(width: 3),
-                                Text(
-                                  widget.item.rating.toStringAsFixed(1),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 85,
+                        height: 85,
+                        child: _FoodImage(item: widget.item, aspectRatio: 1.0),
+                      ),
                     ),
                   ),
                 ),
@@ -548,16 +528,35 @@ class _FoodItemCardState extends State<FoodItemCard>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.item.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: context.textColor,
-                            letterSpacing: -0.2,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.item.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  color: context.textColor,
+                                  letterSpacing: -0.2,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '\$${widget.item.price.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: AppTheme.green,
+                                letterSpacing: -0.2,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 6),
                         Text(
                           widget.item.description,
                           maxLines: 2,
@@ -570,147 +569,133 @@ class _FoodItemCardState extends State<FoodItemCard>
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: widget.item.tags.take(2).map((tag) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getTagColor(
-                                  tag,
-                                ).withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: _getTagColor(
-                                    tag,
-                                  ).withValues(alpha: 0.3),
-                                  width: 0.8,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    _tagIcon(tag),
-                                    size: 11,
-                                    color: _getTagColor(tag),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    tag,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: _getTagColor(tag),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 10),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '\$${widget.item.price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                color: AppTheme.green,
-                                letterSpacing: -0.3,
-                              ),
+                            Expanded(
+                              child: widget.item.tags.isNotEmpty
+                                  ? Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: _buildTag(
+                                        context,
+                                        widget.item.tags.first,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
                             ),
-                            if (_getCartQuantity() == 0)
-                              _BounceAddButton(onTap: _addItem)
-                            else
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppTheme.green.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: AppTheme.green.withValues(
-                                      alpha: 0.3,
-                                    ),
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: _decrement,
-                                      child: Container(
-                                        width: 36,
-                                        height: 40,
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.remove_rounded,
-                                          color: AppTheme.green,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 1,
-                                      height: 24,
-                                      color: AppTheme.green.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 36,
-                                      height: 40,
-                                      child: Center(
-                                        child: Text(
-                                          '${_getCartQuantity()}',
-                                          style: const TextStyle(
-                                            color: AppTheme.green,
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 1,
-                                      height: 24,
-                                      color: AppTheme.green.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: _increment,
-                                      child: Container(
-                                        width: 36,
-                                        height: 40,
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.add_rounded,
-                                          color: AppTheme.green,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            const SizedBox(width: 8),
+                            _buildCartControl(),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 12),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTag(BuildContext context, String tag) {
+    final color = _getTagColor(tag);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_tagIcon(tag), size: 11, color: color),
+          const SizedBox(width: 4),
+          Text(
+            tag,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 10,
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCartControl() {
+    if (_getCartQuantity() == 0) {
+      return _BounceAddButton(onTap: _addItem);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.green.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppTheme.green.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: _decrement,
+            child: Container(
+              width: 36,
+              height: 40,
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.remove_rounded,
+                color: AppTheme.green,
+                size: 18,
+              ),
+            ),
+          ),
+          Container(
+            width: 1,
+            height: 24,
+            color: AppTheme.green.withValues(alpha: 0.2),
+          ),
+          SizedBox(
+            width: 36,
+            height: 40,
+            child: Center(
+              child: Text(
+                '${_getCartQuantity()}',
+                style: const TextStyle(
+                  color: AppTheme.green,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 1,
+            height: 24,
+            color: AppTheme.green.withValues(alpha: 0.2),
+          ),
+          GestureDetector(
+            onTap: _increment,
+            child: Container(
+              width: 36,
+              height: 40,
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.add_rounded,
+                color: AppTheme.green,
+                size: 18,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1326,15 +1311,8 @@ class _ModernFilterChipState extends State<_ModernFilterChip> {
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
           decoration: BoxDecoration(
-            gradient: widget.isSelected
-                ? const LinearGradient(
-                    colors: [AppTheme.greenDark, AppTheme.primaryLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )
-                : null,
-            color: widget.isSelected ? null : Colors.transparent,
-            borderRadius: BorderRadius.circular(24),
+            color: widget.isSelected ? AppTheme.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
             border: widget.isSelected
                 ? null
                 : Border.all(color: context.borderColor, width: 1.2),
@@ -1415,7 +1393,7 @@ class _SearchBarState extends State<_SearchBar> {
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: context.cardColor,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _focused
                     ? AppTheme.green.withValues(alpha: 0.6)
@@ -1485,7 +1463,7 @@ class _SearchBarState extends State<_SearchBar> {
                     )
                   : null,
               color: widget.isSortActive ? null : context.cardColor,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
                   color: widget.isSortActive
@@ -1781,7 +1759,7 @@ class _BounceAddButton extends StatefulWidget {
     required this.onTap,
     this.size = 40,
     this.iconSize = 20,
-    this.radius = 12,
+    this.radius = 8,
   });
 
   final VoidCallback onTap;
