@@ -3,7 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Campus Burnt Amber design tokens.
-  static const Color primary = Color(0xFFB36200);
+  static const Color primary = Color.fromARGB(255, 211, 124, 3);
+  static const Color primaryDark = Color(0xFFB36200);
+  static const Color primaryLight = Color(0xFFFFEFD1);
+  static const Color onPrimary = Color(0xFF1C130A);
   static const Color secondary = Color(0xFFFFF3E5);
   static const Color tertiary = Color(0xFF10B981);
   static const Color tertiaryDark = Color(0xFF047857);
@@ -11,13 +14,12 @@ class AppTheme {
   static const Color background = Color(0xFFFAF7F4);
   static const Color card = Color(0xFFFFFFFF);
   static const Color text = Color(0xFF1C130A);
-  static const Color border = Color(0xFFEEDAC8);
+  static const Color border = Color(0xFFF0DDB8);
 
   // Compatibility aliases for existing widgets. New code should use the
   // design-token names above or Theme.of(context).colorScheme.
   static const Color green = primary;
   static const Color greenDark = Color(0xFF8C4D00);
-  static const Color primaryLight = Color(0xFFD17A00);
   static const Color greenSurface = secondary;
 
   static const Color accentBlue = tertiary;
@@ -33,13 +35,13 @@ class AppTheme {
 
   // ── Gradients (same in both themes) ────────────────────────────────────────
   static final LinearGradient balanceCardGradient = const LinearGradient(
-    colors: [greenDark, primary, primaryLight],
+    colors: [greenDark, primaryDark, primary],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static final LinearGradient headerGradient = const LinearGradient(
-    colors: [greenDark, primary, primaryLight],
+    colors: [greenDark, primaryDark, primary],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -51,7 +53,7 @@ class AppTheme {
       secondary: secondary,
       tertiary: tertiary,
       surface: card,
-      onPrimary: Colors.white,
+      onPrimary: onPrimary,
       onSecondary: text,
       onSurface: text,
     );
@@ -78,7 +80,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primary,
-          foregroundColor: Colors.white,
+          foregroundColor: onPrimary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
@@ -127,7 +129,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: green, width: 1.3),
+          borderSide: const BorderSide(color: primaryDark, width: 1.3),
         ),
       ),
     );
@@ -141,7 +143,7 @@ class AppTheme {
       tertiary: tertiary,
       surface: darkBackground,
       onSurface: darkText,
-      onPrimary: Colors.white,
+      onPrimary: onPrimary,
       onSecondary: text,
     );
 
@@ -166,7 +168,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primary,
-          foregroundColor: Colors.white,
+          foregroundColor: onPrimary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
@@ -206,7 +208,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: green, width: 1.3),
+          borderSide: const BorderSide(color: primaryDark, width: 1.3),
         ),
         hintStyle: const TextStyle(color: darkMutedText),
       ),
