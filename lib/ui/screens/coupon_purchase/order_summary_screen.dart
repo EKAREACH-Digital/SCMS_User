@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../shell/app_shell.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../data/dtos/order_dto.dart';
-import '../../../data/exceptions/api_exception.dart';
-import '../../../data/local/order_alert_service.dart';
-import '../../../data/repositories/order/order_repository.dart';
 import '../../../model/cart/cart_model.dart';
 import '../../../model/food/food_item.dart';
 import '../../../theme/app_theme.dart';
-import '../../../ui/states/balance_state.dart';
-import '../../../ui/states/meal_coupons_state.dart';
-import '../../../ui/states/menu_state.dart';
-import '../../../ui/states/order_history_state.dart';
-import '../../../ui/utils/async_value.dart';
 import '../../../ui/utils/meal_session.dart';
-import '../../widgets/payment_method_sheet.dart';
-import '../../widgets/payment_success_dialog.dart';
+import 'payment_method_screen.dart';
 import '../../widgets/smart_canteen_widgets.dart';
 
 class OrderSummaryScreen extends StatefulWidget {
@@ -30,154 +18,14 @@ class OrderSummaryScreen extends StatefulWidget {
 }
 
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
-  bool _placing = false;
+  final bool _placing = false;
 
-  void _showPaymentMethodSheet(double amount) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => PaymentMethodSheet(
-        totalAmount: amount,
-        onConfirm: (paymentMethod) => _checkout(paymentMethod),
-      ),
-    );
-  }
-
-  /// Places the order, charges the wallet its authoritative total, stores the
-  /// minted coupons, and routes to the QR screen. Order and payment are two
-  /// backend calls, so we pre-check the balance to avoid placing an order we
-  /// can't pay for.
-  Future<void> _checkout(String paymentMethod) async {
-    if (_placing) return;
-
-    final messenger = ScaffoldMessenger.of(context);
-    void fail(String msg) => messenger.showSnackBar(
-          SnackBar(
-            content: Text(msg),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: const Color(0xFFE53935),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-
-    if (paymentMethod != 'SC') {
-      fail('Only the Smart Canteen wallet is supported right now.');
-      return;
-    }
-
-    final cart = CartProvider.of(context);
-
-    // Food is tied to a meal window; drinks are sold all day. A cart holding
-    // only all-day items can check out whenever, and is filed under the
-    // nearest session because every order needs one.
-    final now = DateTime.now();
-    final activeSession = MealSession.activeAt(now);
-    if (activeSession == null && !cart.isAnytimeOnly) {
-      fail('Ordering is closed right now. Try during a meal session.');
-      return;
-    }
-    final session = activeSession ?? MealSession.nearestTo(now);
-
-    final orderRepo = context.read<OrderRepository>();
-    final balance = context.read<BalanceState>();
-    final mealCoupons = context.read<MealCouponsState>();
-    final schoolId = context.read<MenuState>().schoolId;
-
-    if (schoolId == null) {
-      fail('Menu is still loading — please try again in a moment.');
-      return;
-    }
-
-    final balanceState = balance.balanceUsd;
-    final available =
-        balanceState is AsyncData<double> ? balanceState.data : 0.0;
-    if (available + 0.001 < cart.total) {
-      fail('Insufficient wallet balance. Please top up first.');
-      return;
-    }
-
-    final items = cart.entries
-        .map((e) => OrderItemInput(menuItemId: e.item.id, quantity: e.quantity))
-        .toList();
-
-    setState(() => _placing = true);
-    try {
-      final order = await orderRepo.placeOrder(
-        schoolId: schoolId,
-        mealSession: session.key,
-        items: items,
-      );
-      // Charge the wallet the backend's authoritative total.
-      await balance.payment(order.totalAmount);
-      mealCoupons.addFromOrder(order.coupons);
-      _recordLocalHistory(cart, order, session);
-
-      // One "ready to collect" alert per line on the receipt. Scheduled before
-      // the cart is cleared, since the labels come from it.
-      OrderAlertService.instance.scheduleForOrder(
-        orderId: order.id,
-        items: cart.entries
-            .map((e) => OrderAlertItem(
-                  label: e.quantity > 1
-                      ? '${e.item.name} ×${e.quantity}'
-                      : e.item.name,
-                  imageUrl: e.item.imageUrl,
-                  imageAsset: e.item.imagePath,
-                ))
-            .toList(),
-      );
-
-      cart.clear();
-      if (!mounted) return;
-      _showPaymentSuccess(order.totalAmount);
-    } catch (e) {
-      if (!mounted) return;
-      final msg = e is ApiException ? e.message : 'Something went wrong.';
-      fail('Checkout failed: $msg');
-    } finally {
-      if (mounted) setState(() => _placing = false);
-    }
-  }
-
-  void _recordLocalHistory(
-      CartModel cart, PlacedOrderDto order, MealSession session) {
-    final itemsLabel = cart.entries
-        .map(
-          (e) => e.quantity > 1 ? '${e.item.name} ×${e.quantity}' : e.item.name,
-        )
-        .join(', ');
-    final firstEntry = cart.entries.isNotEmpty ? cart.entries.first : null;
-    context.read<OrderHistoryState>().addOrder(
-          OrderRecord(
-            id: order.id,
-            date: _formatNow(),
-            items: itemsLabel,
-            total: order.totalAmount,
-            status: 'Pending',
-            createdAt: DateTime.now(),
-            session: session.label,
-            imagePath: firstEntry?.item.imagePath,
-            imageUrl: firstEntry?.item.imageUrl,
-            colorSeed: firstEntry?.item.colorSeed ?? 0,
-          ),
-        );
-  }
-
-  void _showPaymentSuccess(double amount) {
-    PaymentSuccessDialog.show(
+  void _openPaymentMethodScreen(double amount) {
+    Navigator.push(
       context,
-      amount: amount,
-      buttonLabel: 'View my QR',
-      // Runs once — whether the user taps the button or it auto-dismisses.
-      onDismiss: () {
-        if (mounted) {
-          // Return to the shell on the QR tab. Pushing QrScreen's own route
-          // here used to clear the stack down to a bare QR screen, leaving no
-          // navigation bar and no way back short of restarting the app.
-          AppShell.goToTab(context, AppTab.qr);
-        }
-      },
+      MaterialPageRoute(
+        builder: (_) => PaymentMethodScreen(totalAmount: amount),
+      ),
     );
   }
 
@@ -219,13 +67,15 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   const SizedBox(height: 8),
                   Text(
                     AppLocalizations.of(context)!.cartEmptyBody,
-                    style: const TextStyle(fontSize: 12, color: AppTheme.mutedText),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.mutedText,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   SmartCanteenButton(
                     label: 'Browse Menu',
-                    onPressed: () =>
-                        AppShell.goToTab(context, AppTab.menu),
+                    onPressed: () => AppShell.goToTab(context, AppTab.menu),
                     height: 48,
                     radius: 14,
                   ),
@@ -289,7 +139,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   cart: cart,
                   activeSession: MealSession.activeAt(DateTime.now()),
                   isPlacing: _placing,
-                  onPay: () => _showPaymentMethodSheet(cart.total),
+                  onPay: () => _openPaymentMethodScreen(cart.total),
                 ),
               ],
             ),
@@ -540,7 +390,8 @@ class _PaymentSummarySection extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
-                        right: s == MealSession.dinner ? 0 : 8),
+                      right: s == MealSession.dinner ? 0 : 8,
+                    ),
                     // Only the session whose time window is open can be picked;
                     // the others are shown disabled.
                     child: _SessionChoiceChip(
@@ -556,7 +407,8 @@ class _PaymentSummarySection extends StatelessWidget {
           Text(
             switch ((activeSession, anytimeOnly)) {
               (final s?, _) => '${s.label} is open now (${s.timeRange})',
-              (null, true) => 'Drinks are available all day — you can order now.',
+              (null, true) =>
+                'Drinks are available all day — you can order now.',
               (null, false) =>
                 'Ordering is closed. Breakfast ${MealSession.breakfast.timeRange}, '
                     'Lunch ${MealSession.lunch.timeRange}, Dinner ${MealSession.dinner.timeRange}.',
@@ -586,8 +438,8 @@ class _PaymentSummarySection extends StatelessWidget {
             label: isPlacing
                 ? 'Placing order…'
                 : isOpen
-                    ? 'Proceed to Payment  →'
-                    : 'Ordering closed',
+                ? 'Proceed to Payment  →'
+                : 'Ordering closed',
             onPressed: (isPlacing || !isOpen) ? null : onPay,
             height: 56,
             radius: 16,
@@ -617,13 +469,13 @@ class _SessionChoiceChip extends StatelessWidget {
     final Color borderColor = selected
         ? AppTheme.green
         : enabled
-            ? AppTheme.border
-            : AppTheme.border.withValues(alpha: 0.4);
+        ? AppTheme.border
+        : AppTheme.border.withValues(alpha: 0.4);
     final Color textColor = selected
         ? Colors.white
         : enabled
-            ? AppTheme.mutedText
-            : AppTheme.mutedText.withValues(alpha: 0.35);
+        ? AppTheme.mutedText
+        : AppTheme.mutedText.withValues(alpha: 0.35);
 
     return Opacity(
       opacity: enabled || selected ? 1 : 0.6,
@@ -683,13 +535,4 @@ class _SummaryRow extends StatelessWidget {
       ],
     );
   }
-}
-
-// Returns a human-readable timestamp such as "Today, 2:05 PM".
-String _formatNow() {
-  final dt = DateTime.now();
-  final h = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
-  final m = dt.minute.toString().padLeft(2, '0');
-  final period = dt.hour >= 12 ? 'PM' : 'AM';
-  return 'Today, $h:$m $period';
 }

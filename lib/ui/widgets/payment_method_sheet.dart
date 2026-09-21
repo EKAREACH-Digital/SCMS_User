@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
-import '../states/balance_state.dart';
-import '../utils/async_value.dart';
-import '../utils/currency_formatter.dart';
 import 'smart_canteen_button.dart';
 
 // ── Data model ────────────────────────────────────────────────────────────────
@@ -21,7 +17,6 @@ class _BankOption {
     required this.gradientEnd,
     required this.brandColor,
     this.logoAsset,
-    this.isWallet = false,
   });
 
   final String name;
@@ -34,21 +29,9 @@ class _BankOption {
 
   /// Brand logo asset; when set it replaces the icon/short-code badge.
   final String? logoAsset;
-  final bool isWallet;
 }
 
 const _kOptions = [
-  // ── Wallet ────────────────────────────────────────────────────────────────
-  _BankOption(
-    name: 'Pay with Wallet',
-    tagline: 'Deduct from Smart Canteen balance',
-    shortCode: 'SC',
-    icon: Icons.account_balance_wallet_rounded,
-    gradientStart: AppTheme.greenDark,
-    gradientEnd: AppTheme.primaryLight,
-    brandColor: AppTheme.green,
-    isWallet: true,
-  ),
   // ── Banks ─────────────────────────────────────────────────────────────────
   _BankOption(
     name: 'Pay with Bakong',
@@ -169,13 +152,7 @@ class _PaymentMethodSheetState extends State<PaymentMethodSheet> {
                 selected: _selected == i,
                 onTap: () => _pick(i),
               ),
-              // Divider between wallet (0) and first bank (1)
-              if (i == 0) ...[
-                const SizedBox(height: 14),
-                _OrDivider(),
-                const SizedBox(height: 14),
-              ] else if (i < _kOptions.length - 1)
-                const SizedBox(height: 10),
+              if (i < _kOptions.length - 1) const SizedBox(height: 10),
             ],
             const SizedBox(height: 24),
 
@@ -254,31 +231,6 @@ class _TotalAmountRow extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-// ── "or pay with bank" divider ────────────────────────────────────────────────
-
-class _OrDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: Divider(color: context.borderColor, height: 1)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            AppLocalizations.of(context)!.walletPayWithBank,
-            style: TextStyle(
-              fontSize: 11,
-              color: context.mutedColor,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Expanded(child: Divider(color: context.borderColor, height: 1)),
-      ],
     );
   }
 }
@@ -382,11 +334,6 @@ class _PaymentCardState extends State<_PaymentCard> {
                         height: 1.3,
                       ),
                     ),
-                    // Wallet balance badge (dynamic)
-                    if (opt.isWallet) ...[
-                      const SizedBox(height: 5),
-                      _WalletBalanceBadge(),
-                    ],
                   ],
                 ),
               ),
@@ -518,39 +465,6 @@ class _LogoBadge extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ── Wallet balance badge ──────────────────────────────────────────────────────
-
-class _WalletBalanceBadge extends StatelessWidget {
-  const _WalletBalanceBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    final balanceUsd = context.watch<BalanceState>().balanceUsd;
-    final balanceText = switch (balanceUsd) {
-      AsyncData<double>(:final data) => CurrencyFormatter.usdToKhr(data),
-      // No wallet yet / failed to load — treat as a zero balance, not an error.
-      AsyncError() => CurrencyFormatter.usdToKhr(0),
-      _ => '···',
-    };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        balanceText,
-        style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: AppTheme.green,
-        ),
       ),
     );
   }

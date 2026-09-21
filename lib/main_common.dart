@@ -15,6 +15,7 @@ import 'theme/app_theme.dart';
 import 'ui/screens/alerts/notification_screen.dart';
 import 'ui/screens/alerts/view_model/notification_view_model.dart';
 import 'ui/screens/coupon_purchase/order_summary_screen.dart';
+import 'ui/screens/coupon_purchase/payment_method_screen.dart';
 import 'ui/screens/coupon_purchase/view_model/purchase_view_model.dart';
 import 'ui/screens/digital_wallet/history_screen.dart';
 import 'ui/screens/digital_wallet/qr_screen.dart';
@@ -98,52 +99,61 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
         Provider<WalletRepository>.value(value: widget.walletRepository),
         Provider<OrderRepository>.value(value: widget.orderRepository),
         Provider<NotificationRepository>.value(
-            value: widget.notificationRepository),
+          value: widget.notificationRepository,
+        ),
         Provider<PaymentRepository>.value(value: widget.paymentRepository),
 
         // Global states
         ChangeNotifierProvider.value(value: _cart),
         ChangeNotifierProvider(
-            create: (_) => MealCouponsState(widget.orderRepository)),
+          create: (_) => MealCouponsState(widget.orderRepository),
+        ),
         ChangeNotifierProvider(create: (_) => AppSettingsState()),
         ChangeNotifierProvider(create: (_) => UserProfileState()),
         ChangeNotifierProvider(create: (_) => PaymentMethodsState()),
         ChangeNotifierProvider(
-            create: (_) => NotificationPrefsState(widget.authRepository)),
+          create: (_) => NotificationPrefsState(widget.authRepository),
+        ),
         ChangeNotifierProvider(create: (_) => OrderHistoryState()),
         ChangeNotifierProvider(
-            create: (_) => BalanceState(widget.walletRepository)),
+          create: (_) => BalanceState(widget.walletRepository),
+        ),
         ChangeNotifierProvider(
-            create: (_) => ActiveCouponState(widget.couponRepository)),
+          create: (_) => ActiveCouponState(widget.couponRepository),
+        ),
 
         // Screen view models
         ChangeNotifierProvider(
-            create: (_) => AuthViewModel(widget.authRepository)),
+          create: (_) => AuthViewModel(widget.authRepository),
+        ),
+        ChangeNotifierProvider(create: (_) => MenuState(widget.menuRepository)),
         ChangeNotifierProvider(
-            create: (_) => MenuState(widget.menuRepository)),
+          create: (_) => WeeklyMenuState(widget.menuRepository),
+        ),
         ChangeNotifierProvider(
-            create: (_) => WeeklyMenuState(widget.menuRepository)),
-        ChangeNotifierProvider(
-            create: (_) => PurchaseViewModel(widget.couponRepository)),
+          create: (_) => PurchaseViewModel(widget.couponRepository),
+        ),
         ChangeNotifierProvider(
           create: (_) =>
               WalletViewModel(widget.walletRepository, widget.couponRepository),
         ),
-        ChangeNotifierProvider(create: (_) {
-          final vm = NotificationViewModel(widget.notificationRepository);
-          // Fold each order-ready alert into the Alerts feed as it comes due,
-          // so the tab shows the same message the OS just delivered.
-          OrderAlertService.instance.onAlert.listen(
-            (alert) => vm.addLocal(
-              id: 'local-${alert.orderId}-${alert.dueAt.microsecondsSinceEpoch}',
-              title: alert.title,
-              body: alert.body,
-              imageUrl: alert.imageUrl,
-              imageAsset: alert.imageAsset,
-            ),
-          );
-          return vm;
-        }),
+        ChangeNotifierProvider(
+          create: (_) {
+            final vm = NotificationViewModel(widget.notificationRepository);
+            // Fold each order-ready alert into the Alerts feed as it comes due,
+            // so the tab shows the same message the OS just delivered.
+            OrderAlertService.instance.onAlert.listen(
+              (alert) => vm.addLocal(
+                id: 'local-${alert.orderId}-${alert.dueAt.microsecondsSinceEpoch}',
+                title: alert.title,
+                body: alert.body,
+                imageUrl: alert.imageUrl,
+                imageAsset: alert.imageAsset,
+              ),
+            );
+            return vm;
+          },
+        ),
       ],
       child: CartProvider(
         cart: _cart,
@@ -153,8 +163,7 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
             title: 'Smart Canteen',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode:
-                settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             locale: settings.locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
@@ -174,6 +183,12 @@ class _SmartCanteenAppState extends State<SmartCanteenApp> {
               MenuScreen.routeName: (_) => const MenuScreen(),
               WeeklyMenuScreen.routeName: (_) => const WeeklyMenuScreen(),
               OrderSummaryScreen.routeName: (_) => const OrderSummaryScreen(),
+              PaymentMethodScreen.routeName: (ctx) {
+                final amount = ModalRoute.of(ctx)?.settings.arguments;
+                return PaymentMethodScreen(
+                  totalAmount: amount is num ? amount.toDouble() : 0,
+                );
+              },
               QrScreen.routeName: (_) => const QrScreen(),
               HistoryScreen.routeName: (_) => const HistoryScreen(),
               SettingsScreen.routeName: (_) => const SettingsScreen(),
