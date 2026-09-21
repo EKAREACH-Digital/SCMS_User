@@ -248,25 +248,6 @@ class _Header extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(
-                Icons.location_on_outlined,
-                size: 16,
-                color: AppTheme.primary,
-              ),
-              const SizedBox(width: 5),
-              Text(
-                'Engineering Dining Hall B',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Icon(Icons.keyboard_arrow_down, size: 17, color: muted),
-              const Spacer(),
-              const _KitchenStatus(),
-            ],
-          ),
         ],
       ),
     );
@@ -353,34 +334,6 @@ class _ActiveOrderCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class _KitchenStatus extends StatelessWidget {
-  const _KitchenStatus();
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-    decoration: BoxDecoration(
-      color: const Color(0xFFE8F5E9),
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: const Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.circle, size: 7, color: AppTheme.tertiary),
-        SizedBox(width: 5),
-        Text(
-          'Kitchen Open',
-          style: TextStyle(
-            color: AppTheme.tertiaryDark,
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 class _ExpressBanner extends StatelessWidget {
@@ -884,18 +837,28 @@ class _CartControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (quantity == 0) {
-      return SizedBox(
-        width: 36,
-        height: 36,
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: onAdd,
-          style: IconButton.styleFrom(
-            backgroundColor: AppTheme.primary,
-            foregroundColor: Colors.white,
-            shape: const CircleBorder(),
+      return Material(
+        color: AppTheme.green,
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          splashColor: Colors.white.withValues(alpha: 0.3),
+          onTap: onAdd,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.green.withValues(alpha: 0.35),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
           ),
-          icon: const Icon(Icons.add, size: 20),
         ),
       );
     }
@@ -904,7 +867,7 @@ class _CartControl extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
         color: AppTheme.secondary,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
       ),
       child: Row(
