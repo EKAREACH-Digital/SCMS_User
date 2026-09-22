@@ -47,7 +47,7 @@ class AppDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -68,7 +68,7 @@ class AppDialog extends StatelessWidget {
                     onPressed: onCancel ?? () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppTheme.border),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
                     child: Text(cancelLabel, style: const TextStyle(color: AppTheme.mutedText)),
                   ),
@@ -81,7 +81,7 @@ class AppDialog extends StatelessWidget {
                       backgroundColor: isDestructive ? const Color(0xFFE53935) : AppTheme.green,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
                     child: Text(confirmLabel),
                   ),

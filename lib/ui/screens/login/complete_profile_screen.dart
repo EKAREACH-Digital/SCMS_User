@@ -241,7 +241,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
                         color: AppTheme.green.withValues(alpha: 0.08),
@@ -459,21 +459,21 @@ class _SchoolField extends StatelessWidget {
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
                   color: Color(0xFFE8E8E8),
                   width: 1.5,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
                   color: Color(0xFFE8E8E8),
                   width: 1.5,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(color: AppTheme.green, width: 2),
               ),
             ),
@@ -494,7 +494,7 @@ class _FieldBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE8E8E8), width: 1.5),
       ),
       child: child,
@@ -573,7 +573,7 @@ class _OptionalPasswordHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'You signed up with Google. Set a password to also sign in '
+                  'You signed up with Google. Set a password to also log in '
                   'with your email on another device. You can skip this and '
                   'add one later in Settings.',
                   style: TextStyle(

@@ -334,9 +334,9 @@ class _OutlinedReceiptButtonState extends State<_OutlinedReceiptButton> {
       curve: Curves.easeInOut,
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
-          borderRadius: BorderRadius.circular(27),
+          borderRadius: BorderRadius.circular(8),
           splashColor: _kGreen.withValues(alpha: 0.12),
           highlightColor: _kGreen.withValues(alpha: 0.06),
           onTapDown: (_) => setState(() => _pressed = true),
@@ -351,7 +351,7 @@ class _OutlinedReceiptButtonState extends State<_OutlinedReceiptButton> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: context.cardColor,
-              borderRadius: BorderRadius.circular(27),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(color: _kGreen, width: 1.6),
               boxShadow: _pressed
                   ? []
@@ -424,7 +424,7 @@ class _TicketCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: _kGreenDeep.withValues(alpha: 0.4),
@@ -493,7 +493,7 @@ class _TicketCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: _kMint.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: _kMint.withValues(alpha: 0.3)),
                   ),
                   child: Row(
@@ -546,7 +546,7 @@ class _TicketCard extends StatelessWidget {
                         height: 210,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             // Soft mint glow when the ticket is active (paid)
                             if (isPaid)
@@ -735,7 +735,7 @@ class _StatusBadgeState extends State<_StatusBadge>
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.45),
@@ -928,7 +928,7 @@ class _AllTicketsChip extends StatelessWidget {
                 )
               : null,
           color: isSelected ? null : context.borderColor,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: isSelected
@@ -943,7 +943,7 @@ class _AllTicketsChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFFEAF6EB) : context.cardColor,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
             children: [
@@ -968,7 +968,7 @@ class _AllTicketsChip extends StatelessWidget {
                   color: isSelected
                       ? _kGreenDeep.withValues(alpha: 0.12)
                       : context.borderColor,
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   '$count',
@@ -1028,7 +1028,7 @@ class _SessionChip extends StatelessWidget {
                     )
                   : null,
               color: isSelected ? null : context.borderColor,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: isSelected
@@ -1045,7 +1045,7 @@ class _SessionChip extends StatelessWidget {
                 // Opaque light-green fill when selected so the green text stays
                 // readable inside the gradient border.
                 color: isSelected ? const Color(0xFFEAF6EB) : context.cardColor,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
                 children: [
@@ -1127,7 +1127,7 @@ class _OrderSummaryCard extends StatelessWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: _kGreen.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
                       Icons.receipt_outlined,
@@ -1379,7 +1379,7 @@ class _ReceiptSheet extends StatelessWidget {
                       height: 46,
                       decoration: BoxDecoration(
                         color: _kGreen.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.receipt_long_rounded,

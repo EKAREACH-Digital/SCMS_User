@@ -73,7 +73,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Password set — you can now sign in with your email'),
+        content: Text('Password set — you can now log in with your email'),
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppTheme.green,
       ),
@@ -190,7 +190,7 @@ class _ExplainerCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.green.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.green.withValues(alpha: 0.18)),
       ),
       child: Column(
@@ -201,7 +201,7 @@ class _ExplainerCard extends StatelessWidget {
               const Icon(Icons.key_outlined, color: AppTheme.green, size: 20),
               const SizedBox(width: 10),
               Text(
-                'Sign in without Google',
+                'Log In without Google',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -213,7 +213,7 @@ class _ExplainerCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             'Your account was created with Google, so it has no password yet. '
-            'Set one to also sign in with your email on any device.',
+            'Set one to also log in with your email on any device.',
             style: TextStyle(
               fontSize: 13,
               height: 1.45,
@@ -290,7 +290,7 @@ class _ErrorBanner extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: const Color(0xFFE53935).withValues(alpha: 0.09),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: const Color(0xFFE53935).withValues(alpha: 0.3),
         ),

@@ -20,7 +20,7 @@ class SmartCanteenAuthSwitch extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE8E8E8), width: 1.5),
         boxShadow: [
           BoxShadow(

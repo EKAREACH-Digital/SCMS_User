@@ -164,7 +164,7 @@ class _Thumbnail extends StatelessWidget {
     if (image == null) return _fallback();
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
       child: SizedBox(width: 40, height: 40, child: image),
     );
   }
@@ -217,7 +217,7 @@ class _Thumbnail extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           color: fallbackBg,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Icon(fallbackIcon, size: 20, color: AppTheme.green),
       );

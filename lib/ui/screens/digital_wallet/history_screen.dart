@@ -264,7 +264,7 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                               )
                             : null,
                         color: widget.isSortActive ? null : context.cardColor,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
                             color: widget.isSortActive
@@ -311,7 +311,7 @@ class _SummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: context.cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -505,7 +505,7 @@ class _OrderCardState extends State<_OrderCard> {
       curve: Curves.easeInOut,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),
@@ -516,10 +516,10 @@ class _OrderCardState extends State<_OrderCard> {
         ),
         child: Material(
           color: context.cardColor,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(16),
             splashColor: AppTheme.green.withValues(alpha: 0.12),
             highlightColor: AppTheme.green.withValues(alpha: 0.05),
             onTap: _openDetails,
@@ -531,7 +531,7 @@ class _OrderCardState extends State<_OrderCard> {
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     child: SizedBox(
                       width: 52,
                       height: 52,
@@ -834,7 +834,7 @@ class _RetryButtonState extends State<_RetryButton> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: AppTheme.green.withValues(alpha: _busy ? 0.15 : 0.35),
@@ -1062,7 +1062,7 @@ class _DetailsSheet extends StatelessWidget {
             Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   child: SizedBox(
                     width: 44,
                     height: 44,
@@ -1184,7 +1184,7 @@ class _SortTile extends StatelessWidget {
           color: selected
               ? AppTheme.green.withValues(alpha: 0.1)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? AppTheme.green : context.borderColor,
             width: selected ? 1.5 : 1.2,

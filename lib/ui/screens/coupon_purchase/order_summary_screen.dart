@@ -104,7 +104,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: AppTheme.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
                           '${cart.totalItems} Item${cart.totalItems == 1 ? '' : 's'}',
@@ -171,7 +171,7 @@ class OrderItemCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           child: SizedBox(
             width: 80,
             height: 80,
@@ -311,7 +311,7 @@ class QuantityController extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.border),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
@@ -484,7 +484,7 @@ class _SessionChoiceChip extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: borderColor, width: 1.5),
         ),
         child: Text(

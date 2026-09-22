@@ -64,6 +64,12 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
 
   @override
   Widget build(BuildContext context) {
+    final inputTheme = Theme.of(context).inputDecorationTheme;
+    final inputBorder = inputTheme.enabledBorder ?? inputTheme.border;
+    final borderRadius = inputBorder is OutlineInputBorder
+        ? inputBorder.borderRadius
+        : BorderRadius.zero;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,10 +88,10 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
           builder: (context, child) {
             return Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: borderRadius,
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.green.withValues(
+                    color: Theme.of(context).colorScheme.primary.withValues(
                       alpha: 0.1 * _focusAnimation.value,
                     ),
                     blurRadius: 8 * _focusAnimation.value,
@@ -104,10 +110,7 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
                 ),
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  hintStyle: const TextStyle(
-                    color: AppTheme.mutedText,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  hintStyle: inputTheme.hintStyle,
                   prefixIcon: widget.prefixIcon,
                   suffixIcon: widget.obscureText
                       ? GestureDetector(
@@ -121,45 +124,12 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
                           ),
                         )
                       : widget.suffixIcon,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFE8E8E8),
-                      width: 1.5,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color.lerp(
-                        const Color(0xFFE8E8E8),
-                        AppTheme.green,
-                        _focusAnimation.value * 0.3,
-                      )!,
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color.lerp(
-                        const Color(0xFFE8E8E8),
-                        AppTheme.green,
-                        _focusAnimation.value,
-                      )!,
-                      width: 2,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Color.lerp(
-                    Colors.white,
-                    AppTheme.green.withValues(alpha: 0.02),
-                    _focusAnimation.value,
-                  ),
+                  contentPadding: inputTheme.contentPadding,
+                  border: inputTheme.border,
+                  enabledBorder: inputTheme.enabledBorder,
+                  focusedBorder: inputTheme.focusedBorder,
+                  filled: inputTheme.filled,
+                  fillColor: inputTheme.fillColor,
                 ),
               ),
             );

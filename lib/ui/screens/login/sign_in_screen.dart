@@ -96,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
                         color: AppTheme.green.withValues(alpha: 0.08),

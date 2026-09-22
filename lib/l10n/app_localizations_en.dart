@@ -57,19 +57,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyTitle => 'Order History';
 
   @override
-  String get historySubtitle => 'Your transactions & top-ups';
+  String get historySubtitle => 'Your transactions & top ups';
 
   @override
   String get historyTotalSpent => 'Total Spent';
 
   @override
-  String get historyTopUps => 'Top-ups';
+  String get historyTopUps => 'Top Ups';
 
   @override
   String get historyEmptyTitle => 'No orders yet';
 
   @override
-  String get historyEmptyBody => 'Your orders and top-ups will appear here';
+  String get historyEmptyBody => 'Your orders and top ups will appear here';
 
   @override
   String get historyErrorTitle => 'Couldn\'t load history';
@@ -93,10 +93,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyOrderDetails => 'Order Details';
 
   @override
-  String get historyTopUpDetails => 'Top-up Details';
+  String get historyTopUpDetails => 'Top Up Details';
 
   @override
-  String get historyTopUpSuccessful => 'Top-Up Successful';
+  String get historyTopUpSuccessful => 'Top Up Successful';
 
   @override
   String get historyItems => 'Items';
@@ -154,16 +154,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletChoosePaymentPrompt =>
-      'Select how you want to top up your wallet';
+      'Select how you want to Top Up your wallet';
 
   @override
-  String get walletTopUpAmount => 'Top-up Amount';
+  String get walletTopUpAmount => 'Top Up Amount';
 
   @override
-  String get walletTopUpFailed => 'Top-up failed. Please try again.';
+  String get walletTopUpFailed => 'Top Up failed. Please try again.';
 
   @override
-  String get walletLowBalance => 'Low balance — top up to keep ordering';
+  String get walletLowBalance => 'Low balance — Top Up to keep ordering';
 
   @override
   String get walletTotalAmount => 'Total Amount';
@@ -199,7 +199,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get topupTitle => 'Top up wallet';
+  String get topupTitle => 'Top Up wallet';
 
   @override
   String get topupAmountLabel => 'Amount (USD)';
@@ -227,7 +227,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topupInvalidAmount => 'Please enter a valid amount';
 
   @override
-  String get topupStartError => 'Could not start the top-up. Please try again.';
+  String get topupStartError => 'Could not start the top up. Please try again.';
 
   @override
   String get topupAbaNotFound =>
@@ -253,7 +253,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topupBackToWallet => 'Back to wallet';
 
   @override
-  String get topupSuccessTitle => 'Top-up successful';
+  String get topupSuccessTitle => 'Top Up successful';
 
   @override
   String topupSuccessBody(String amount) {
@@ -486,7 +486,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authPasswordReset =>
-      'Password reset — sign in with your new password';
+      'Password reset — log in with your new password';
 
   @override
   String get authResendCode => 'Didn\'t get it? Send another code';

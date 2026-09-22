@@ -192,7 +192,7 @@ class _TotalAmountRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppTheme.green.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.green.withValues(alpha: 0.2)),
       ),
       child: Row(
@@ -202,7 +202,7 @@ class _TotalAmountRow extends StatelessWidget {
             height: 32,
             decoration: BoxDecoration(
               color: AppTheme.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(9),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
               Icons.receipt_long_rounded,
@@ -284,7 +284,7 @@ class _PaymentCardState extends State<_PaymentCard> {
             color: sel
                 ? AppTheme.green.withValues(alpha: 0.04)
                 : context.cardColor,
-            borderRadius: BorderRadius.circular(24), // ← more rounded
+            borderRadius: BorderRadius.circular(16), // ← more rounded
             border: Border.all(
               color: sel ? AppTheme.green : context.borderColor,
               width: sel ? 2.0 : 1.2,

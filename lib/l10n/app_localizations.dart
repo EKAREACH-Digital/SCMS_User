@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @historySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your transactions & top-ups'**
+  /// **'Your transactions & top ups'**
   String get historySubtitle;
 
   /// No description provided for @historyTotalSpent.
@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @historyTopUps.
   ///
   /// In en, this message translates to:
-  /// **'Top-ups'**
+  /// **'Top Ups'**
   String get historyTopUps;
 
   /// No description provided for @historyEmptyTitle.
@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// No description provided for @historyEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Your orders and top-ups will appear here'**
+  /// **'Your orders and top ups will appear here'**
   String get historyEmptyBody;
 
   /// No description provided for @historyErrorTitle.
@@ -269,13 +269,13 @@ abstract class AppLocalizations {
   /// No description provided for @historyTopUpDetails.
   ///
   /// In en, this message translates to:
-  /// **'Top-up Details'**
+  /// **'Top Up Details'**
   String get historyTopUpDetails;
 
   /// No description provided for @historyTopUpSuccessful.
   ///
   /// In en, this message translates to:
-  /// **'Top-Up Successful'**
+  /// **'Top Up Successful'**
   String get historyTopUpSuccessful;
 
   /// No description provided for @historyItems.
@@ -389,25 +389,25 @@ abstract class AppLocalizations {
   /// No description provided for @walletChoosePaymentPrompt.
   ///
   /// In en, this message translates to:
-  /// **'Select how you want to top up your wallet'**
+  /// **'Select how you want to Top Up your wallet'**
   String get walletChoosePaymentPrompt;
 
   /// No description provided for @walletTopUpAmount.
   ///
   /// In en, this message translates to:
-  /// **'Top-up Amount'**
+  /// **'Top Up Amount'**
   String get walletTopUpAmount;
 
   /// No description provided for @walletTopUpFailed.
   ///
   /// In en, this message translates to:
-  /// **'Top-up failed. Please try again.'**
+  /// **'Top Up failed. Please try again.'**
   String get walletTopUpFailed;
 
   /// No description provided for @walletLowBalance.
   ///
   /// In en, this message translates to:
-  /// **'Low balance — top up to keep ordering'**
+  /// **'Low balance — Top Up to keep ordering'**
   String get walletLowBalance;
 
   /// No description provided for @walletTotalAmount.
@@ -473,7 +473,7 @@ abstract class AppLocalizations {
   /// No description provided for @topupTitle.
   ///
   /// In en, this message translates to:
-  /// **'Top up wallet'**
+  /// **'Top Up wallet'**
   String get topupTitle;
 
   /// No description provided for @topupAmountLabel.
@@ -527,7 +527,7 @@ abstract class AppLocalizations {
   /// No description provided for @topupStartError.
   ///
   /// In en, this message translates to:
-  /// **'Could not start the top-up. Please try again.'**
+  /// **'Could not start the top up. Please try again.'**
   String get topupStartError;
 
   /// No description provided for @topupAbaNotFound.
@@ -575,7 +575,7 @@ abstract class AppLocalizations {
   /// No description provided for @topupSuccessTitle.
   ///
   /// In en, this message translates to:
-  /// **'Top-up successful'**
+  /// **'Top Up successful'**
   String get topupSuccessTitle;
 
   /// No description provided for @topupSuccessBody.
@@ -1001,7 +1001,7 @@ abstract class AppLocalizations {
   /// No description provided for @authPasswordReset.
   ///
   /// In en, this message translates to:
-  /// **'Password reset — sign in with your new password'**
+  /// **'Password reset — log in with your new password'**
   String get authPasswordReset;
 
   /// No description provided for @authResendCode.

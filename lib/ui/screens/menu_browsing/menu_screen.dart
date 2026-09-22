@@ -222,7 +222,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 height: 44,
                 decoration: BoxDecoration(
                   color: context.cardColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -252,7 +252,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     height: 44,
                     decoration: BoxDecoration(
                       color: context.cardColor,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.05),
@@ -706,7 +706,7 @@ class _FoodItemCardState extends State<FoodItemCard>
       child: Container(
         decoration: BoxDecoration(
           color: context.cardColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
@@ -794,7 +794,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                     ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFB74D).withValues(alpha: 0.95),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.15),
@@ -937,7 +937,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                         Container(
                           decoration: BoxDecoration(
                             color: AppTheme.green.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: AppTheme.green.withValues(alpha: 0.3),
                               width: 2,
@@ -1026,7 +1026,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: AppTheme.green.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppTheme.green.withValues(alpha: 0.15)),
           ),
           child: Row(
@@ -1092,7 +1092,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.orange.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.orange.withValues(alpha: 0.15)),
           ),
           child: Row(
@@ -1579,7 +1579,7 @@ class _SortTile extends StatelessWidget {
           color: selected
               ? AppTheme.green.withValues(alpha: 0.1)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: selected ? AppTheme.green : context.borderColor,
             width: selected ? 1.5 : 1.2,

@@ -88,7 +88,7 @@ class SettingsSection extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: context.cardColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.06),
@@ -132,7 +132,7 @@ class AppPillToggle extends StatelessWidget {
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           color: value ? AppTheme.green : context.borderColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: value
               ? [
                   BoxShadow(
@@ -232,7 +232,7 @@ class _SettingsTileState extends State<SettingsTile> {
                       height: 40,
                       decoration: BoxDecoration(
                         color: widget.iconColor.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Icon(
                         widget.icon,
@@ -318,7 +318,7 @@ class SettingsHeader extends StatelessWidget {
         children: [
           Material(
             color: Colors.white.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(11),
+            borderRadius: BorderRadius.circular(8),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () => Navigator.maybePop(context),

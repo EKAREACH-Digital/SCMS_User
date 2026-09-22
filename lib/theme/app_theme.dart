@@ -18,6 +18,7 @@ class AppTheme {
 
   // Compatibility aliases for existing widgets. New code should use the
   // design-token names above or Theme.of(context).colorScheme.
+  @Deprecated('Use AppTheme.primary')
   static const Color green = primary;
   static const Color greenDark = Color(0xFF8C4D00);
   static const Color greenSurface = secondary;

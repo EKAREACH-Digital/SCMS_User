@@ -230,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SettingsTile(
                     icon: Icons.key_outlined,
                     title: 'Set a Password',
-                    subtitle: 'Also sign in with your email',
+                    subtitle: 'Also log in with your email',
                     onTap: () => _open(const SetPasswordScreen()),
                   ),
                 SettingsTile(
@@ -366,7 +366,7 @@ class _Header extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.18),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
             ),
             child: Text(
@@ -394,7 +394,7 @@ class _IconButtonGlass extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white.withValues(alpha: 0.15),
-      borderRadius: BorderRadius.circular(11),
+      borderRadius: BorderRadius.circular(8),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -546,7 +546,7 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
         color: context.cardColor,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -562,7 +562,7 @@ class _StatCard extends StatelessWidget {
             height: 36,
             decoration: BoxDecoration(
               color: AppTheme.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(11),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: AppTheme.green, size: 19),
           ),
@@ -626,7 +626,7 @@ class _DarkModeTile extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: AppTheme.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -688,7 +688,7 @@ class _LanguageTile extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: AppTheme.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
               Icons.translate_rounded,
@@ -743,7 +743,7 @@ class _LanguageSegment extends StatelessWidget {
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: context.bgColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: context.borderColor),
       ),
       child: Row(
@@ -765,7 +765,7 @@ class _LanguageSegment extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: lang == current ? AppTheme.green : Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   _shortLabel(lang),
@@ -872,12 +872,12 @@ class _PickerOption extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
             children: [

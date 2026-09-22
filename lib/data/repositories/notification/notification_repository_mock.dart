@@ -12,7 +12,7 @@ class NotificationRepositoryMock implements NotificationRepository {
       NotificationDto(
         id: 'n1',
         title: 'Low balance',
-        body: 'Your wallet balance is below \$5. Top up to keep ordering.',
+        body: 'Your wallet balance is below \$5. Top Up to keep ordering.',
         type: 'wallet',
         isRead: _allRead,
         createdAt: now.subtract(const Duration(minutes: 10)),
@@ -38,7 +38,7 @@ class NotificationRepositoryMock implements NotificationRepository {
       ),
       NotificationDto(
         id: 'n3',
-        title: 'Top-up confirmed',
+        title: 'Top Up confirmed',
         body: '\$10.00 was added to your wallet.',
         type: 'wallet',
         isRead: true,
@@ -58,10 +58,12 @@ class NotificationRepositoryMock implements NotificationRepository {
   Future<int> getUnreadCount() async {
     if (_allRead) return 0;
     return _seed()
-        .where((n) =>
-            !n.isRead &&
-            n.source == NotificationSource.personal &&
-            !_dismissed.contains(n.id))
+        .where(
+          (n) =>
+              !n.isRead &&
+              n.source == NotificationSource.personal &&
+              !_dismissed.contains(n.id),
+        )
         .length;
   }
 

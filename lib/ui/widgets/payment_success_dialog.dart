@@ -148,7 +148,7 @@ class _PaymentSuccessDialogState extends State<PaymentSuccessDialog>
     final isSuccess = _phase == _Phase.success;
     return Dialog(
       backgroundColor: context.cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(28),
         // Smoothly grow/shrink as the button appears in the success phase.

@@ -127,7 +127,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Password reset — sign in with your new password'),
+          content: Text('Password reset — log in with your new password'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppTheme.green,
         ),
@@ -172,7 +172,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ? () => Navigator.pop(context)
                         : _back,
                     icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                    label: Text(_step == _Step.email ? 'Sign in' : 'Back'),
+                    label: Text(_step == _Step.email ? 'Log In' : 'Back'),
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.mutedText,
                     ),
@@ -410,7 +410,7 @@ class _ErrorBanner extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.red.shade50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.red.shade200),
       ),
       child: Row(
