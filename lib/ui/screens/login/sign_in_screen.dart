@@ -14,13 +14,6 @@ import 'complete_profile_screen.dart';
 import 'forgot_password_screen.dart';
 import 'view_model/auth_view_model.dart';
 
-/// Brand gradient used for the primary action buttons (#4CAF50 → #81C784).
-const _primaryGradient = LinearGradient(
-  colors: [AppTheme.green, AppTheme.primaryLight],
-  begin: Alignment.centerLeft,
-  end: Alignment.centerRight,
-);
-
 const _googleBlue = Color(0xFF4285F4);
 const _microsoftBlue = Color(0xFF0078D4);
 
@@ -207,14 +200,7 @@ class _AuthHeader extends StatelessWidget {
           height: 84,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: _primaryGradient,
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.green.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
+            color: AppTheme.primary,
           ),
           child: const Icon(
             Icons.restaurant_menu,
@@ -435,6 +421,7 @@ class _LoginFormState extends State<_LoginForm> {
             Checkbox(
               value: widget.rememberMe,
               activeColor: AppTheme.green,
+              checkColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -467,7 +454,6 @@ class _LoginFormState extends State<_LoginForm> {
         SmartCanteenButton(
           label: _isSubmitting ? 'Signing in…' : 'Log In',
           onPressed: _isSubmitting ? null : _handleLogin,
-          gradient: _primaryGradient,
         ),
         const SizedBox(height: 24),
         const SmartCanteenDividerText(label: 'OR CONTINUE WITH'),
@@ -636,7 +622,6 @@ class _SignUpFormState extends State<_SignUpForm> {
         SmartCanteenButton(
           label: _isSubmitting ? 'Signing up…' : 'Sign Up',
           onPressed: _isSubmitting ? null : _handleSignUp,
-          gradient: _primaryGradient,
         ),
         const SizedBox(height: 24),
         const SmartCanteenDividerText(label: 'OR CONTINUE WITH'),

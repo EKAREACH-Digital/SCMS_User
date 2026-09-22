@@ -25,7 +25,7 @@ class SmartCanteenButton extends StatefulWidget {
   final Color textColor;
   final double height;
 
-  /// Corner radius. Defaults to a pill shape (height / 2) when null.
+  /// Corner radius. Defaults to 8px when null.
   final double? radius;
   final Widget? leading;
   final double width;
@@ -67,10 +67,10 @@ class _SmartCanteenButtonState extends State<SmartCanteenButton>
 
   @override
   Widget build(BuildContext context) {
-    // Pill shape by default — radius scales with height.
-    final radius = widget.radius ?? widget.height / 2;
+    // Sharp corners by default — 8px, overridable via widget.radius.
+    final radius = widget.radius ?? 8;
     final shadowColor = widget.gradient != null
-        ? AppTheme.green
+        ? AppTheme.primaryDark
         : widget.fillColor;
 
     return ScaleTransition(
