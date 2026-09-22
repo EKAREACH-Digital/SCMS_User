@@ -57,19 +57,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyTitle => 'Order History';
 
   @override
-  String get historySubtitle => 'Your transactions & top ups';
-
-  @override
-  String get historyTotalSpent => 'Total Spent';
-
-  @override
-  String get historyTopUps => 'Top Ups';
+  String get historySubtitle => 'Everything you\'ve ordered';
 
   @override
   String get historyEmptyTitle => 'No orders yet';
 
   @override
-  String get historyEmptyBody => 'Your orders and top ups will appear here';
+  String get historyEmptyBody => 'Your orders will appear here';
 
   @override
   String get historyErrorTitle => 'Couldn\'t load history';
@@ -93,12 +87,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyOrderDetails => 'Order Details';
 
   @override
-  String get historyTopUpDetails => 'Top Up Details';
-
-  @override
-  String get historyTopUpSuccessful => 'Top Up Successful';
-
-  @override
   String get historyItems => 'Items';
 
   @override
@@ -108,22 +96,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyInKhr => 'In KHR';
 
   @override
-  String get historyPaymentMethod => 'Payment Method';
-
-  @override
   String get historyStatus => 'Status';
 
   @override
-  String get historyAmountAdded => 'Amount Added';
+  String get historyOrderedOn => 'Ordered on';
 
   @override
-  String get historyTransactionId => 'Transaction ID';
+  String get historyMealSession => 'Meal session';
 
   @override
-  String get historyMethodWallet => 'Wallet';
-
-  @override
-  String get historyMethodBankTransfer => 'Bank Transfer';
+  String historyItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get statusCompleted => 'Completed';

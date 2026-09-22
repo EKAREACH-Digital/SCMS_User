@@ -38,9 +38,44 @@ class OrderRepositoryMock implements OrderRepository {
     return _coupons.where((c) => c.isActive).toList();
   }
 
+  /// Sample past orders so the History screen has something to render in the
+  /// dev flavour. Dates are relative to now, so the list always looks current.
   @override
   Future<List<OrderSummaryDto>> getMyOrders() async {
     await Future.delayed(const Duration(milliseconds: 400));
-    return const [];
+    final now = DateTime.now();
+    return [
+      OrderSummaryDto(
+        id: 'mock-order-1',
+        totalAmount: 5.75,
+        status: 'completed',
+        mealSession: 'lunch',
+        createdAt: now.subtract(const Duration(hours: 3)),
+        items: const [
+          OrderLineDto(name: 'Chicken with Rice', quantity: 2, unitPrice: 2.00),
+          OrderLineDto(name: 'Pork with Rice', quantity: 1, unitPrice: 1.75),
+        ],
+      ),
+      OrderSummaryDto(
+        id: 'mock-order-2',
+        totalAmount: 1.25,
+        status: 'pending',
+        mealSession: 'breakfast',
+        createdAt: now.subtract(const Duration(days: 1, hours: 2)),
+        items: const [
+          OrderLineDto(name: 'Fried Egg Rice', quantity: 1, unitPrice: 1.25),
+        ],
+      ),
+      OrderSummaryDto(
+        id: 'mock-order-3',
+        totalAmount: 4.00,
+        status: 'cancelled',
+        mealSession: 'dinner',
+        createdAt: now.subtract(const Duration(days: 3)),
+        items: const [
+          OrderLineDto(name: 'Khmer Noodle', quantity: 2, unitPrice: 2.00),
+        ],
+      ),
+    ];
   }
 }

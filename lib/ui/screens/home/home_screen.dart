@@ -14,6 +14,7 @@ import '../alerts/notification_screen.dart';
 import '../menu_browsing/menu_screen.dart';
 import '../shell/app_shell.dart';
 import '../../widgets/cart_bar.dart';
+import '../../widgets/food_tag_chip.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -664,23 +665,35 @@ class _FoodGrid extends StatelessWidget {
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
     itemCount: items.length,
+    // Still two per row; only the card height changed. A fixed extent rather
+    // than an aspect ratio, because the content is a known height and
+    // deriving it from the column width left dead space under the price.
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      childAspectRatio: .72,
+      crossAxisSpacing: 14,
+      mainAxisSpacing: 14,
+      mainAxisExtent: 228,
     ),
     itemBuilder: (context, index) => _FoodCard(item: items[index]),
   );
 }
 
-class _FoodCard extends StatelessWidget {
+class _FoodCard extends StatefulWidget {
   const _FoodCard({required this.item});
 
   final FoodItem item;
 
   @override
+  State<_FoodCard> createState() => _FoodCardState();
+}
+
+class _FoodCardState extends State<_FoodCard> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
+    final descriptiveTag = foodDescriptiveTag(item.tags);
     final cart = CartProvider.of(context);
     void addToCart() {
       HapticFeedback.selectionClick();
@@ -690,105 +703,126 @@ class _FoodCard extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _showDetails(context),
-      child: Consumer<CartModel>(
-        builder: (context, cart, _) => _SurfaceCard(
-          padding: EdgeInsets.zero,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(8),
-                    ),
-                    child: SizedBox(
-                      height: 116,
-                      width: double.infinity,
-                      child: _HomeFoodImage(item: item),
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: .70),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.schedule, size: 12, color: Colors.white),
-                          SizedBox(width: 4),
-                          Text(
-                            '5 min wait',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(9, 8, 7, 7),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      // Matches the press feedback on the menu card.
+      child: AnimatedScale(
+        scale: _isPressed ? 0.97 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        child: Consumer<CartModel>(
+          builder: (context, cart, _) => _SurfaceCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
                   children: [
-                    Text(
-                      item.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.2,
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(8),
+                      ),
+                      child: SizedBox(
+                        height: 118,
+                        width: double.infinity,
+                        child: _HomeFoodImage(item: item),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item.description,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: context.mutedColor,
-                        fontWeight: FontWeight.w400,
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 7,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .45),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.schedule, size: 11, color: Colors.white),
+                            SizedBox(width: 4),
+                            Text(
+                              '5 min',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          '\$${item.price.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.2,
-                          ),
-                        ),
-                        const Spacer(),
-                        _CartControl(
-                          quantity: cart.quantityOf(item.id),
-                          onAdd: addToCart,
-                          onIncrement: () => cart.increment(item.id),
-                          onDecrement: () => cart.decrement(item.id),
-                        ),
-                      ],
                     ),
                   ],
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(11, 10, 11, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: context.textColor,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        // Backend items carry only their category, which the
+                        // section header already states — show the dish's own
+                        // blurb instead of a chip that repeats it.
+                        if (descriptiveTag != null)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: FoodTagChip(tag: descriptiveTag),
+                          )
+                        else
+                          Text(
+                            item.description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11,
+                              height: 1.35,
+                              color: context.mutedColor,
+                            ),
+                          ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              '\$${item.price.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: AppTheme.primary,
+                                letterSpacing: -0.2,
+                              ),
+                            ),
+                            const Spacer(),
+                            _CartControl(
+                              quantity: cart.quantityOf(item.id),
+                              onAdd: addToCart,
+                              onIncrement: () => cart.increment(item.id),
+                              onDecrement: () => cart.decrement(item.id),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -810,7 +844,7 @@ class _FoodCard extends StatelessWidget {
           child: SingleChildScrollView(
             controller: controller,
             child: FoodItemCard(
-              item: item,
+              item: widget.item,
               isExpanded: true,
               onTap: () => Navigator.pop(context),
             ),
@@ -844,54 +878,50 @@ class _CartControl extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           splashColor: Colors.white.withValues(alpha: 0.3),
           onTap: onAdd,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primary.withValues(alpha: 0.35),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
+          child: const SizedBox(
+            width: 32,
+            height: 32,
+            child: Icon(Icons.add_rounded, color: Colors.white, size: 18),
           ),
         ),
       );
     }
 
+    // Tinted rather than solid, so a card with items in the cart does not
+    // outshout the rest of the grid.
     return Container(
-      height: 36,
+      height: 32,
       decoration: BoxDecoration(
-        color: AppTheme.secondary,
+        color: AppTheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: AppTheme.primary.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             onPressed: onDecrement,
-            icon: const Icon(Icons.remove, size: 16),
+            icon: const Icon(Icons.remove_rounded, size: 15),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints.tightFor(width: 30, height: 36),
+            constraints: const BoxConstraints.tightFor(width: 27, height: 32),
             color: AppTheme.primary,
           ),
           Text(
             '$quantity',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
+              fontSize: 13,
               color: AppTheme.primary,
             ),
           ),
           IconButton(
             onPressed: onIncrement,
-            icon: const Icon(Icons.add, size: 16),
+            icon: const Icon(Icons.add_rounded, size: 15),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints.tightFor(width: 30, height: 36),
+            constraints: const BoxConstraints.tightFor(width: 27, height: 32),
             color: AppTheme.primary,
           ),
         ],

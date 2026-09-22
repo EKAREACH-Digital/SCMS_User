@@ -1,10 +1,28 @@
 import 'package:flutter/foundation.dart';
 
 import '../../data/dtos/order_dto.dart';
-import '../../data/dtos/wallet_dto.dart';
 import '../../data/exceptions/api_exception.dart';
 import '../../data/repositories/order/order_repository.dart';
-import '../../data/repositories/wallet/wallet_repository.dart';
+
+/// One dish within a past order, as the history screen displays it.
+class OrderLine {
+  const OrderLine({
+    required this.name,
+    required this.quantity,
+    this.unitPrice,
+    this.imageUrl,
+  });
+
+  final String name;
+  final int quantity;
+
+  /// Price per unit, or null when the backend gave no price for this line.
+  final double? unitPrice;
+  final String? imageUrl;
+
+  /// What this line cost in total, or null when [unitPrice] is unknown.
+  double? get lineTotal => unitPrice == null ? null : unitPrice! * quantity;
+}
 
 class OrderRecord {
   const OrderRecord({
@@ -14,29 +32,32 @@ class OrderRecord {
     required this.total,
     required this.status,
     required this.createdAt,
-    this.type = 'order',
+    this.lines = const [],
     this.session,
     this.imagePath,
     this.imageUrl,
-    this.logoAsset,
     this.colorSeed = 0,
   });
 
   final String id;
   final String date;
+
+  /// One-line summary of the dishes, for the collapsed card.
   final String items;
   final double total;
 
-  /// Real timestamp, used to sort the merged orders + top-ups chronologically.
+  /// The dishes themselves, with quantity and price — what the details sheet
+  /// breaks down. Empty for optimistically-added orders until the next
+  /// refresh fills them in.
+  final List<OrderLine> lines;
+
+  /// Real timestamp, used to sort the list chronologically.
   final DateTime createdAt;
 
   /// 'Pending', 'Completed', or 'Failed'.
   final String status;
 
-  /// 'order' or 'deposit'.
-  final String type;
-
-  /// 'Breakfast' or 'Lunch' for food orders; null for deposits.
+  /// 'Breakfast', 'Lunch' or 'Dinner'.
   final String? session;
 
   /// First item's bundled asset path — set for optimistically-added orders.
@@ -45,10 +66,6 @@ class OrderRecord {
   /// First item's remote photo, from the backend's `image_url`. Preferred over
   /// [imagePath]; both null falls back to the gradient placeholder.
   final String? imageUrl;
-
-  /// Payment-method logo for a top-up (`asset/payment method/*.png`), so a
-  /// deposit shows the bank it came through rather than a generic icon.
-  final String? logoAsset;
 
   /// Controls which gradient/icon slot is used for the placeholder.
   final int colorSeed;
@@ -68,32 +85,19 @@ class OrderHistoryState extends ChangeNotifier {
   /// failed fetch apart from a genuinely empty history.
   String? get error => _error;
 
-  /// Loads the signed-in user's real history — food orders (`GET /orders/my`)
-  /// and wallet top-ups (`GET /wallet/:id/transactions`) — merges them, sorts
-  /// newest-first, and replaces the list. On failure the current list is kept
-  /// and [error] is set.
-  Future<void> loadFromBackend(
-    OrderRepository orderRepo,
-    WalletRepository walletRepo,
-  ) async {
+  /// Loads the signed-in user's food orders (`GET /orders/my`), newest first,
+  /// and replaces the list. Wallet top-ups are deliberately not merged in —
+  /// history is a record of what was bought, not of money moving in.
+  /// On failure the current list is kept and [error] is set.
+  Future<void> loadFromBackend(OrderRepository orderRepo) async {
     _loading = true;
     _error = null;
     notifyListeners();
     try {
-      final results = await Future.wait([
-        orderRepo.getMyOrders(),
-        _safeTransactions(walletRepo),
-      ]);
-      final orderDtos = results[0] as List<OrderSummaryDto>;
-      final txDtos = results[1] as List<TransactionDto>;
+      final orderDtos = await orderRepo.getMyOrders();
 
       final records = <OrderRecord>[
         for (final (i, o) in orderDtos.indexed) _toOrderRecord(o, i),
-        // Only "money in" (top-ups / refunds). Wallet 'payment' rows are the
-        // same as the food orders above, so we skip them to avoid duplicates.
-        for (final t
-            in txDtos.where((t) => t.type == 'topup' || t.type == 'refund'))
-          _toDepositRecord(t),
       ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
       _orders
@@ -107,15 +111,6 @@ class OrderHistoryState extends ChangeNotifier {
     } finally {
       _loading = false;
       notifyListeners();
-    }
-  }
-
-  /// Wallet transactions throw if the user has no wallet yet — treat as empty.
-  Future<List<TransactionDto>> _safeTransactions(WalletRepository repo) async {
-    try {
-      return await repo.getTransactions();
-    } catch (_) {
-      return const [];
     }
   }
 
@@ -138,40 +133,15 @@ class OrderHistoryState extends ChangeNotifier {
       session: _capitalize(o.mealSession),
       imageUrl: photo,
       colorSeed: index,
-    );
-  }
-
-  /// Bundled logos for the top-up methods the app offers.
-  static const _methodLogos = <String, String>{
-    'aba': 'asset/payment method/aba.png',
-    'bakong': 'asset/payment method/bakong.png',
-    'acleda': 'asset/payment method/acleda.png',
-  };
-
-  /// Picks a bank logo from the transaction note.
-  ///
-  /// The backend stores the method in free text (`notes`), e.g.
-  /// "ABA PayWay top-up PW…" — there's no structured method column on
-  /// wallet_transactions, so match on the name. Null keeps the generic
-  /// wallet icon.
-  static String? _logoForDescription(String description) {
-    final text = description.toLowerCase();
-    for (final entry in _methodLogos.entries) {
-      if (text.contains(entry.key)) return entry.value;
-    }
-    return null;
-  }
-
-  OrderRecord _toDepositRecord(TransactionDto t) {
-    return OrderRecord(
-      id: t.id,
-      date: _fmtDate(t.createdAt),
-      items: t.description.isEmpty ? 'Wallet Top-up' : t.description,
-      total: t.amountUsd,
-      status: 'Completed',
-      createdAt: t.createdAt,
-      type: 'deposit',
-      logoAsset: _logoForDescription(t.description),
+      lines: [
+        for (final i in o.items)
+          OrderLine(
+            name: i.name,
+            quantity: i.quantity,
+            unitPrice: i.unitPrice,
+            imageUrl: i.imageUrl,
+          ),
+      ],
     );
   }
 

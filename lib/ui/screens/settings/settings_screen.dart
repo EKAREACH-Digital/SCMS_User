@@ -150,8 +150,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final balanceUsd = context.watch<BalanceState>().balanceUsd;
-    final allOrders = context.watch<OrderHistoryState>().orders;
-    final orders = allOrders.where((o) => o.type == 'order').toList();
+    // History holds food orders only — top-ups are no longer recorded there.
+    final orders = context.watch<OrderHistoryState>().orders;
     final settings = context.watch<AppSettingsState>();
     final user = context.watch<UserProfileState>();
 

@@ -197,20 +197,8 @@ abstract class AppLocalizations {
   /// No description provided for @historySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your transactions & top ups'**
+  /// **'Everything you\'ve ordered'**
   String get historySubtitle;
-
-  /// No description provided for @historyTotalSpent.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Spent'**
-  String get historyTotalSpent;
-
-  /// No description provided for @historyTopUps.
-  ///
-  /// In en, this message translates to:
-  /// **'Top Ups'**
-  String get historyTopUps;
 
   /// No description provided for @historyEmptyTitle.
   ///
@@ -221,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @historyEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Your orders and top ups will appear here'**
+  /// **'Your orders will appear here'**
   String get historyEmptyBody;
 
   /// No description provided for @historyErrorTitle.
@@ -266,18 +254,6 @@ abstract class AppLocalizations {
   /// **'Order Details'**
   String get historyOrderDetails;
 
-  /// No description provided for @historyTopUpDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Top Up Details'**
-  String get historyTopUpDetails;
-
-  /// No description provided for @historyTopUpSuccessful.
-  ///
-  /// In en, this message translates to:
-  /// **'Top Up Successful'**
-  String get historyTopUpSuccessful;
-
   /// No description provided for @historyItems.
   ///
   /// In en, this message translates to:
@@ -296,41 +272,29 @@ abstract class AppLocalizations {
   /// **'In KHR'**
   String get historyInKhr;
 
-  /// No description provided for @historyPaymentMethod.
-  ///
-  /// In en, this message translates to:
-  /// **'Payment Method'**
-  String get historyPaymentMethod;
-
   /// No description provided for @historyStatus.
   ///
   /// In en, this message translates to:
   /// **'Status'**
   String get historyStatus;
 
-  /// No description provided for @historyAmountAdded.
+  /// No description provided for @historyOrderedOn.
   ///
   /// In en, this message translates to:
-  /// **'Amount Added'**
-  String get historyAmountAdded;
+  /// **'Ordered on'**
+  String get historyOrderedOn;
 
-  /// No description provided for @historyTransactionId.
+  /// No description provided for @historyMealSession.
   ///
   /// In en, this message translates to:
-  /// **'Transaction ID'**
-  String get historyTransactionId;
+  /// **'Meal session'**
+  String get historyMealSession;
 
-  /// No description provided for @historyMethodWallet.
+  /// No description provided for @historyItemCount.
   ///
   /// In en, this message translates to:
-  /// **'Wallet'**
-  String get historyMethodWallet;
-
-  /// No description provided for @historyMethodBankTransfer.
-  ///
-  /// In en, this message translates to:
-  /// **'Bank Transfer'**
-  String get historyMethodBankTransfer;
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String historyItemCount(int count);
 
   /// No description provided for @statusCompleted.
   ///

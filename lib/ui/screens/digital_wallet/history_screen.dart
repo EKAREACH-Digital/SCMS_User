@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/repositories/order/order_repository.dart';
-import '../../../data/repositories/wallet/wallet_repository.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../model/food/food_item.dart';
 import '../../../theme/app_theme.dart';
@@ -22,10 +21,8 @@ const Color _kAmber = Color(0xFFF9A825);
 String _statusLabel(AppLocalizations l10n, OrderRecord record) =>
     switch (record.status) {
       // A finished meal order is "Redeemed" — the same word the staff
-      // dashboard uses when it scans the ticket. A finished top-up is just
-      // "Completed"; nothing was redeemed.
-      'Completed' =>
-        record.type == 'deposit' ? l10n.statusCompleted : l10n.statusRedeemed,
+      // dashboard uses when it scans the ticket.
+      'Completed' => l10n.statusRedeemed,
       'Failed' => l10n.statusFailed,
       _ => l10n.statusPending,
     };
@@ -71,7 +68,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> _load() {
     return context.read<OrderHistoryState>().loadFromBackend(
       context.read<OrderRepository>(),
-      context.read<WalletRepository>(),
     );
   }
 
@@ -106,13 +102,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final orders = state.orders;
     final sorted = _sorted(orders);
 
-    final spent = orders
-        .where((o) => o.type == 'order' && o.status != 'Failed')
-        .fold<double>(0, (sum, o) => sum + o.total);
-    final topUps = orders
-        .where((o) => o.type == 'deposit' && o.status != 'Failed')
-        .fold<double>(0, (sum, o) => sum + o.total);
-
     return Scaffold(
       body: Column(
         children: [
@@ -124,7 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             // Once there is data, keep showing it — a failed background
             // refresh shouldn't blank out a list the user can still read.
             child: orders.isNotEmpty
-                ? _buildList(sorted, spent, topUps)
+                ? _buildList(sorted)
                 : state.isLoading
                 ? const _LoadingState()
                 : state.error != null
@@ -136,22 +125,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Widget _buildList(List<OrderRecord> sorted, double spent, double topUps) {
+  Widget _buildList(List<OrderRecord> sorted) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      // +1 for the summary card pinned at the top of the list.
-      itemCount: sorted.length + 1,
+      itemCount: sorted.length,
       itemBuilder: (context, index) {
-        if (index == 0) {
-          return _FadeInItem(
-            index: 0,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _SummaryCard(spent: spent, topUps: topUps),
-            ),
-          );
-        }
-        final order = sorted[index - 1];
+        final order = sorted[index];
         return _FadeInItem(
           key: ValueKey('${_sort}_${order.id}'),
           index: index,
@@ -294,162 +273,6 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
   }
 }
 
-// ── Spent vs top-ups summary chart ─────────────────────────────────────────
-
-class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({required this.spent, required this.topUps});
-
-  final double spent;
-  final double topUps;
-
-  @override
-  Widget build(BuildContext context) {
-    final total = spent + topUps;
-    final spentFraction = total <= 0 ? 0.0 : spent / total;
-
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: context.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: _SummaryStat(
-                  label: AppLocalizations.of(context)!.historyTotalSpent,
-                  amount: spent,
-                  color: _kRed,
-                  icon: Icons.south_west_rounded,
-                ),
-              ),
-              Container(
-                width: 1,
-                height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 14),
-                color: context.borderColor,
-              ),
-              Expanded(
-                child: _SummaryStat(
-                  label: AppLocalizations.of(context)!.historyTopUps,
-                  amount: topUps,
-                  color: AppTheme.success,
-                  icon: Icons.north_east_rounded,
-                  alignEnd: true,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Proportional bar: red (spent) vs green (top-ups), animates in.
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: SizedBox(
-              height: 10,
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: spentFraction),
-                duration: const Duration(milliseconds: 700),
-                curve: Curves.easeInOut,
-                builder: (context, fraction, _) {
-                  return Row(
-                    children: [
-                      if (fraction > 0)
-                        Expanded(
-                          flex: (fraction * 1000).round(),
-                          child: Container(
-                            color: _kRed.withValues(alpha: 0.85),
-                          ),
-                        ),
-                      if (fraction < 1)
-                        Expanded(
-                          flex: ((1 - fraction) * 1000).round(),
-                          child: Container(
-                            color: AppTheme.success.withValues(alpha: 0.85),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SummaryStat extends StatelessWidget {
-  const _SummaryStat({
-    required this.label,
-    required this.amount,
-    required this.color,
-    required this.icon,
-    this.alignEnd = false,
-  });
-
-  final String label;
-  final double amount;
-  final Color color;
-  final IconData icon;
-  final bool alignEnd;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: alignEnd
-          ? CrossAxisAlignment.end
-          : CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, size: 14, color: color),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: context.mutedColor,
-                letterSpacing: 0.1,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          '\$${amount.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
-            color: color,
-            letterSpacing: -0.5,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 // ── Transaction card ───────────────────────────────────────────────────────
 
 class _OrderCard extends StatefulWidget {
@@ -476,28 +299,21 @@ class _OrderCardState extends State<_OrderCard> {
   @override
   Widget build(BuildContext context) {
     final order = widget.order;
-    final isDeposit = order.type == 'deposit';
     final isPending = order.status == 'Pending';
     final isFailed = order.status == 'Failed';
     final isCompleted = order.status == 'Completed';
 
-    // Color cues: green = income/top-up, red = expense, amber = pending.
-    final statusColor = isCompleted
-        ? (isDeposit ? AppTheme.success : _kRed)
-        : isFailed
-        ? _kRed
-        : _kAmber;
+    // Color cues: red = spent, amber = pending, grey = a cancelled order that
+    // was never charged.
+    final statusColor = isFailed || isCompleted ? _kRed : _kAmber;
 
     final amountColor = isFailed
         ? _kGray
         : isPending
         ? _kAmber
-        : isDeposit
-        ? AppTheme.success
         : _kRed;
-    final amountLabel = isDeposit
-        ? '+\$${order.total.toStringAsFixed(2)}'
-        : '-\$${order.total.toStringAsFixed(2)}';
+    final amountLabel = '\$${order.total.toStringAsFixed(2)}';
+    final itemCount = order.lines.fold<int>(0, (n, l) => n + l.quantity);
 
     return AnimatedScale(
       scale: _pressed ? 0.97 : 1.0,
@@ -535,9 +351,7 @@ class _OrderCardState extends State<_OrderCard> {
                     child: SizedBox(
                       width: 52,
                       height: 52,
-                      child: isDeposit
-                          ? _DepositThumbnail(logoAsset: order.logoAsset)
-                          : _FoodThumbnail(order: order),
+                      child: _FoodThumbnail(order: order),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -580,6 +394,19 @@ class _OrderCardState extends State<_OrderCard> {
                             ),
                           ],
                         ),
+                        if (itemCount > 0) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.historyItemCount(itemCount),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.primary,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -983,50 +810,6 @@ class _FoodThumbnail extends StatelessWidget {
   }
 }
 
-class _DepositThumbnail extends StatelessWidget {
-  const _DepositThumbnail({this.logoAsset});
-
-  /// Bank logo for the method the top-up came through. Null for older records
-  /// with no recognisable method, which keep the generic wallet icon.
-  final String? logoAsset;
-
-  @override
-  Widget build(BuildContext context) {
-    if (logoAsset != null) {
-      return Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(6),
-        child: ClipOval(
-          child: Image.asset(
-            logoAsset!,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => const _WalletGlyph(),
-          ),
-        ),
-      );
-    }
-    return const _WalletGlyph();
-  }
-}
-
-class _WalletGlyph extends StatelessWidget {
-  const _WalletGlyph();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.primary.withValues(alpha: 0.12),
-      child: const Center(
-        child: Icon(
-          Icons.account_balance_wallet_rounded,
-          color: AppTheme.primary,
-          size: 26,
-        ),
-      ),
-    );
-  }
-}
-
 // ── View Details modal ─────────────────────────────────────────────────────
 
 class _DetailsSheet extends StatelessWidget {
@@ -1035,7 +818,7 @@ class _DetailsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDeposit = order.type == 'deposit';
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       top: false,
       child: Container(
@@ -1044,6 +827,8 @@ class _DetailsSheet extends StatelessWidget {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         ),
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+        // An order with many lines can outgrow the sheet, so the body scrolls
+        // while the grabber and title stay put.
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1066,31 +851,43 @@ class _DetailsSheet extends StatelessWidget {
                   child: SizedBox(
                     width: 44,
                     height: 44,
-                    child: isDeposit
-                        ? _DepositThumbnail(logoAsset: order.logoAsset)
-                        : _FoodThumbnail(order: order),
+                    child: _FoodThumbnail(order: order),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    isDeposit
-                        ? AppLocalizations.of(context)!.historyTopUpDetails
-                        : AppLocalizations.of(context)!.historyOrderDetails,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: context.textColor,
-                      letterSpacing: -0.3,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.historyOrderDetails,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: context.textColor,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        order.date,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: context.mutedColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 18),
-            isDeposit
-                ? _DepositDetails(order: order)
-                : _FoodOrderDetails(order: order),
+            Flexible(
+              child: SingleChildScrollView(
+                child: _FoodOrderDetails(order: order),
+              ),
+            ),
           ],
         ),
       ),
@@ -1232,14 +1029,37 @@ class _FoodOrderDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _DetailRow(
-          label: l10n.historyItems,
-          value: order.items,
-          valueStyle: const TextStyle(
-            fontSize: 13,
+        Text(
+          l10n.historyItems,
+          style: TextStyle(
+            fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppTheme.primary,
+            color: context.mutedColor,
           ),
+        ),
+        const SizedBox(height: 8),
+        // One row per dish, with its own quantity and what it cost. Falls back
+        // to the joined summary string for optimistically-added orders, which
+        // have no lines until the next refresh.
+        if (order.lines.isEmpty)
+          _DetailRow(
+            label: l10n.historyItems,
+            value: order.items,
+            valueStyle: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.primary,
+            ),
+          )
+        else
+          for (final line in order.lines)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _OrderLineRow(line: line),
+            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Divider(color: context.borderColor, height: 1),
         ),
         const SizedBox(height: 10),
         _DetailRow(
@@ -1263,14 +1083,26 @@ class _FoodOrderDetails extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _DetailRow(
-          label: l10n.historyPaymentMethod,
-          value: l10n.historyMethodWallet,
-          valueStyle: const TextStyle(
+          label: l10n.historyOrderedOn,
+          value: order.date,
+          valueStyle: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppTheme.primary,
+            color: context.textColor,
           ),
         ),
+        if (order.session != null) ...[
+          const SizedBox(height: 8),
+          _DetailRow(
+            label: l10n.historyMealSession,
+            value: order.session!,
+            valueStyle: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.primary,
+            ),
+          ),
+        ],
         const SizedBox(height: 8),
         _DetailRow(
           label: l10n.historyStatus,
@@ -1290,85 +1122,71 @@ class _FoodOrderDetails extends StatelessWidget {
   }
 }
 
-// ── Expanded breakdown for deposits ────────────────────────────────────────
+// ── One dish within an order ───────────────────────────────────────────────
 
-class _DepositDetails extends StatelessWidget {
-  const _DepositDetails({required this.order});
-  final OrderRecord order;
+class _OrderLineRow extends StatelessWidget {
+  const _OrderLineRow({required this.line});
+
+  final OrderLine line;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Center(
-          child: Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppTheme.success.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.check_circle_rounded,
-              color: AppTheme.success,
-              size: 32,
-            ),
+        // Quantity badge, so "×2" is readable at a glance rather than buried
+        // in the dish name.
+        Container(
+          constraints: const BoxConstraints(minWidth: 28),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
+            color: AppTheme.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(6),
           ),
-        ),
-        const SizedBox(height: 12),
-        Center(
           child: Text(
-            l10n.historyTopUpSuccessful,
-            style: TextStyle(
-              fontSize: 14,
+            '×${line.quantity}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: context.textColor,
+              color: AppTheme.primary,
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        _DetailRow(
-          label: l10n.historyAmountAdded,
-          value: '+\$${order.total.toStringAsFixed(2)}',
-          valueStyle: const TextStyle(
-            fontSize: 14,
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                line.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: context.textColor,
+                ),
+              ),
+              // Only worth showing the unit price when more than one was
+              // bought; otherwise it just repeats the line total.
+              if (line.unitPrice != null && line.quantity > 1)
+                Text(
+                  '\$${line.unitPrice!.toStringAsFixed(2)} each',
+                  style: TextStyle(fontSize: 11, color: context.mutedColor),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          line.lineTotal == null
+              ? '—'
+              : '\$${line.lineTotal!.toStringAsFixed(2)}',
+          style: TextStyle(
+            fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: AppTheme.success,
-          ),
-        ),
-        const SizedBox(height: 8),
-        _DetailRow(
-          label: l10n.historyInKhr,
-          value: '+៛${(order.total * 4000).toStringAsFixed(0)}',
-          valueStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: context.mutedColor,
-          ),
-        ),
-        const SizedBox(height: 10),
-        _DetailRow(
-          label: l10n.historyPaymentMethod,
-          value: l10n.historyMethodBankTransfer,
-          valueStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppTheme.success,
-          ),
-        ),
-        const SizedBox(height: 8),
-        _DetailRow(
-          label: l10n.historyTransactionId,
-          value: order.id.length >= 8
-              ? order.id.substring(0, 8).toUpperCase()
-              : order.id.toUpperCase(),
-          valueStyle: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            color: context.mutedColor,
-            fontFamily: 'monospace',
+            color: line.lineTotal == null ? context.mutedColor : AppTheme.primary,
           ),
         ),
       ],

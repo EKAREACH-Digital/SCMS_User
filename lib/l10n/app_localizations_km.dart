@@ -57,20 +57,13 @@ class AppLocalizationsKm extends AppLocalizations {
   String get historyTitle => 'ប្រវត្តិការបញ្ជាទិញ';
 
   @override
-  String get historySubtitle => 'ប្រតិបត្តិការ និងការបញ្ចូលទឹកប្រាក់របស់អ្នក';
-
-  @override
-  String get historyTotalSpent => 'ចំណាយសរុប';
-
-  @override
-  String get historyTopUps => 'ការបញ្ចូលទឹកប្រាក់';
+  String get historySubtitle => 'អ្វីៗដែលអ្នកបានបញ្ជាទិញ';
 
   @override
   String get historyEmptyTitle => 'មិនទាន់មានការបញ្ជាទិញ';
 
   @override
-  String get historyEmptyBody =>
-      'ការបញ្ជាទិញ និងការបញ្ចូលទឹកប្រាក់របស់អ្នកនឹងបង្ហាញនៅទីនេះ';
+  String get historyEmptyBody => 'ការបញ្ជាទិញរបស់អ្នកនឹងបង្ហាញនៅទីនេះ';
 
   @override
   String get historyErrorTitle => 'មិនអាចទាញយកប្រវត្តិបានទេ';
@@ -94,12 +87,6 @@ class AppLocalizationsKm extends AppLocalizations {
   String get historyOrderDetails => 'ព័ត៌មានលម្អិតការបញ្ជាទិញ';
 
   @override
-  String get historyTopUpDetails => 'ព័ត៌មានលម្អិតការបញ្ចូលទឹកប្រាក់';
-
-  @override
-  String get historyTopUpSuccessful => 'ការបញ្ចូលទឹកប្រាក់ជោគជ័យ';
-
-  @override
   String get historyItems => 'ទំនិញ';
 
   @override
@@ -109,22 +96,24 @@ class AppLocalizationsKm extends AppLocalizations {
   String get historyInKhr => 'ជាប្រាក់រៀល';
 
   @override
-  String get historyPaymentMethod => 'វិធីទូទាត់';
-
-  @override
   String get historyStatus => 'ស្ថានភាព';
 
   @override
-  String get historyAmountAdded => 'ចំនួនបានបញ្ចូល';
+  String get historyOrderedOn => 'បញ្ជាទិញនៅ';
 
   @override
-  String get historyTransactionId => 'លេខសម្គាល់ប្រតិបត្តិការ';
+  String get historyMealSession => 'វេនអាហារ';
 
   @override
-  String get historyMethodWallet => 'កាបូបអេឡិចត្រូនិក';
-
-  @override
-  String get historyMethodBankTransfer => 'ផ្ទេរតាមធនាគារ';
+  String historyItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ទំនិញ $count',
+      one: 'ទំនិញ 1',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get statusCompleted => 'បានបញ្ចប់';

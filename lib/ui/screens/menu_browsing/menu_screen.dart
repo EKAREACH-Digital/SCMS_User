@@ -9,6 +9,7 @@ import '../../../theme/app_theme.dart';
 import '../../../ui/states/menu_state.dart';
 import '../../../ui/utils/async_value.dart';
 import '../../widgets/cart_bar.dart';
+import '../../widgets/food_tag_chip.dart';
 import 'weekly_menu_screen.dart';
 
 enum _SortBy { recommended, priceLowHigh, priceHighLow, rating }
@@ -434,45 +435,6 @@ class _FoodItemCardState extends State<FoodItemCard>
     return cart.quantityOf(widget.item.id);
   }
 
-  Map<String, Color> _getTagColors() => {
-    'Soup': Colors.blue,
-    'Traditional': AppTheme.primary,
-    'Sweet': Colors.pink,
-    'Spicy': Colors.red,
-    'Healthy': Colors.teal,
-    'Vegan': Colors.amber,
-    'Drink': Colors.lightBlue,
-    'Grilled': Colors.orange,
-    'Soft': Colors.purple,
-    'Simple': Colors.indigo,
-    'Quick': Colors.cyan,
-    'Cold': Colors.blueAccent,
-    'Fresh': Colors.greenAccent,
-  };
-
-  Color _getTagColor(String tag) {
-    switch (tag.toLowerCase()) {
-      case 'high protein':
-      case 'healthy':
-        return Colors.teal;
-      case 'chef choice':
-      case 'grilled':
-        return const Color(0xFFB7793E);
-      case 'vegetarian':
-      case 'vegan':
-      case 'fresh':
-        return const Color(0xFF3E8E62);
-      case 'gluten free':
-      case 'traditional':
-        return const Color(0xFFB58B5A);
-      case 'chilled':
-      case 'cold':
-        return const Color(0xFF6F7C86);
-      default:
-        return _getTagColors()[tag] ?? AppTheme.primary;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.isExpanded) {
@@ -572,15 +534,15 @@ class _FoodItemCardState extends State<FoodItemCard>
                         Row(
                           children: [
                             Expanded(
-                              child: widget.item.tags.isNotEmpty
-                                  ? Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: _buildTag(
-                                        context,
-                                        widget.item.tags.first,
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
+                              child: switch (foodDescriptiveTag(
+                                widget.item.tags,
+                              )) {
+                                final tag? => Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: FoodTagChip(tag: tag),
+                                ),
+                                null => const SizedBox.shrink(),
+                              },
                             ),
                             const SizedBox(width: 8),
                             _buildCartControl(),
@@ -595,35 +557,6 @@ class _FoodItemCardState extends State<FoodItemCard>
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTag(BuildContext context, String tag) {
-    final color = _getTagColor(tag);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(_tagIcon(tag), size: 11, color: color),
-          const SizedBox(width: 4),
-          Text(
-            tag,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 10,
-              color: color,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -859,41 +792,9 @@ class _FoodItemCardState extends State<FoodItemCard>
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: widget.item.tags.map((tag) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getTagColor(tag).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _getTagColor(tag).withValues(alpha: 0.4),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _tagIcon(tag),
-                              size: 13,
-                              color: _getTagColor(tag),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              tag,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: _getTagColor(tag),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                    children: widget.item.tags
+                        .map((tag) => FoodTagChip(tag: tag, large: true))
+                        .toList(),
                   ),
                   const SizedBox(height: 16),
                   _buildNutritionInfo(context),
@@ -1668,39 +1569,6 @@ class _FadeInItemState extends State<_FadeInItem>
 }
 
 // ── Tag icon mapping ──────────────────────────────────────────────────────────
-
-IconData _tagIcon(String tag) {
-  switch (tag) {
-    case 'Soup':
-      return Icons.ramen_dining_rounded;
-    case 'Traditional':
-      return Icons.rice_bowl_rounded;
-    case 'Sweet':
-      return Icons.cake_rounded;
-    case 'Spicy':
-      return Icons.local_fire_department_rounded;
-    case 'Healthy':
-      return Icons.eco_rounded;
-    case 'Vegan':
-      return Icons.spa_rounded;
-    case 'Drink':
-      return Icons.local_cafe_rounded;
-    case 'Grilled':
-      return Icons.outdoor_grill_rounded;
-    case 'Soft':
-      return Icons.bubble_chart_rounded;
-    case 'Simple':
-      return Icons.restaurant_rounded;
-    case 'Quick':
-      return Icons.bolt_rounded;
-    case 'Cold':
-      return Icons.ac_unit_rounded;
-    case 'Fresh':
-      return Icons.grass_rounded;
-    default:
-      return Icons.label_rounded;
-  }
-}
 
 // ── Shimmering rating star ─────────────────────────────────────────────────────
 

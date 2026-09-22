@@ -96,20 +96,35 @@ class OrderLineDto {
   /// show the same picture the menu does.
   final String? imageUrl;
 
+  /// What one unit cost. Read from the order line's own `unit_price` when the
+  /// backend snapshots it, so a past order keeps the price it was actually
+  /// charged at rather than today's menu price; the joined menu item is only a
+  /// fallback. Null when neither is present — history then shows the order
+  /// total without a per-line breakdown.
+  final double? unitPrice;
+
   const OrderLineDto({
     required this.name,
     required this.quantity,
     this.imageUrl,
+    this.unitPrice,
   });
+
+  /// Total charged for this line.
+  double? get lineTotal =>
+      unitPrice == null ? null : unitPrice! * quantity;
 
   factory OrderLineDto.fromJson(Map<String, dynamic> json) {
     final menuItem = json['menuItem'] ?? json['menu_item'];
     final asMap = menuItem is Map<String, dynamic> ? menuItem : null;
     final image = asMap?['image_url'] as String?;
+    final rawPrice =
+        json['unit_price'] ?? json['price'] ?? asMap?['price'];
     return OrderLineDto(
       name: asMap?['name'] as String? ?? 'Item',
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       imageUrl: (image != null && image.isNotEmpty) ? image : null,
+      unitPrice: rawPrice == null ? null : PlacedOrderDto._toDouble(rawPrice),
     );
   }
 }
