@@ -78,7 +78,10 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text('Continue'),
+              child: const Text(
+                'Continue',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../theme/app_theme.dart';
 import '../../states/payment_methods_state.dart';
+import '../../widgets/add_card_sheet.dart';
 import 'bank_selection_screen.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -20,24 +22,31 @@ enum _PaymentMethod { bank, card }
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   _PaymentMethod? _selectedMethod;
   BankOption? _selectedBank;
-  bool _hasSavedCard = true;
-  SavedCard _savedCard = const SavedCard(
-    id: 'mock-visa',
-    brand: CardBrand.visa,
-    last4: '4242',
-    holder: 'Sokhunmony Soun',
-    expiry: '08/27',
-  );
+
+  /// Which saved card this checkout pays with. Null means "whichever card is
+  /// the account default"; picking one here does not change that default.
+  String? _selectedCardId;
+
+  /// Resolves the chosen card against the live list, falling back to the
+  /// default and then to the first card, so a card removed in Settings can
+  /// never stay selected here.
+  SavedCard? _resolveCard(PaymentMethodsState state) {
+    final cards = state.cards;
+    if (cards.isEmpty) return null;
+    for (final id in [_selectedCardId, state.defaultId]) {
+      if (id == null) continue;
+      for (final card in cards) {
+        if (card.id == id) return card;
+      }
+    }
+    return cards.first;
+  }
 
   Future<void> _openAddCard() async {
-    final card = await Navigator.push<SavedCard>(
-      context,
-      MaterialPageRoute(builder: (_) => const AddCardScreen()),
-    );
+    final card = await AddCardSheet.show(context);
     if (!mounted || card == null) return;
     setState(() {
-      _hasSavedCard = true;
-      _savedCard = card;
+      _selectedCardId = card.id;
       _selectedMethod = _PaymentMethod.card;
     });
   }
@@ -90,6 +99,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final paymentMethods = context.watch<PaymentMethodsState>();
+    final cards = paymentMethods.cards;
+    final card = _resolveCard(paymentMethods);
+
     return Scaffold(
       backgroundColor: context.bgColor,
       appBar: AppBar(
@@ -121,15 +134,35 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           const SizedBox(height: 12),
           _PaymentOptionTile(
             title: 'Pay with Card',
-            subtitle: _hasSavedCard ? 'Saved Card' : 'Add a saved card',
+            subtitle: card == null
+                ? 'Add a saved card'
+                : '${card.brand.label} •••• ${card.last4}',
             icon: Icons.credit_card_rounded,
             selected: _selectedMethod == _PaymentMethod.card,
-            onTap: !_hasSavedCard
+            onTap: card == null
                 ? _openAddCard
-                : () => setState(() => _selectedMethod = _PaymentMethod.card),
-            child: !_hasSavedCard
+                : () => setState(() {
+                    _selectedCardId = card.id;
+                    _selectedMethod = _PaymentMethod.card;
+                  }),
+            child: card == null
                 ? _AddCardTile(onTap: _openAddCard)
-                : _SavedCardTile(card: _savedCard),
+                : Column(
+                    children: [
+                      for (final c in cards) ...[
+                        _SavedCardTile(
+                          card: c,
+                          selected: c.id == card.id,
+                          onTap: () => setState(() {
+                            _selectedCardId = c.id;
+                            _selectedMethod = _PaymentMethod.card;
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                      _AddCardTile(onTap: _openAddCard),
+                    ],
+                  ),
           ),
         ],
       ),
@@ -258,47 +291,66 @@ class _SelectionIndicator extends StatelessWidget {
 }
 
 class _SavedCardTile extends StatelessWidget {
-  const _SavedCardTile({required this.card});
+  const _SavedCardTile({
+    required this.card,
+    required this.selected,
+    required this.onTap,
+  });
 
   final SavedCard card;
+  final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: context.bgColor,
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.borderColor),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.credit_card_rounded, color: AppTheme.primaryDark),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  card.brand.label,
-                  style: TextStyle(
-                    color: context.textColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  '•••• ${card.last4}',
-                  style: TextStyle(color: context.mutedColor, fontSize: 13),
-                ),
-              ],
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: context.bgColor,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: selected ? AppTheme.primaryDark : context.borderColor,
+              width: selected ? 1.6 : 1,
             ),
           ),
-          Text(
-            'Exp ${card.expiry}',
-            style: TextStyle(color: context.mutedColor, fontSize: 12),
+          child: Row(
+            children: [
+              Icon(Icons.credit_card_rounded, color: AppTheme.primaryDark),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      card.brand.label,
+                      style: TextStyle(
+                        color: context.textColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '•••• ${card.last4}',
+                      style: TextStyle(color: context.mutedColor, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                'Exp ${card.expiry}',
+                style: TextStyle(color: context.mutedColor, fontSize: 12),
+              ),
+              const SizedBox(width: 10),
+              _SelectionIndicator(selected: selected),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -459,169 +511,6 @@ class _PaymentBottomBar extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({super.key});
-
-  @override
-  State<AddCardScreen> createState() => _AddCardScreenState();
-}
-
-class _AddCardScreenState extends State<AddCardScreen> {
-  final _cardNumberController = TextEditingController();
-  final _expiryController = TextEditingController();
-  final _cvvController = TextEditingController();
-  final _holderController = TextEditingController();
-
-  @override
-  void dispose() {
-    _cardNumberController.dispose();
-    _expiryController.dispose();
-    _cvvController.dispose();
-    _holderController.dispose();
-    super.dispose();
-  }
-
-  void _saveCard() {
-    final digits = _cardNumberController.text.replaceAll(RegExp(r'\D'), '');
-    final last4 = digits.length >= 4
-        ? digits.substring(digits.length - 4)
-        : '4242';
-    Navigator.pop(
-      context,
-      SavedCard(
-        id: 'mock-${DateTime.now().microsecondsSinceEpoch}',
-        brand: CardBrand.visa,
-        last4: last4,
-        holder: _holderController.text.trim().isEmpty
-            ? 'Cardholder'
-            : _holderController.text.trim(),
-        expiry: _expiryController.text.trim().isEmpty
-            ? '08/27'
-            : _expiryController.text.trim(),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.bgColor,
-      appBar: AppBar(
-        title: const Text('Add Card'),
-        backgroundColor: context.bgColor,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-        children: [
-          Text(
-            'Enter your card details. This is a local mock form for now.',
-            style: TextStyle(color: context.mutedColor, fontSize: 14),
-          ),
-          const SizedBox(height: 22),
-          _CardField(
-            label: 'Card number',
-            hint: '1234 5678 9012 3456',
-            controller: _cardNumberController,
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: _CardField(
-                  label: 'Expiry',
-                  hint: 'MM/YY',
-                  controller: _expiryController,
-                  keyboardType: TextInputType.datetime,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _CardField(
-                  label: 'CVV',
-                  hint: '123',
-                  controller: _cvvController,
-                  keyboardType: TextInputType.number,
-                  obscureText: true,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          _CardField(
-            label: 'Cardholder name',
-            hint: 'Name on card',
-            controller: _holderController,
-            keyboardType: TextInputType.name,
-          ),
-          const SizedBox(height: 28),
-          SizedBox(
-            height: 48,
-            child: ElevatedButton(
-              onPressed: _saveCard,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                foregroundColor: AppTheme.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Save Card'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CardField extends StatelessWidget {
-  const _CardField({
-    required this.label,
-    required this.hint,
-    required this.controller,
-    required this.keyboardType,
-    this.obscureText = false,
-  });
-
-  final String label;
-  final String hint;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final bool obscureText;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        filled: true,
-        fillColor: context.cardColor,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: context.borderColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: context.borderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppTheme.primaryDark, width: 1.3),
         ),
       ),
     );
