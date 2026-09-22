@@ -169,7 +169,7 @@ Same layout structure with:
 - `Curves.easeInOut`: Micro-interactions and color changes
 
 ### Color Palette
-- Primary green: `AppTheme.green`
+- Primary amber: `AppTheme.primary`
 - Muted text: `AppTheme.mutedText`
 - Border: Softened to `Color(0xFFE8E8E8)`
 - Shadows: Green with variable opacity (6-25%)

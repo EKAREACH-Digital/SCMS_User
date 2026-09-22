@@ -7,7 +7,7 @@ class SmartCanteenButton extends StatefulWidget {
     super.key,
     required this.label,
     this.onPressed,
-    this.fillColor = AppTheme.green,
+    this.fillColor = AppTheme.primary,
     this.gradient,
     this.textColor = Colors.white,
     this.height = 54,

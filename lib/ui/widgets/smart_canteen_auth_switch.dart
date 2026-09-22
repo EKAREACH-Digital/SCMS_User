@@ -24,7 +24,7 @@ class SmartCanteenAuthSwitch extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE8E8E8), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.green.withValues(alpha: 0.06),
+            color: AppTheme.primary.withValues(alpha: 0.06),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -107,7 +107,7 @@ class _AuthSwitchItemState extends State<_AuthSwitchItem>
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: widget.selected ? AppTheme.green : Colors.transparent,
+          color: widget.selected ? AppTheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
@@ -115,7 +115,7 @@ class _AuthSwitchItemState extends State<_AuthSwitchItem>
           duration: const Duration(milliseconds: 320),
           curve: Curves.easeOutCubic,
           style: TextStyle(
-            color: widget.selected ? Colors.white : AppTheme.green,
+            color: widget.selected ? Colors.white : AppTheme.primary,
             fontWeight: FontWeight.w700,
             fontSize: 15,
             letterSpacing: 0.3,

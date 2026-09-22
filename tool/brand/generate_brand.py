@@ -28,7 +28,7 @@ SOURCE = APP / "tool/brand/source.png"
 # Same stops as AppTheme.headerGradient, ordered light → dark so the tile reads
 # as lit from the top-left.
 GRADIENT = [
-    (0.00, (0x4C, 0xAF, 0x50)),  # AppTheme.green
+    (0.00, (0x4C, 0xAF, 0x50)),  # legacy brand-generation reference
     (0.55, (0x2E, 0x7D, 0x32)),  # AppTheme.greenDark
     (1.00, (0x1B, 0x5E, 0x20)),
 ]

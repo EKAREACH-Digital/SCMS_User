@@ -838,7 +838,7 @@ class _CartControl extends StatelessWidget {
   Widget build(BuildContext context) {
     if (quantity == 0) {
       return Material(
-        color: AppTheme.green,
+        color: AppTheme.primary,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
@@ -851,7 +851,7 @@ class _CartControl extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.green.withValues(alpha: 0.35),
+                  color: AppTheme.primary.withValues(alpha: 0.35),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),

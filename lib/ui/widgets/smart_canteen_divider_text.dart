@@ -17,7 +17,7 @@ class SmartCanteenDividerText extends StatelessWidget {
           child: Text(
             label,
             style: const TextStyle(
-              color: AppTheme.green,
+              color: AppTheme.primary,
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.9,

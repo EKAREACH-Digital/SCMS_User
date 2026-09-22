@@ -56,7 +56,11 @@ class AppDialog extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppTheme.text),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.text,
+              ),
             ),
             const SizedBox(height: 12),
             body,
@@ -68,9 +72,14 @@ class AppDialog extends StatelessWidget {
                     onPressed: onCancel ?? () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppTheme.border),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                    child: Text(cancelLabel, style: const TextStyle(color: AppTheme.mutedText)),
+                    child: Text(
+                      cancelLabel,
+                      style: const TextStyle(color: AppTheme.mutedText),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -78,10 +87,14 @@ class AppDialog extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onConfirm ?? () => Navigator.pop(context, true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isDestructive ? const Color(0xFFE53935) : AppTheme.green,
+                      backgroundColor: isDestructive
+                          ? const Color(0xFFE53935)
+                          : AppTheme.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                     child: Text(confirmLabel),
                   ),

@@ -16,12 +16,20 @@ class LowBalanceBanner extends StatelessWidget {
       color: const Color(0xFFFFF3E0),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Color(0xFFE65100), size: 18),
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Color(0xFFE65100),
+            size: 18,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               AppLocalizations.of(context)!.walletLowBalance,
-              style: const TextStyle(fontSize: 12, color: Color(0xFFE65100), fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFFE65100),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           GestureDetector(
@@ -29,12 +37,16 @@ class LowBalanceBanner extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               decoration: BoxDecoration(
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 AppLocalizations.of(context)!.commonTopUp,
-                style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

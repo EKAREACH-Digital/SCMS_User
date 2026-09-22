@@ -131,12 +131,12 @@ class AppPillToggle extends StatelessWidget {
         height: 30,
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          color: value ? AppTheme.green : context.borderColor,
+          color: value ? AppTheme.primary : context.borderColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: value
               ? [
                   BoxShadow(
-                    color: AppTheme.green.withValues(alpha: 0.35),
+                    color: AppTheme.primary.withValues(alpha: 0.35),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -178,7 +178,7 @@ class SettingsTile extends StatefulWidget {
     required this.subtitle,
     this.onTap,
     this.trailing,
-    this.iconColor = AppTheme.green,
+    this.iconColor = AppTheme.primary,
     this.isLast = false,
   });
 
@@ -309,7 +309,7 @@ class SettingsHeader extends StatelessWidget {
       ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.primaryLight, AppTheme.green, AppTheme.greenDark],
+          colors: [AppTheme.primaryLight, AppTheme.primary, AppTheme.greenDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

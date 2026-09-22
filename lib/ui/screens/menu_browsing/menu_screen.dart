@@ -97,13 +97,13 @@ class _MenuScreenState extends State<MenuScreen> {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: AppTheme.green.withValues(alpha: 0.1),
+                color: AppTheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.search_off_rounded,
                 size: 36,
-                color: AppTheme.green,
+                color: AppTheme.primary,
               ),
             ),
             const SizedBox(height: 16),
@@ -193,7 +193,7 @@ class _MenuScreenState extends State<MenuScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppTheme.green.withValues(alpha: 0.08), Colors.white],
+              colors: [AppTheme.primary.withValues(alpha: 0.08), Colors.white],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -337,7 +337,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Expanded(
                 child: switch (menuAsync) {
                   AsyncLoading<List<FoodItem>>() => const Center(
-                    child: CircularProgressIndicator(color: AppTheme.green),
+                    child: CircularProgressIndicator(color: AppTheme.primary),
                   ),
                   AsyncError<List<FoodItem>>() => _MenuLoadError(
                     onRetry: () => context.read<MenuState>().load(force: true),
@@ -436,7 +436,7 @@ class _FoodItemCardState extends State<FoodItemCard>
 
   Map<String, Color> _getTagColors() => {
     'Soup': Colors.blue,
-    'Traditional': AppTheme.green,
+    'Traditional': AppTheme.primary,
     'Sweet': Colors.pink,
     'Spicy': Colors.red,
     'Healthy': Colors.teal,
@@ -469,7 +469,7 @@ class _FoodItemCardState extends State<FoodItemCard>
       case 'cold':
         return const Color(0xFF6F7C86);
       default:
-        return _getTagColors()[tag] ?? AppTheme.green;
+        return _getTagColors()[tag] ?? AppTheme.primary;
     }
   }
 
@@ -550,7 +550,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
-                                color: AppTheme.green,
+                                color: AppTheme.primary,
                                 letterSpacing: -0.2,
                               ),
                             ),
@@ -635,10 +635,10 @@ class _FoodItemCardState extends State<FoodItemCard>
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.1),
+        color: AppTheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: AppTheme.green.withValues(alpha: 0.3),
+          color: AppTheme.primary.withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -653,7 +653,7 @@ class _FoodItemCardState extends State<FoodItemCard>
               alignment: Alignment.center,
               child: const Icon(
                 Icons.remove_rounded,
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 18,
               ),
             ),
@@ -661,7 +661,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           Container(
             width: 1,
             height: 24,
-            color: AppTheme.green.withValues(alpha: 0.2),
+            color: AppTheme.primary.withValues(alpha: 0.2),
           ),
           SizedBox(
             width: 36,
@@ -670,7 +670,7 @@ class _FoodItemCardState extends State<FoodItemCard>
               child: Text(
                 '${_getCartQuantity()}',
                 style: const TextStyle(
-                  color: AppTheme.green,
+                  color: AppTheme.primary,
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
                 ),
@@ -680,7 +680,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           Container(
             width: 1,
             height: 24,
-            color: AppTheme.green.withValues(alpha: 0.2),
+            color: AppTheme.primary.withValues(alpha: 0.2),
           ),
           GestureDetector(
             onTap: _increment,
@@ -690,7 +690,7 @@ class _FoodItemCardState extends State<FoodItemCard>
               alignment: Alignment.center,
               child: const Icon(
                 Icons.add_rounded,
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 18,
               ),
             ),
@@ -920,7 +920,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
-                              color: AppTheme.green,
+                              color: AppTheme.primary,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -936,10 +936,10 @@ class _FoodItemCardState extends State<FoodItemCard>
                       else
                         Container(
                           decoration: BoxDecoration(
-                            color: AppTheme.green.withValues(alpha: 0.1),
+                            color: AppTheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppTheme.green.withValues(alpha: 0.3),
+                              color: AppTheme.primary.withValues(alpha: 0.3),
                               width: 2,
                             ),
                           ),
@@ -953,7 +953,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                                   alignment: Alignment.center,
                                   child: const Icon(
                                     Icons.remove_rounded,
-                                    color: AppTheme.green,
+                                    color: AppTheme.primary,
                                     size: 22,
                                   ),
                                 ),
@@ -961,7 +961,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                               Container(
                                 width: 1,
                                 height: 32,
-                                color: AppTheme.green.withValues(alpha: 0.2),
+                                color: AppTheme.primary.withValues(alpha: 0.2),
                               ),
                               SizedBox(
                                 width: 48,
@@ -970,7 +970,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                                   child: Text(
                                     '${_getCartQuantity()}',
                                     style: const TextStyle(
-                                      color: AppTheme.green,
+                                      color: AppTheme.primary,
                                       fontWeight: FontWeight.w800,
                                       fontSize: 18,
                                     ),
@@ -980,7 +980,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                               Container(
                                 width: 1,
                                 height: 32,
-                                color: AppTheme.green.withValues(alpha: 0.2),
+                                color: AppTheme.primary.withValues(alpha: 0.2),
                               ),
                               GestureDetector(
                                 onTap: _increment,
@@ -990,7 +990,7 @@ class _FoodItemCardState extends State<FoodItemCard>
                                   alignment: Alignment.center,
                                   child: const Icon(
                                     Icons.add_rounded,
-                                    color: AppTheme.green,
+                                    color: AppTheme.primary,
                                     size: 22,
                                   ),
                                 ),
@@ -1025,9 +1025,9 @@ class _FoodItemCardState extends State<FoodItemCard>
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: AppTheme.green.withValues(alpha: 0.08),
+            color: AppTheme.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppTheme.green.withValues(alpha: 0.15)),
+            border: Border.all(color: AppTheme.primary.withValues(alpha: 0.15)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1051,7 +1051,7 @@ class _FoodItemCardState extends State<FoodItemCard>
           style: const TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w600,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 4),
@@ -1060,14 +1060,14 @@ class _FoodItemCardState extends State<FoodItemCard>
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w800,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         Text(
           unit,
           style: const TextStyle(
             fontSize: 9,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -1245,7 +1245,7 @@ class _FoodImageState extends State<_FoodImage> {
           child: CircularProgressIndicator(
             strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(
-              AppTheme.green.withValues(alpha: 0.6),
+              AppTheme.primary.withValues(alpha: 0.6),
             ),
           ),
         ),
@@ -1319,7 +1319,7 @@ class _ModernFilterChipState extends State<_ModernFilterChip> {
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
-                      color: AppTheme.green.withValues(alpha: 0.35),
+                      color: AppTheme.primary.withValues(alpha: 0.35),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -1396,14 +1396,14 @@ class _SearchBarState extends State<_SearchBar> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _focused
-                    ? AppTheme.green.withValues(alpha: 0.6)
+                    ? AppTheme.primary.withValues(alpha: 0.6)
                     : Colors.transparent,
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: _focused
-                      ? AppTheme.green.withValues(alpha: 0.18)
+                      ? AppTheme.primary.withValues(alpha: 0.18)
                       : Colors.black.withValues(alpha: 0.04),
                   blurRadius: _focused ? 16 : 12,
                   offset: Offset(0, _focused ? 5 : 3),
@@ -1428,7 +1428,7 @@ class _SearchBarState extends State<_SearchBar> {
                     curve: Curves.easeInOut,
                     child: Icon(
                       Icons.search_rounded,
-                      color: _focused ? AppTheme.green : context.mutedColor,
+                      color: _focused ? AppTheme.primary : context.mutedColor,
                       size: 20,
                     ),
                   ),
@@ -1467,7 +1467,7 @@ class _SearchBarState extends State<_SearchBar> {
               boxShadow: [
                 BoxShadow(
                   color: widget.isSortActive
-                      ? AppTheme.green.withValues(alpha: 0.35)
+                      ? AppTheme.primary.withValues(alpha: 0.35)
                       : Colors.black.withValues(alpha: 0.04),
                   blurRadius: 12,
                   offset: const Offset(0, 3),
@@ -1577,11 +1577,11 @@ class _SortTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: selected
-              ? AppTheme.green.withValues(alpha: 0.1)
+              ? AppTheme.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: selected ? AppTheme.green : context.borderColor,
+            color: selected ? AppTheme.primary : context.borderColor,
             width: selected ? 1.5 : 1.2,
           ),
         ),
@@ -1590,7 +1590,7 @@ class _SortTile extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: selected ? AppTheme.green : context.mutedColor,
+              color: selected ? AppTheme.primary : context.mutedColor,
             ),
             const SizedBox(width: 12),
             Text(
@@ -1598,14 +1598,14 @@ class _SortTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: selected ? AppTheme.green : context.textColor,
+                color: selected ? AppTheme.primary : context.textColor,
               ),
             ),
             const Spacer(),
             if (selected)
               const Icon(
                 Icons.check_circle_rounded,
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 20,
               ),
           ],
@@ -1812,7 +1812,7 @@ class _BounceAddButtonState extends State<_BounceAddButton>
     return ScaleTransition(
       scale: _scale,
       child: Material(
-        color: AppTheme.green,
+        color: AppTheme.primary,
         borderRadius: BorderRadius.circular(widget.radius),
         elevation: 0,
         shadowColor: Colors.transparent,
@@ -1827,7 +1827,7 @@ class _BounceAddButtonState extends State<_BounceAddButton>
               borderRadius: BorderRadius.circular(widget.radius),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.green.withValues(alpha: 0.35),
+                  color: AppTheme.primary.withValues(alpha: 0.35),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -1857,7 +1857,11 @@ class _MenuLoadError extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.cloud_off_rounded, size: 40, color: AppTheme.green),
+          const Icon(
+            Icons.cloud_off_rounded,
+            size: 40,
+            color: AppTheme.primary,
+          ),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.menuErrorTitle,

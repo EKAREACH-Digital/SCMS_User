@@ -76,7 +76,7 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
         Text(
           widget.label,
           style: const TextStyle(
-            color: AppTheme.green,
+            color: AppTheme.primary,
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,

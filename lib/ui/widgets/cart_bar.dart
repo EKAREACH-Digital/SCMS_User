@@ -66,12 +66,12 @@ class _CartBarState extends State<CartBar> with SingleTickerProviderStateMixin {
           color: context.cardColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.green.withValues(alpha: 0.2),
+            color: AppTheme.primary.withValues(alpha: 0.2),
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -101,7 +101,7 @@ class _CartBarState extends State<CartBar> with SingleTickerProviderStateMixin {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -180,11 +180,11 @@ class _CartBarButtonState extends State<_CartBarButton> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
-            color: isFilled ? AppTheme.green : Colors.transparent,
+            color: isFilled ? AppTheme.primary : Colors.transparent,
             border: isFilled
                 ? null
                 : Border.all(
-                    color: AppTheme.green.withValues(alpha: 0.4),
+                    color: AppTheme.primary.withValues(alpha: 0.4),
                     width: 1.2,
                   ),
             borderRadius: BorderRadius.circular(8),
@@ -195,7 +195,7 @@ class _CartBarButtonState extends State<_CartBarButton> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: isFilled ? Colors.white : AppTheme.green,
+              color: isFilled ? Colors.white : AppTheme.primary,
             ),
           ),
         ),

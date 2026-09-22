@@ -115,7 +115,9 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
     });
 
     try {
-      final session = await context.read<PaymentRepository>().startTopUp(amount);
+      final session = await context.read<PaymentRepository>().startTopUp(
+        amount,
+      );
       if (!mounted) return;
       setState(() {
         _session = session;
@@ -175,8 +177,9 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
 
     _checking = true;
     try {
-      final status =
-          await context.read<PaymentRepository>().checkStatus(session.tranId);
+      final status = await context.read<PaymentRepository>().checkStatus(
+        session.tranId,
+      );
       if (!mounted) return;
 
       if (status == TopupStatus.paid) {
@@ -230,29 +233,29 @@ class _TopUpScreenState extends State<TopUpScreen> with WidgetsBindingObserver {
           padding: const EdgeInsets.all(24),
           child: switch (_stage) {
             _Stage.amount => _AmountForm(
-                controller: _amountController,
-                busy: _starting,
-                error: _error,
-                onSubmit: _start,
-              ),
+              controller: _amountController,
+              busy: _starting,
+              error: _error,
+              onSubmit: _start,
+            ),
             _Stage.preparing => _PreparingView(
-                amountUsd: double.tryParse(_amountController.text) ?? 0,
-              ),
+              amountUsd: double.tryParse(_amountController.text) ?? 0,
+            ),
             _Stage.waiting => _WaitingView(
-                session: _session!,
-                error: _error,
-                onOpenAba: _openAba,
-                onCancel: _cancel,
-              ),
+              session: _session!,
+              error: _error,
+              onOpenAba: _openAba,
+              onCancel: _cancel,
+            ),
             _Stage.failed => _FailedView(
-                message: _error ?? '',
-                onRetry: _retry,
-                onBack: () => Navigator.of(context).pop(false),
-              ),
+              message: _error ?? '',
+              onRetry: _retry,
+              onBack: () => Navigator.of(context).pop(false),
+            ),
             _Stage.paid => _PaidView(
-                amountUsd: _session?.amountUsd ?? 0,
-                onDone: () => Navigator.of(context).pop(true),
-              ),
+              amountUsd: _session?.amountUsd ?? 0,
+              onDone: () => Navigator.of(context).pop(true),
+            ),
           },
         ),
       ),
@@ -310,7 +313,7 @@ class _AmountForm extends StatelessWidget {
         const SizedBox(height: 24),
         FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: AppTheme.green,
+            backgroundColor: AppTheme.primary,
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
           onPressed: busy ? null : onSubmit,
@@ -352,7 +355,7 @@ class _PreparingView extends StatelessWidget {
             style: const TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w800,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
           const SizedBox(height: 28),
@@ -361,7 +364,7 @@ class _PreparingView extends StatelessWidget {
             height: 28,
             child: CircularProgressIndicator(
               strokeWidth: 2.5,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
           const SizedBox(height: 18),
@@ -402,7 +405,7 @@ class _WaitingView extends StatelessWidget {
           style: const TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w800,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 20),
@@ -433,7 +436,11 @@ class _WaitingView extends StatelessWidget {
         Text(
           l10n.topupScanHint,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 13, color: context.mutedColor, height: 1.5),
+          style: TextStyle(
+            fontSize: 13,
+            color: context.mutedColor,
+            height: 1.5,
+          ),
         ),
         const SizedBox(height: 20),
         OutlinedButton.icon(
@@ -461,7 +468,7 @@ class _WaitingView extends StatelessWidget {
               height: 16,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: AppTheme.green,
+                color: AppTheme.primary,
               ),
             ),
             const SizedBox(width: 10),
@@ -511,11 +518,7 @@ class _FailedView extends StatelessWidget {
               color: _kRed.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.cancel_rounded,
-              color: _kRed,
-              size: 48,
-            ),
+            child: const Icon(Icons.cancel_rounded, color: _kRed, size: 48),
           ),
         ),
         const SizedBox(height: 20),
@@ -543,7 +546,7 @@ class _FailedView extends StatelessWidget {
         const SizedBox(height: 32),
         FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: AppTheme.green,
+            backgroundColor: AppTheme.primary,
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
           onPressed: onRetry,
@@ -576,12 +579,12 @@ class _PaidView extends StatelessWidget {
             width: 84,
             height: 84,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.success.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.check_circle_rounded,
-              color: AppTheme.green,
+              color: AppTheme.success,
               size: 48,
             ),
           ),
@@ -605,7 +608,7 @@ class _PaidView extends StatelessWidget {
         const SizedBox(height: 32),
         FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: AppTheme.green,
+            backgroundColor: AppTheme.primary,
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
           onPressed: onDone,

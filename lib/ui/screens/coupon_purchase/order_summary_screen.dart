@@ -103,13 +103,13 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppTheme.green.withValues(alpha: 0.1),
+                          color: AppTheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
                           '${cart.totalItems} Item${cart.totalItems == 1 ? '' : 's'}',
                           style: const TextStyle(
-                            color: AppTheme.green,
+                            color: AppTheme.primary,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -208,7 +208,7 @@ class OrderItemCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.green,
+                      color: AppTheme.primary,
                     ),
                   ),
                   QuantityController(
@@ -265,7 +265,7 @@ class _OrderItemImage extends StatelessWidget {
       child: Center(
         child: Icon(
           kFoodIcons[idx % kFoodIcons.length],
-          color: AppTheme.green,
+          color: AppTheme.primary,
           size: 32,
         ),
       ),
@@ -316,7 +316,7 @@ class QuantityController extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.remove, size: 16, color: AppTheme.green),
+            icon: const Icon(Icons.remove, size: 16, color: AppTheme.primary),
             onPressed: onDecrement,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 30, minHeight: 40),
@@ -326,7 +326,7 @@ class QuantityController extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
           ),
           IconButton(
-            icon: const Icon(Icons.add, size: 16, color: AppTheme.green),
+            icon: const Icon(Icons.add, size: 16, color: AppTheme.primary),
             onPressed: onIncrement,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 30, minHeight: 40),
@@ -415,7 +415,7 @@ class _PaymentSummarySection extends StatelessWidget {
             },
             style: TextStyle(
               fontSize: 11,
-              color: isOpen ? AppTheme.green : const Color(0xFFE53935),
+              color: isOpen ? AppTheme.primary : const Color(0xFFE53935),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -465,9 +465,9 @@ class _SessionChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color bg = selected ? AppTheme.green : Colors.transparent;
+    final Color bg = selected ? AppTheme.primary : Colors.transparent;
     final Color borderColor = selected
-        ? AppTheme.green
+        ? AppTheme.primary
         : enabled
         ? AppTheme.border
         : AppTheme.border.withValues(alpha: 0.4);
@@ -529,7 +529,7 @@ class _SummaryRow extends StatelessWidget {
           style: TextStyle(
             fontSize: isTotal ? 22 : 14,
             fontWeight: isTotal ? FontWeight.w700 : FontWeight.w600,
-            color: isTotal ? AppTheme.green : AppTheme.text,
+            color: isTotal ? AppTheme.primary : AppTheme.text,
           ),
         ),
       ],

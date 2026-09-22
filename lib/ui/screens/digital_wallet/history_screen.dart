@@ -187,7 +187,7 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.green.withValues(alpha: isDark ? 0.18 : 0.12),
+            AppTheme.primary.withValues(alpha: isDark ? 0.18 : 0.12),
             context.bgColor.withValues(alpha: 0),
           ],
           begin: Alignment.topCenter,
@@ -268,7 +268,7 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                         boxShadow: [
                           BoxShadow(
                             color: widget.isSortActive
-                                ? AppTheme.green.withValues(alpha: 0.35)
+                                ? AppTheme.primary.withValues(alpha: 0.35)
                                 : Colors.black.withValues(alpha: 0.05),
                             blurRadius: 12,
                             offset: const Offset(0, 3),
@@ -343,7 +343,7 @@ class _SummaryCard extends StatelessWidget {
                 child: _SummaryStat(
                   label: AppLocalizations.of(context)!.historyTopUps,
                   amount: topUps,
-                  color: AppTheme.green,
+                  color: AppTheme.success,
                   icon: Icons.north_east_rounded,
                   alignEnd: true,
                 ),
@@ -374,7 +374,7 @@ class _SummaryCard extends StatelessWidget {
                         Expanded(
                           flex: ((1 - fraction) * 1000).round(),
                           child: Container(
-                            color: AppTheme.green.withValues(alpha: 0.85),
+                            color: AppTheme.success.withValues(alpha: 0.85),
                           ),
                         ),
                     ],
@@ -483,7 +483,7 @@ class _OrderCardState extends State<_OrderCard> {
 
     // Color cues: green = income/top-up, red = expense, amber = pending.
     final statusColor = isCompleted
-        ? (isDeposit ? AppTheme.green : _kRed)
+        ? (isDeposit ? AppTheme.success : _kRed)
         : isFailed
         ? _kRed
         : _kAmber;
@@ -493,7 +493,7 @@ class _OrderCardState extends State<_OrderCard> {
         : isPending
         ? _kAmber
         : isDeposit
-        ? AppTheme.green
+        ? AppTheme.success
         : _kRed;
     final amountLabel = isDeposit
         ? '+\$${order.total.toStringAsFixed(2)}'
@@ -520,8 +520,8 @@ class _OrderCardState extends State<_OrderCard> {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
-            splashColor: AppTheme.green.withValues(alpha: 0.12),
-            highlightColor: AppTheme.green.withValues(alpha: 0.05),
+            splashColor: AppTheme.primary.withValues(alpha: 0.12),
+            highlightColor: AppTheme.primary.withValues(alpha: 0.05),
             onTap: _openDetails,
             onTapDown: (_) => setState(() => _pressed = true),
             onTapUp: (_) => setState(() => _pressed = false),
@@ -728,7 +728,7 @@ class _LoadingState extends StatelessWidget {
         height: 32,
         child: CircularProgressIndicator(
           strokeWidth: 2.5,
-          color: AppTheme.green,
+          color: AppTheme.primary,
         ),
       ),
     );
@@ -837,7 +837,7 @@ class _RetryButtonState extends State<_RetryButton> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.green.withValues(alpha: _busy ? 0.15 : 0.35),
+              color: AppTheme.primary.withValues(alpha: _busy ? 0.15 : 0.35),
               blurRadius: 12,
               offset: const Offset(0, 3),
             ),
@@ -894,13 +894,13 @@ class _EmptyState extends StatelessWidget {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.1),
+              color: AppTheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.receipt_long_outlined,
               size: 36,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
           const SizedBox(height: 16),
@@ -975,7 +975,7 @@ class _FoodThumbnail extends StatelessWidget {
       child: Center(
         child: Icon(
           kFoodIcons[idx % kFoodIcons.length],
-          color: AppTheme.green,
+          color: AppTheme.primary,
           size: 22,
         ),
       ),
@@ -1015,11 +1015,11 @@ class _WalletGlyph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.green.withValues(alpha: 0.12),
+      color: AppTheme.primary.withValues(alpha: 0.12),
       child: const Center(
         child: Icon(
           Icons.account_balance_wallet_rounded,
-          color: AppTheme.green,
+          color: AppTheme.primary,
           size: 26,
         ),
       ),
@@ -1182,11 +1182,11 @@ class _SortTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: selected
-              ? AppTheme.green.withValues(alpha: 0.1)
+              ? AppTheme.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? AppTheme.green : context.borderColor,
+            color: selected ? AppTheme.primary : context.borderColor,
             width: selected ? 1.5 : 1.2,
           ),
         ),
@@ -1195,7 +1195,7 @@ class _SortTile extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: selected ? AppTheme.green : context.mutedColor,
+              color: selected ? AppTheme.primary : context.mutedColor,
             ),
             const SizedBox(width: 12),
             Text(
@@ -1203,14 +1203,14 @@ class _SortTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: selected ? AppTheme.green : context.textColor,
+                color: selected ? AppTheme.primary : context.textColor,
               ),
             ),
             const Spacer(),
             if (selected)
               const Icon(
                 Icons.check_circle_rounded,
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 20,
               ),
           ],
@@ -1238,7 +1238,7 @@ class _FoodOrderDetails extends StatelessWidget {
           valueStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 10),
@@ -1248,7 +1248,7 @@ class _FoodOrderDetails extends StatelessWidget {
           valueStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 8),
@@ -1268,7 +1268,7 @@ class _FoodOrderDetails extends StatelessWidget {
           valueStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppTheme.green,
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 8),
@@ -1279,7 +1279,7 @@ class _FoodOrderDetails extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: order.status == 'Completed'
-                ? AppTheme.green
+                ? AppTheme.primary
                 : order.status == 'Failed'
                 ? _kRed
                 : _kAmber,
@@ -1307,12 +1307,12 @@ class _DepositDetails extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.1),
+              color: AppTheme.success.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.check_circle_rounded,
-              color: AppTheme.green,
+              color: AppTheme.success,
               size: 32,
             ),
           ),
@@ -1335,7 +1335,7 @@ class _DepositDetails extends StatelessWidget {
           valueStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: AppTheme.green,
+            color: AppTheme.success,
           ),
         ),
         const SizedBox(height: 8),
@@ -1355,7 +1355,7 @@ class _DepositDetails extends StatelessWidget {
           valueStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppTheme.green,
+            color: AppTheme.success,
           ),
         ),
         const SizedBox(height: 8),

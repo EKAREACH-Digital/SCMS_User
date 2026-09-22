@@ -31,18 +31,30 @@ class CouponExpiredOverlay extends StatelessWidget {
                     color: const Color(0xFFFFEBEE),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.timer_off_rounded, color: Color(0xFFE53935), size: 32),
+                  child: const Icon(
+                    Icons.timer_off_rounded,
+                    color: Color(0xFFE53935),
+                    size: 32,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.couponExpiredTitle,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.text),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.text,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   AppLocalizations.of(context)!.couponExpiredBody,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppTheme.mutedText, fontSize: 13, height: 1.5),
+                  style: const TextStyle(
+                    color: AppTheme.mutedText,
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -50,10 +62,12 @@ class CouponExpiredOverlay extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onDismiss,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.green,
+                      backgroundColor: AppTheme.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(

@@ -11,6 +11,7 @@ class AppTheme {
   static const Color tertiary = Color(0xFF10B981);
   static const Color tertiaryDark = Color(0xFF047857);
   static const Color tertiaryLight = Color(0xFF34D399);
+  static const Color success = tertiary;
   static const Color background = Color(0xFFFAF7F4);
   static const Color card = Color(0xFFFFFFFF);
   static const Color text = Color(0xFF1C130A);
@@ -18,6 +19,8 @@ class AppTheme {
 
   // Compatibility aliases for existing widgets. New code should use the
   // design-token names above or Theme.of(context).colorScheme.
+  // All known AppTheme.green usages have been migrated; keep this alias for
+  // compatibility until downstream references are confirmed clear.
   @Deprecated('Use AppTheme.primary')
   static const Color green = primary;
   static const Color greenDark = Color(0xFF8C4D00);

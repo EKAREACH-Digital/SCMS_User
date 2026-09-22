@@ -16,7 +16,7 @@ class AboutScreen extends StatelessWidget {
       SnackBar(
         content: Text('$label — coming soon'),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.green,
+        backgroundColor: AppTheme.primary,
       ),
     );
   }
@@ -54,7 +54,7 @@ class AboutScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.green.withValues(alpha: 0.35),
+                                color: AppTheme.primary.withValues(alpha: 0.35),
                                 blurRadius: 18,
                                 offset: const Offset(0, 8),
                               ),

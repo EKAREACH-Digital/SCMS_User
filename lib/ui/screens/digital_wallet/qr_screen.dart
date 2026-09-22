@@ -730,7 +730,7 @@ class _StatusBadgeState extends State<_StatusBadge>
   @override
   Widget build(BuildContext context) {
     final isPaid = widget.isPaid;
-    final color = isPaid ? AppTheme.green : const Color(0xFFFF9800);
+    final color = isPaid ? AppTheme.success : const Color(0xFFFF9800);
     final badge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
@@ -1186,7 +1186,7 @@ class _OrderSummaryCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: AppTheme.green,
+                    color: AppTheme.success,
                   ),
                 ),
               ),
@@ -1463,7 +1463,7 @@ class _ReceiptSheet extends StatelessWidget {
                 _ReceiptRow(
                   label: 'Total',
                   value: '\$${order.total.toStringAsFixed(2)}',
-                  valueColor: AppTheme.green,
+                  valueColor: AppTheme.primary,
                   isBold: true,
                 ),
                 const SizedBox(height: 12),
@@ -1471,7 +1471,7 @@ class _ReceiptSheet extends StatelessWidget {
                   label: 'Status',
                   value: order.status,
                   valueColor: order.status == 'Completed'
-                      ? AppTheme.green
+                      ? AppTheme.primary
                       : const Color(0xFFFF9800),
                 ),
                 const SizedBox(height: 12),

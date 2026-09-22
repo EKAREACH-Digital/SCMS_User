@@ -58,24 +58,47 @@ class QuickCheckoutBottomSheet extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
           Container(
-            width: 40, height: 4,
-            decoration: BoxDecoration(color: AppTheme.border, borderRadius: BorderRadius.circular(2)),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppTheme.border,
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
           const SizedBox(height: 20),
           Text(
             AppLocalizations.of(context)!.cartItemsInCart(itemCount),
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppTheme.text),
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.text,
+            ),
           ),
           const SizedBox(height: 16),
-          _Row(label: AppLocalizations.of(context)!.cartSubtotal, value: '\$${subtotal.toStringAsFixed(2)}'),
-          if (discount > 0) _Row(label: AppLocalizations.of(context)!.cartScholarDiscount, value: '-\$${discount.toStringAsFixed(2)}', valueColor: AppTheme.green),
-          _Row(label: AppLocalizations.of(context)!.cartServiceFee, value: '\$${serviceFee.toStringAsFixed(2)}'),
+          _Row(
+            label: AppLocalizations.of(context)!.cartSubtotal,
+            value: '\$${subtotal.toStringAsFixed(2)}',
+          ),
+          if (discount > 0)
+            _Row(
+              label: AppLocalizations.of(context)!.cartScholarDiscount,
+              value: '-\$${discount.toStringAsFixed(2)}',
+              valueColor: AppTheme.success,
+            ),
+          _Row(
+            label: AppLocalizations.of(context)!.cartServiceFee,
+            value: '\$${serviceFee.toStringAsFixed(2)}',
+          ),
           const Divider(height: 24, color: AppTheme.border),
           _Row(
             label: AppLocalizations.of(context)!.cartTotal,
             value: '\$${total.toStringAsFixed(2)}',
-            labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppTheme.text),
-            valueColor: AppTheme.green,
+            labelStyle: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.text,
+            ),
+            valueColor: AppTheme.primary,
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -84,14 +107,19 @@ class QuickCheckoutBottomSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onCheckout,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.green,
+                backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               child: Text(
                 AppLocalizations.of(context)!.cartProceedToPayment,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -102,7 +130,12 @@ class QuickCheckoutBottomSheet extends StatelessWidget {
 }
 
 class _Row extends StatelessWidget {
-  const _Row({required this.label, required this.value, this.valueColor = AppTheme.text, this.labelStyle});
+  const _Row({
+    required this.label,
+    required this.value,
+    this.valueColor = AppTheme.text,
+    this.labelStyle,
+  });
   final String label;
   final String value;
   final Color valueColor;
@@ -114,9 +147,21 @@ class _Row extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Text(label, style: labelStyle ?? const TextStyle(color: AppTheme.mutedText, fontSize: 13)),
+          Text(
+            label,
+            style:
+                labelStyle ??
+                const TextStyle(color: AppTheme.mutedText, fontSize: 13),
+          ),
           const Spacer(),
-          Text(value, style: TextStyle(color: valueColor, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(
+            value,
+            style: TextStyle(
+              color: valueColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );

@@ -129,7 +129,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         const SnackBar(
           content: Text('Password reset — log in with your new password'),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: AppTheme.green,
+          backgroundColor: AppTheme.primary,
         ),
       );
     });
@@ -186,11 +186,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [AppTheme.green, AppTheme.primaryLight],
+                        colors: [AppTheme.primary, AppTheme.primaryLight],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.green.withValues(alpha: 0.28),
+                          color: AppTheme.primary.withValues(alpha: 0.28),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -232,7 +232,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   label: _busy ? 'Please wait…' : _actionLabel,
                   onPressed: _busy ? null : _onAction,
                   gradient: const LinearGradient(
-                    colors: [AppTheme.green, AppTheme.primaryLight],
+                    colors: [AppTheme.primary, AppTheme.primaryLight],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -243,7 +243,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onPressed: _busy ? null : _sendCode,
                     child: const Text(
                       'Didn\'t get it? Send another code',
-                      style: TextStyle(fontSize: 12.5, color: AppTheme.green),
+                      style: TextStyle(fontSize: 12.5, color: AppTheme.primary),
                     ),
                   ),
                 ],
@@ -299,7 +299,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             keyboardType: TextInputType.emailAddress,
             prefixIcon: const Icon(
               Icons.mail_outline_rounded,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               size: 20,
             ),
           ),
@@ -313,7 +313,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             keyboardType: TextInputType.number,
             prefixIcon: const Icon(
               Icons.pin_outlined,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               size: 20,
             ),
           ),
@@ -327,7 +327,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             obscureText: _obscure,
             prefixIcon: const Icon(
               Icons.lock_outline_rounded,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               size: 20,
             ),
             suffixIcon: IconButton(
@@ -350,7 +350,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             obscureText: _obscure,
             prefixIcon: const Icon(
               Icons.lock_outline_rounded,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               size: 20,
             ),
           ),
@@ -389,8 +389,8 @@ class _StepDots extends StatelessWidget {
           height: 8,
           decoration: BoxDecoration(
             color: done
-                ? AppTheme.green
-                : AppTheme.green.withValues(alpha: 0.22),
+                ? AppTheme.primary
+                : AppTheme.primary.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(4),
           ),
         );

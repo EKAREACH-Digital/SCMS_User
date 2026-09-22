@@ -13,14 +13,14 @@ class MenuChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? AppTheme.green : context.cardColor,
+        color: selected ? AppTheme.primary : context.cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.borderColor),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: selected ? Colors.white : AppTheme.green,
+          color: selected ? Colors.white : AppTheme.primary,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

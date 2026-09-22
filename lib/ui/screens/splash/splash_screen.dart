@@ -218,7 +218,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w700,
-                                  color: AppTheme.green,
+                                  color: AppTheme.primary,
                                 ),
                               ),
                             ),
@@ -256,7 +256,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 height: 22,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.4,
-                                  color: AppTheme.green,
+                                  color: AppTheme.primary,
                                 ),
                               ),
                             )

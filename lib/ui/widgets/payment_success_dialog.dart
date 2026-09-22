@@ -241,11 +241,11 @@ class _PaymentSuccessDialogState extends State<PaymentSuccessDialog>
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
-                  color: AppTheme.green,
+                  color: AppTheme.success,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.green.withValues(
+                      color: AppTheme.success.withValues(
                         alpha: 0.30 + 0.25 * glow,
                       ),
                       blurRadius: 16 + 14 * glow,
@@ -331,7 +331,7 @@ class _PaymentSuccessDialogState extends State<PaymentSuccessDialog>
             child: Icon(
               i.isEven ? Icons.star_rounded : Icons.auto_awesome_rounded,
               size: i.isEven ? 12 : 10,
-              color: AppTheme.green.withValues(alpha: 0.8),
+              color: AppTheme.success.withValues(alpha: 0.8),
             ),
           ),
         ),
@@ -359,13 +359,15 @@ class _ProcessingIcon extends StatelessWidget {
               height: 72,
               child: CircularProgressIndicator(
                 strokeWidth: 3,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.green),
-                backgroundColor: AppTheme.green.withValues(alpha: 0.12),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  AppTheme.success,
+                ),
+                backgroundColor: AppTheme.success.withValues(alpha: 0.12),
               ),
             ),
             const Icon(
               Icons.account_balance_wallet_rounded,
-              color: AppTheme.green,
+              color: AppTheme.success,
               size: 28,
             ),
           ],

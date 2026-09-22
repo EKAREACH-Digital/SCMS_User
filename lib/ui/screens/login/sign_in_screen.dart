@@ -99,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.green.withValues(alpha: 0.08),
+                        color: AppTheme.primary.withValues(alpha: 0.08),
                         blurRadius: 24,
                         offset: const Offset(0, 10),
                       ),
@@ -399,7 +399,7 @@ class _LoginFormState extends State<_LoginForm> {
           keyboardType: TextInputType.emailAddress,
           prefixIcon: const Icon(
             Icons.mail_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -411,7 +411,7 @@ class _LoginFormState extends State<_LoginForm> {
           obscureText: true,
           prefixIcon: const Icon(
             Icons.lock_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -420,7 +420,7 @@ class _LoginFormState extends State<_LoginForm> {
           children: [
             Checkbox(
               value: widget.rememberMe,
-              activeColor: AppTheme.green,
+              activeColor: AppTheme.primary,
               checkColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
@@ -578,7 +578,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           hintText: 'Enter your full name',
           prefixIcon: const Icon(
             Icons.person_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -590,7 +590,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           keyboardType: TextInputType.emailAddress,
           prefixIcon: const Icon(
             Icons.mail_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -602,7 +602,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           obscureText: true,
           prefixIcon: const Icon(
             Icons.lock_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -614,7 +614,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           obscureText: true,
           prefixIcon: const Icon(
             Icons.lock_outline,
-            color: AppTheme.green,
+            color: AppTheme.primary,
             size: 20,
           ),
         ),
@@ -695,8 +695,8 @@ class _ForgotPasswordButtonState extends State<_ForgotPasswordButton>
       vsync: this,
     );
     _colorAnimation = ColorTween(
-      begin: AppTheme.green,
-      end: AppTheme.green.withValues(alpha: 0.7),
+      begin: AppTheme.primary,
+      end: AppTheme.primary.withValues(alpha: 0.7),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 

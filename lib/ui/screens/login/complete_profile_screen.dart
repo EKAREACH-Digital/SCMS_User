@@ -17,7 +17,7 @@ import 'view_model/auth_view_model.dart';
 
 /// Brand gradient used for the primary action button (#4CAF50 → #81C784).
 const _primaryGradient = LinearGradient(
-  colors: [AppTheme.green, AppTheme.primaryLight],
+  colors: [AppTheme.primary, AppTheme.primaryLight],
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );
@@ -202,7 +202,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       gradient: _primaryGradient,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.green.withValues(alpha: 0.3),
+                          color: AppTheme.primary.withValues(alpha: 0.3),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -244,7 +244,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.green.withValues(alpha: 0.08),
+                        color: AppTheme.primary.withValues(alpha: 0.08),
                         blurRadius: 24,
                         offset: const Offset(0, 10),
                       ),
@@ -268,7 +268,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         keyboardType: TextInputType.name,
                         prefixIcon: const Icon(
                           Icons.person_outline,
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                           size: 20,
                         ),
                       ),
@@ -290,7 +290,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         keyboardType: TextInputType.phone,
                         prefixIcon: const Icon(
                           Icons.phone_outlined,
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                           size: 20,
                         ),
                       ),
@@ -305,7 +305,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                           obscureText: _obscurePassword,
                           prefixIcon: const Icon(
                             Icons.lock_outline_rounded,
-                            color: AppTheme.green,
+                            color: AppTheme.primary,
                             size: 20,
                           ),
                           suffixIcon: IconButton(
@@ -332,7 +332,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                           obscureText: _obscurePassword,
                           prefixIcon: const Icon(
                             Icons.lock_outline_rounded,
-                            color: AppTheme.green,
+                            color: AppTheme.primary,
                             size: 20,
                           ),
                         ),
@@ -383,7 +383,7 @@ class _SchoolField extends StatelessWidget {
         Text(
           AppLocalizations.of(context)!.authSchool,
           style: const TextStyle(
-            color: AppTheme.green,
+            color: AppTheme.primary,
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,
@@ -431,7 +431,7 @@ class _SchoolField extends StatelessWidget {
           DropdownButtonFormField<String>(
             initialValue: selectedId,
             isExpanded: true,
-            icon: const Icon(Icons.arrow_drop_down, color: AppTheme.green),
+            icon: const Icon(Icons.arrow_drop_down, color: AppTheme.primary),
             hint: Text(
               AppLocalizations.of(context)!.authSelectSchool,
               style: const TextStyle(color: AppTheme.mutedText, fontSize: 15),
@@ -449,7 +449,7 @@ class _SchoolField extends StatelessWidget {
             decoration: InputDecoration(
               prefixIcon: const Icon(
                 Icons.school_outlined,
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 20,
               ),
               contentPadding: const EdgeInsets.symmetric(
@@ -474,7 +474,7 @@ class _SchoolField extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: AppTheme.green, width: 2),
+                borderSide: const BorderSide(color: AppTheme.primary, width: 2),
               ),
             ),
           ),
@@ -550,14 +550,14 @@ class _OptionalPasswordHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.07),
+        color: AppTheme.primary.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.green.withValues(alpha: 0.18)),
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.18)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.key_outlined, color: AppTheme.green, size: 20),
+          const Icon(Icons.key_outlined, color: AppTheme.primary, size: 20),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

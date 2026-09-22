@@ -34,13 +34,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: Text(l10n.alertsTitle,
-            style: const TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(
+          l10n.alertsTitle,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
         actions: [
           TextButton(
             onPressed: vm.markAllRead,
-            child: Text(l10n.alertsMarkAllRead,
-                style: const TextStyle(color: AppTheme.green, fontSize: 13)),
+            child: Text(
+              l10n.alertsMarkAllRead,
+              style: const TextStyle(color: AppTheme.primary, fontSize: 13),
+            ),
           ),
         ],
       ),
@@ -48,15 +52,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
         AsyncLoading() => const Center(child: CircularProgressIndicator()),
         AsyncError(error: final err) => Center(child: Text('Error: $err')),
         AsyncData(data: final items) when items.isEmpty => Center(
-            child: Text(l10n.alertsEmpty,
-                style: const TextStyle(color: AppTheme.mutedText)),
+          child: Text(
+            l10n.alertsEmpty,
+            style: const TextStyle(color: AppTheme.mutedText),
           ),
+        ),
         AsyncData(data: final items) => ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: items.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (_, i) => AlertTile(item: items[i]),
-          ),
+          padding: const EdgeInsets.all(16),
+          itemCount: items.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 8),
+          itemBuilder: (_, i) => AlertTile(item: items[i]),
+        ),
       },
       bottomNavigationBar: SmartCanteenNavigationBarButton(
         currentIndex: -1,
@@ -83,10 +89,12 @@ class AlertTile extends StatelessWidget {
           color: const Color(0xFFFFEBEE),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
+        child: const Icon(
+          Icons.delete_outline_rounded,
+          color: Color(0xFFE53935),
+        ),
       ),
-      onDismissed: (_) =>
-          context.read<NotificationViewModel>().dismiss(item),
+      onDismissed: (_) => context.read<NotificationViewModel>().dismiss(item),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -102,20 +110,46 @@ class AlertTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _Thumbnail(item: item, fallbackBg: _iconBg(item.type), fallbackIcon: _icon(item.type)),
+            _Thumbnail(
+              item: item,
+              fallbackBg: _iconBg(item.type),
+              fallbackIcon: _icon(item.type),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppTheme.text)),
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      color: AppTheme.text,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(item.body, style: const TextStyle(fontSize: 12, color: AppTheme.mutedText), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  Text(
+                    item.body,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.mutedText,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
               ),
             ),
             if (!item.isRead)
-              Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppTheme.green, shape: BoxShape.circle)),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: AppTheme.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
           ],
         ),
       ),
@@ -189,20 +223,17 @@ class _Thumbnail extends StatelessWidget {
   /// fitted whole on the category tint rather than cropped to fill — a
   /// cover-cropped logo loses the part that identifies it.
   Widget _assetImage(String asset) => Container(
-        width: 40,
-        height: 40,
-        color: fallbackBg,
-        padding: const EdgeInsets.all(6),
-        child: Image.asset(
-          asset,
-          fit: BoxFit.contain,
-          errorBuilder: (_, _, _) => Icon(
-            fallbackIcon,
-            size: 20,
-            color: AppTheme.green,
-          ),
-        ),
-      );
+    width: 40,
+    height: 40,
+    color: fallbackBg,
+    padding: const EdgeInsets.all(6),
+    child: Image.asset(
+      asset,
+      fit: BoxFit.contain,
+      errorBuilder: (_, _, _) =>
+          Icon(fallbackIcon, size: 20, color: AppTheme.primary),
+    ),
+  );
 
   /// A dish whose remote photo failed still has its bundled image to fall back
   /// on before we give up and show the generic icon.
@@ -213,12 +244,12 @@ class _Thumbnail extends StatelessWidget {
   }
 
   Widget _fallback() => Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: fallbackBg,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(fallbackIcon, size: 20, color: AppTheme.green),
-      );
+    width: 40,
+    height: 40,
+    decoration: BoxDecoration(
+      color: fallbackBg,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: Icon(fallbackIcon, size: 20, color: AppTheme.primary),
+  );
 }

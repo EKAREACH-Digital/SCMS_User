@@ -75,7 +75,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       const SnackBar(
         content: Text('Password set — you can now log in with your email'),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.green,
+        backgroundColor: AppTheme.primary,
       ),
     );
   }
@@ -104,7 +104,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     obscureText: _obscure,
                     prefixIcon: const Icon(
                       Icons.lock_outline_rounded,
-                      color: AppTheme.green,
+                      color: AppTheme.primary,
                       size: 20,
                     ),
                     suffixIcon: IconButton(
@@ -130,7 +130,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     obscureText: _obscure,
                     prefixIcon: const Icon(
                       Icons.lock_outline_rounded,
-                      color: AppTheme.green,
+                      color: AppTheme.primary,
                       size: 20,
                     ),
                   ),
@@ -189,16 +189,16 @@ class _ExplainerCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.07),
+        color: AppTheme.primary.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.green.withValues(alpha: 0.18)),
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.key_outlined, color: AppTheme.green, size: 20),
+              const Icon(Icons.key_outlined, color: AppTheme.primary, size: 20),
               const SizedBox(width: 10),
               Text(
                 'Log In without Google',

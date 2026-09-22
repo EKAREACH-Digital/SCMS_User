@@ -176,7 +176,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: isError ? const Color(0xFFE53935) : AppTheme.green,
+        backgroundColor: isError ? const Color(0xFFE53935) : AppTheme.primary,
       ),
     );
   }
@@ -293,9 +293,9 @@ class _AvatarPicker extends StatelessWidget {
             height: 104,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               border: Border.all(
-                color: AppTheme.green.withValues(alpha: 0.3),
+                color: AppTheme.primary.withValues(alpha: 0.3),
                 width: 2,
               ),
             ),
@@ -313,7 +313,7 @@ class _AvatarPicker extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 34,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                         ),
                       ),
                     ),
@@ -326,7 +326,7 @@ class _AvatarPicker extends StatelessWidget {
               width: 34,
               height: 34,
               decoration: BoxDecoration(
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 shape: BoxShape.circle,
                 border: Border.all(color: context.bgColor, width: 2.5),
               ),
@@ -372,7 +372,7 @@ class _LabeledField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: AppTheme.green,
+            color: AppTheme.primary,
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,
@@ -427,7 +427,7 @@ class _SheetOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? const Color(0xFFE53935) : AppTheme.green;
+    final color = isDestructive ? const Color(0xFFE53935) : AppTheme.primary;
     final bgColor = isDestructive
         ? const Color(0xFFFFEBEE)
         : context.surfaceColor;

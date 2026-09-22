@@ -75,7 +75,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.green,
+                            color: AppTheme.primary,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -109,14 +109,14 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isSelected
-                                ? AppTheme.green.withValues(alpha: 0.4)
+                                ? AppTheme.primary.withValues(alpha: 0.4)
                                 : Colors.transparent,
                             width: 1,
                           ),
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: AppTheme.green.withValues(
+                                    color: AppTheme.primary.withValues(
                                       alpha: 0.32,
                                     ),
                                     blurRadius: 10,
@@ -138,7 +138,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                             size: 22,
                             color: Color.lerp(
                               context.mutedColor,
-                              AppTheme.green,
+                              AppTheme.primary,
                               t,
                             ),
                           ),
@@ -154,7 +154,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                               ? FontWeight.w600
                               : FontWeight.w400,
                           color: isSelected
-                              ? AppTheme.green
+                              ? AppTheme.primary
                               : context.mutedColor,
                         ),
                         child: Text(_labels(AppLocalizations.of(context)!)[i]),
@@ -165,7 +165,7 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
                         width: isSelected ? 16 : 0,
                         height: 3,
                         decoration: BoxDecoration(
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),

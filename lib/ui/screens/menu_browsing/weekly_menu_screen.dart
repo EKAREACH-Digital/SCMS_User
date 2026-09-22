@@ -32,8 +32,8 @@ class _WeeklyMenuScreenState extends State<WeeklyMenuScreen> {
   }
 
   Future<void> _load() => context.read<WeeklyMenuState>().load(
-        schoolId: context.read<MenuState>().schoolId,
-      );
+    schoolId: context.read<MenuState>().schoolId,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -43,39 +43,36 @@ class _WeeklyMenuScreenState extends State<WeeklyMenuScreen> {
 
     return Scaffold(
       backgroundColor: context.bgColor,
-      appBar: AppBar(
-        title: Text(l10n.weeklyMenuTitle),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text(l10n.weeklyMenuTitle), elevation: 0),
       body: SafeArea(
         child: state.isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppTheme.green),
+                child: CircularProgressIndicator(color: AppTheme.primary),
               )
             : state.error != null
-                ? _Message(
-                    icon: Icons.cloud_off_rounded,
-                    title: l10n.weeklyMenuErrorTitle,
-                    body: state.error!,
-                    onRetry: _load,
-                  )
-                : weekly == null
-                    ? _Message(
-                        icon: Icons.event_busy_rounded,
-                        title: l10n.weeklyMenuEmptyTitle,
-                        body: l10n.weeklyMenuEmptyBody,
-                        onRetry: _load,
-                      )
-                    : _WeekBody(
-                        weekly: weekly,
-                        day: _day,
-                        onDayChanged: (d) {
-                          HapticFeedback.selectionClick();
-                          setState(() => _day = d);
-                        },
-                        showAllWeekNote: state.hasNoDaySchedule,
-                        entries: state.entriesForDay(_day),
-                      ),
+            ? _Message(
+                icon: Icons.cloud_off_rounded,
+                title: l10n.weeklyMenuErrorTitle,
+                body: state.error!,
+                onRetry: _load,
+              )
+            : weekly == null
+            ? _Message(
+                icon: Icons.event_busy_rounded,
+                title: l10n.weeklyMenuEmptyTitle,
+                body: l10n.weeklyMenuEmptyBody,
+                onRetry: _load,
+              )
+            : _WeekBody(
+                weekly: weekly,
+                day: _day,
+                onDayChanged: (d) {
+                  HapticFeedback.selectionClick();
+                  setState(() => _day = d);
+                },
+                showAllWeekNote: state.hasNoDaySchedule,
+                entries: state.entriesForDay(_day),
+              ),
       ),
     );
   }
@@ -147,10 +144,7 @@ class _MenuHeader extends StatelessWidget {
   final MenuDto menu;
 
   static String _fmt(DateTime d) =>
-      '${d.day} ${const [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-      ][d.month - 1]}';
+      '${d.day} ${const ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.month - 1]}';
 
   @override
   Widget build(BuildContext context) {
@@ -225,14 +219,14 @@ class _DayStrip extends StatelessWidget {
               width: 58,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? AppTheme.green : context.cardColor,
+                color: isSelected ? AppTheme.primary : context.cardColor,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected
-                      ? AppTheme.green
+                      ? AppTheme.primary
                       : isToday
-                          ? AppTheme.green.withValues(alpha: 0.45)
-                          : context.borderColor,
+                      ? AppTheme.primary.withValues(alpha: 0.45)
+                      : context.borderColor,
                   width: isToday && !isSelected ? 1.4 : 1,
                 ),
               ),
@@ -253,7 +247,7 @@ class _DayStrip extends StatelessWidget {
                       width: 5,
                       height: 5,
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.white : AppTheme.green,
+                        color: isSelected ? Colors.white : AppTheme.primary,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -297,7 +291,7 @@ class _SlotHeading extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
           decoration: BoxDecoration(
-            color: AppTheme.green.withValues(alpha: 0.12),
+            color: AppTheme.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -305,7 +299,7 @@ class _SlotHeading extends StatelessWidget {
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
         ),
@@ -373,10 +367,7 @@ class _DishTile extends StatelessWidget {
                     item.description,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      color: context.mutedColor,
-                    ),
+                    style: TextStyle(fontSize: 11.5, color: context.mutedColor),
                   ),
                 ],
               ],
@@ -388,7 +379,7 @@ class _DishTile extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
         ],
@@ -403,9 +394,12 @@ class _DishPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.green.withValues(alpha: 0.10),
-      child: const Icon(Icons.restaurant_rounded,
-          size: 20, color: AppTheme.green),
+      color: AppTheme.primary.withValues(alpha: 0.10),
+      child: const Icon(
+        Icons.restaurant_rounded,
+        size: 20,
+        color: AppTheme.primary,
+      ),
     );
   }
 }
@@ -419,13 +413,16 @@ class _Note extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.08),
+        color: AppTheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline_rounded,
-              size: 15, color: AppTheme.green),
+          const Icon(
+            Icons.info_outline_rounded,
+            size: 15,
+            color: AppTheme.primary,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -469,10 +466,10 @@ class _Message extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: AppTheme.green.withValues(alpha: 0.1),
+                color: AppTheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 34, color: AppTheme.green),
+              child: Icon(icon, size: 34, color: AppTheme.primary),
             ),
             const SizedBox(height: 16),
             Text(
@@ -495,10 +492,7 @@ class _Message extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            TextButton(
-              onPressed: onRetry,
-              child: Text(l10n.commonRetry),
-            ),
+            TextButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
           ],
         ),
       ),

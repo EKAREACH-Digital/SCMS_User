@@ -136,7 +136,7 @@ class _CardTile extends StatelessWidget {
             gradient: const LinearGradient(
               colors: [
                 AppTheme.greenDark,
-                AppTheme.green,
+                AppTheme.primary,
                 AppTheme.primaryLight,
               ],
               begin: Alignment.topLeft,
@@ -145,7 +145,7 @@ class _CardTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.green.withValues(alpha: 0.3),
+                color: AppTheme.primary.withValues(alpha: 0.3),
                 blurRadius: 18,
                 offset: const Offset(0, 8),
               ),
@@ -292,13 +292,13 @@ class _EmptyCards extends StatelessWidget {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.1),
+              color: AppTheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.credit_card_off_rounded,
               size: 34,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
           const SizedBox(height: 16),
@@ -367,7 +367,7 @@ class _AddCardSheetState extends State<_AddCardSheet> {
       const SnackBar(
         content: Text('Card added'),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.green,
+        backgroundColor: AppTheme.primary,
       ),
     );
   }
@@ -535,7 +535,7 @@ class _SheetField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: AppTheme.green,
+            color: AppTheme.primary,
             fontSize: 13,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,

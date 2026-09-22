@@ -24,7 +24,10 @@ class CanteenLogo extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
-                colors: [AppTheme.green.withValues(alpha: 0.08), Colors.white],
+                colors: [
+                  AppTheme.primary.withValues(alpha: 0.08),
+                  Colors.white,
+                ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),

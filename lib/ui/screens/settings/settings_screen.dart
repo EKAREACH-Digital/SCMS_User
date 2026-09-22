@@ -318,7 +318,7 @@ class _Header extends StatelessWidget {
       decoration: const BoxDecoration(
         // Soft mint → emerald gradient.
         gradient: LinearGradient(
-          colors: [AppTheme.primaryLight, AppTheme.green, AppTheme.greenDark],
+          colors: [AppTheme.primaryLight, AppTheme.primary, AppTheme.greenDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -483,7 +483,7 @@ class _Avatar extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
-                              color: AppTheme.green,
+                              color: AppTheme.primary,
                             ),
                           ),
                         ),
@@ -509,7 +509,7 @@ class _Avatar extends StatelessWidget {
                   child: const Icon(
                     Icons.camera_alt_rounded,
                     size: 14,
-                    color: AppTheme.green,
+                    color: AppTheme.primary,
                   ),
                 ),
               ),
@@ -561,10 +561,10 @@ class _StatCard extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: AppTheme.green, size: 19),
+            child: Icon(icon, color: AppTheme.primary, size: 19),
           ),
           const SizedBox(height: 10),
           if (end == null)
@@ -586,7 +586,7 @@ class _StatCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
-                  color: AppTheme.green,
+                  color: AppTheme.primary,
                   letterSpacing: -0.3,
                 ),
               ),
@@ -625,7 +625,7 @@ class _DarkModeTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
             ),
             child: AnimatedSwitcher(
@@ -635,7 +635,7 @@ class _DarkModeTile extends StatelessWidget {
               child: Icon(
                 isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
                 key: ValueKey(isDark),
-                color: AppTheme.green,
+                color: AppTheme.primary,
                 size: 20,
               ),
             ),
@@ -687,12 +687,12 @@ class _LanguageTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
               Icons.translate_rounded,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               size: 20,
             ),
           ),
@@ -764,7 +764,9 @@ class _LanguageSegment extends StatelessWidget {
                   vertical: 7,
                 ),
                 decoration: BoxDecoration(
-                  color: lang == current ? AppTheme.green : Colors.transparent,
+                  color: lang == current
+                      ? AppTheme.primary
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -863,7 +865,7 @@ class _PickerOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? _kRed : AppTheme.green;
+    final color = isDestructive ? _kRed : AppTheme.primary;
     final bgColor = isDestructive
         ? const Color(0xFFFFEBEE)
         : context.surfaceColor;

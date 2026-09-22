@@ -191,9 +191,9 @@ class _TotalAmountRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppTheme.green.withValues(alpha: 0.06),
+        color: AppTheme.primary.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.green.withValues(alpha: 0.2)),
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -201,13 +201,13 @@ class _TotalAmountRow extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: AppTheme.green.withValues(alpha: 0.12),
+              color: AppTheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
               Icons.receipt_long_rounded,
               size: 17,
-              color: AppTheme.green,
+              color: AppTheme.primary,
             ),
           ),
           const SizedBox(width: 10),
@@ -225,7 +225,7 @@ class _TotalAmountRow extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppTheme.green,
+              color: AppTheme.primary,
               letterSpacing: -0.5,
             ),
           ),
@@ -282,17 +282,17 @@ class _PaymentCardState extends State<_PaymentCard> {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
           decoration: BoxDecoration(
             color: sel
-                ? AppTheme.green.withValues(alpha: 0.04)
+                ? AppTheme.primary.withValues(alpha: 0.04)
                 : context.cardColor,
             borderRadius: BorderRadius.circular(16), // ← more rounded
             border: Border.all(
-              color: sel ? AppTheme.green : context.borderColor,
+              color: sel ? AppTheme.primary : context.borderColor,
               width: sel ? 2.0 : 1.2,
             ),
             boxShadow: sel
                 ? [
                     BoxShadow(
-                      color: AppTheme.green.withValues(alpha: 0.16),
+                      color: AppTheme.primary.withValues(alpha: 0.16),
                       blurRadius: 18,
                       offset: const Offset(0, 5),
                     ),
@@ -321,7 +321,7 @@ class _PaymentCardState extends State<_PaymentCard> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: sel ? AppTheme.green : context.textColor,
+                        color: sel ? AppTheme.primary : context.textColor,
                       ),
                       child: Text(opt.name),
                     ),
@@ -350,7 +350,7 @@ class _PaymentCardState extends State<_PaymentCard> {
                         width: 26,
                         height: 26,
                         decoration: const BoxDecoration(
-                          color: AppTheme.green,
+                          color: AppTheme.primary,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -407,7 +407,7 @@ class _LogoBadge extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(
             color: selected
-                ? AppTheme.green
+                ? AppTheme.primary
                 : option.brandColor.withValues(alpha: 0.15),
             width: selected ? 1.6 : 1,
           ),
@@ -430,7 +430,7 @@ class _LogoBadge extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: selected
             ? const LinearGradient(
-                colors: [AppTheme.greenDark, AppTheme.green],
+                colors: [AppTheme.greenDark, AppTheme.primary],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -442,7 +442,7 @@ class _LogoBadge extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: (selected ? AppTheme.green : option.brandColor).withValues(
+            color: (selected ? AppTheme.primary : option.brandColor).withValues(
               alpha: 0.35,
             ),
             blurRadius: 8,

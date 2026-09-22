@@ -8,7 +8,7 @@ class SmartCanteenSocialButton extends StatefulWidget {
     required this.label,
     required this.icon,
     this.onTap,
-    this.brandColor = AppTheme.green,
+    this.brandColor = AppTheme.primary,
   });
 
   final String label;
@@ -80,7 +80,8 @@ class _SmartCanteenSocialButtonState extends State<SmartCanteenSocialButton>
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: _borderColorAnimation.value ??
+                    color:
+                        _borderColorAnimation.value ??
                         widget.brandColor.withValues(alpha: 0.35),
                     width: 1.5,
                   ),
