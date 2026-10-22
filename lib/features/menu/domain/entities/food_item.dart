@@ -1,0 +1,65 @@
+// A dish on the menu — used by the menu/home screens and the cart. Loaded from
+// the backend via MenuViewModel.
+
+/// Stand-in photo for dishes the backend has no `image_url` for. Items that do
+/// have one render it instead (see MenuItemDto.toEntity).
+const String kFallbackFoodImageUrl =
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80';
+
+class FoodItem {
+  final String id;
+  final String name;
+  final String description;
+  final double price;
+  final double rating;
+  final List<String> tags;
+  final String category; // 'breakfast' | 'lunch' | 'drinks'
+  final String? imagePath; // bundled asset (local)
+  final String? imageUrl; // remote photo (network)
+  final int colorSeed;
+
+  /// The school (tenant) this dish belongs to — an order is scoped to it.
+  final String? schoolId;
+
+  const FoodItem({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.rating,
+    required this.tags,
+    required this.category,
+    this.imagePath,
+    this.imageUrl,
+    this.colorSeed = 0,
+    this.schoolId,
+  });
+
+  FoodItem copyWith({
+    String? id,
+    String? name,
+    String? description,
+    double? price,
+    double? rating,
+    List<String>? tags,
+    String? category,
+    String? imagePath,
+    String? imageUrl,
+    int? colorSeed,
+    String? schoolId,
+  }) {
+    return FoodItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      rating: rating ?? this.rating,
+      tags: tags ?? this.tags,
+      category: category ?? this.category,
+      imagePath: imagePath ?? this.imagePath,
+      imageUrl: imageUrl ?? this.imageUrl,
+      colorSeed: colorSeed ?? this.colorSeed,
+      schoolId: schoolId ?? this.schoolId,
+    );
+  }
+}

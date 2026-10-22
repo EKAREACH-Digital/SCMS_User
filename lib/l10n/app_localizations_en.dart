@@ -480,4 +480,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authResendCode => 'Didn\'t get it? Send another code';
+
+  @override
+  String get authRegisterTitle => 'Register';
+
+  @override
+  String get authRegisterFirstName => 'First Name';
+
+  @override
+  String get authRegisterFirstNameHint => 'John';
+
+  @override
+  String get authRegisterLastName => 'Last Name';
+
+  @override
+  String get authRegisterLastNameHint => 'Doe';
+
+  @override
+  String get authRegisterEmailLabel => 'E-mail';
+
+  @override
+  String get authRegisterEmailHint => 'Enter your email';
+
+  @override
+  String get authRegisterPasswordLabel => 'Password';
+
+  @override
+  String get authRegisterPasswordRequirement => 'must contain 8 char.';
+
+  @override
+  String get authRegisterConfirmPasswordLabel => 'Confirm Password';
+
+  @override
+  String get authRegisterNext => 'Next';
+
+  @override
+  String get authRegisterCreating => 'Creating account…';
+
+  @override
+  String get authRegisterChooseSchool => 'Choose your school';
+
+  @override
+  String get authRegisterSelectBranch => 'Select branch';
+
+  @override
+  String get authRegisterCreateAccount => 'Create Account';
+
+  @override
+  String get authAlreadyHaveAccount => 'Already have an account? ';
+
+  @override
+  String get authSignInLink => 'Sign In';
+
+  @override
+  String get authRegisterErrorName => 'Please enter your first and last name.';
+
+  @override
+  String get authRegisterErrorEmail => 'Please enter a valid email address.';
+
+  @override
+  String get authRegisterErrorPasswordMatch => 'Passwords do not match.';
+
+  @override
+  String get authRegisterFailed => 'Registration failed.';
+
+  @override
+  String get authRegisterErrorSchool => 'Please select your school.';
+
+  @override
+  String get authRegisterErrorBranch => 'Please select your branch.';
+
+  @override
+  String get authRegisterSaveFailed =>
+      'Could not save your details. Please try again.';
+
+  @override
+  String get authSignInTitle => 'Sign In';
+
+  @override
+  String get authSignInButton => 'Log In';
+
+  @override
+  String get authSignInLoading => 'Signing in…';
+
+  @override
+  String get authSignInEmailLabel => 'Email Address';
+
+  @override
+  String get authSignInEmailHint => 'Enter your email';
+
+  @override
+  String get authSignInPasswordLabel => 'Password';
+
+  @override
+  String get authSignInPasswordHint => 'Enter your password';
+
+  @override
+  String get authOrContinueWith => 'OR CONTINUE WITH';
+
+  @override
+  String get authDontHaveAccount => 'Don\'t have an account? ';
+
+  @override
+  String get authSignUpLink => 'Sign Up';
+
+  @override
+  String get authSignInErrorEmpty => 'Please fill in all fields.';
+
+  @override
+  String get authSignInFailed => 'Sign in failed.';
 }

@@ -1,0 +1,88 @@
+import 'package:smart_canteen_user_frontend/core/constants/images_constant.dart';
+import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
+
+/// Placeholder dishes shown while the real menu loads (or if it fails).
+const List<FoodItem> kMenuItems = [
+  FoodItem(
+    id: '1',
+    name: 'Khmer Noodle',
+    description:
+        'Traditional Cambodian noodle soup with fresh herbs and rich broth',
+    price: 2.00,
+    rating: 4.7,
+    tags: ['Soup', 'Traditional'],
+    category: 'breakfast',
+    imagePath: ImageConst.khmerNoodle,
+  ),
+  FoodItem(
+    id: '2',
+    name: 'Pork with Rice',
+    description: 'Steamed jasmine rice served with seasoned grilled pork cuts',
+    price: 1.75,
+    rating: 4.8,
+    tags: ['Grilled', 'Sweet', 'Spicy'],
+    category: 'lunch',
+    imagePath: ImageConst.porkWithRice,
+  ),
+  FoodItem(
+    id: '3',
+    name: 'Chicken with Rice',
+    description: 'Tender chicken on fragrant jasmine rice with house sauce',
+    price: 2.00,
+    rating: 4.9,
+    tags: ['Soft', 'Sweet'],
+    category: 'lunch',
+    imagePath: ImageConst.chickenWithRice,
+  ),
+  FoodItem(
+    id: '4',
+    name: 'Fried Egg Rice',
+    description: 'Sunny-side-up egg over warm jasmine rice with soy sauce',
+    price: 1.25,
+    rating: 4.5,
+    tags: ['Simple', 'Quick'],
+    category: 'breakfast',
+    imagePath: ImageConst.friedEggRice,
+  ),
+  FoodItem(
+    id: '5',
+    name: 'Coconut Milk Tea',
+    description: 'Creamy iced milk tea with coconut jelly and brown sugar',
+    price: 1.00,
+    rating: 4.6,
+    tags: ['Cold', 'Sweet'],
+    category: 'drinks',
+    imagePath: ImageConst.coconutMilkTea,
+  ),
+  FoodItem(
+    id: '6',
+    name: 'Sugarcane Juice',
+    description: 'Freshly pressed sugarcane juice with a hint of lime',
+    price: 0.75,
+    rating: 4.4,
+    tags: ['Cold', 'Fresh'],
+    category: 'drinks',
+    imagePath: ImageConst.sugarcaneJuice,
+  ),
+  // FoodItem(
+  //   id: '7',
+  //   name: 'Bai Sach Chrouk',
+  //   description:
+  //       'Cambodian breakfast of marinated pork on rice with pickled veggies',
+  //   price: 1.50,
+  //   rating: 4.8,
+  //   tags: ['Grilled', 'Traditional'],
+  //   category: 'breakfast',
+  //   colorSeed: 4,
+  // ),
+  FoodItem(
+    id: '7',
+    name: 'Beef Lok Lak',
+    description: 'Stir-fried beef cubes with lime dipping sauce and fried egg',
+    price: 3.00,
+    rating: 4.9,
+    tags: ['Stir-fried', 'Savory'],
+    category: 'lunch',
+    imagePath: ImageConst.beefLokLak,
+  ),
+];

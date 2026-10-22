@@ -973,6 +973,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Didn\'t get it? Send another code'**
   String get authResendCode;
+
+  /// No description provided for @authRegisterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get authRegisterTitle;
+
+  /// No description provided for @authRegisterFirstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get authRegisterFirstName;
+
+  /// No description provided for @authRegisterFirstNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'John'**
+  String get authRegisterFirstNameHint;
+
+  /// No description provided for @authRegisterLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get authRegisterLastName;
+
+  /// No description provided for @authRegisterLastNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Doe'**
+  String get authRegisterLastNameHint;
+
+  /// No description provided for @authRegisterEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'E-mail'**
+  String get authRegisterEmailLabel;
+
+  /// No description provided for @authRegisterEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get authRegisterEmailHint;
+
+  /// No description provided for @authRegisterPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authRegisterPasswordLabel;
+
+  /// No description provided for @authRegisterPasswordRequirement.
+  ///
+  /// In en, this message translates to:
+  /// **'must contain 8 char.'**
+  String get authRegisterPasswordRequirement;
+
+  /// No description provided for @authRegisterConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get authRegisterConfirmPasswordLabel;
+
+  /// No description provided for @authRegisterNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get authRegisterNext;
+
+  /// No description provided for @authRegisterCreating.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating account…'**
+  String get authRegisterCreating;
+
+  /// No description provided for @authRegisterChooseSchool.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your school'**
+  String get authRegisterChooseSchool;
+
+  /// No description provided for @authRegisterSelectBranch.
+  ///
+  /// In en, this message translates to:
+  /// **'Select branch'**
+  String get authRegisterSelectBranch;
+
+  /// No description provided for @authRegisterCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get authRegisterCreateAccount;
+
+  /// No description provided for @authAlreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get authAlreadyHaveAccount;
+
+  /// No description provided for @authSignInLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get authSignInLink;
+
+  /// No description provided for @authRegisterErrorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your first and last name.'**
+  String get authRegisterErrorName;
+
+  /// No description provided for @authRegisterErrorEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address.'**
+  String get authRegisterErrorEmail;
+
+  /// No description provided for @authRegisterErrorPasswordMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get authRegisterErrorPasswordMatch;
+
+  /// No description provided for @authRegisterFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed.'**
+  String get authRegisterFailed;
+
+  /// No description provided for @authRegisterErrorSchool.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your school.'**
+  String get authRegisterErrorSchool;
+
+  /// No description provided for @authRegisterErrorBranch.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your branch.'**
+  String get authRegisterErrorBranch;
+
+  /// No description provided for @authRegisterSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your details. Please try again.'**
+  String get authRegisterSaveFailed;
+
+  /// No description provided for @authSignInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get authSignInTitle;
+
+  /// No description provided for @authSignInButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get authSignInButton;
+
+  /// No description provided for @authSignInLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in…'**
+  String get authSignInLoading;
+
+  /// No description provided for @authSignInEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get authSignInEmailLabel;
+
+  /// No description provided for @authSignInEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get authSignInEmailHint;
+
+  /// No description provided for @authSignInPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authSignInPasswordLabel;
+
+  /// No description provided for @authSignInPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get authSignInPasswordHint;
+
+  /// No description provided for @authOrContinueWith.
+  ///
+  /// In en, this message translates to:
+  /// **'OR CONTINUE WITH'**
+  String get authOrContinueWith;
+
+  /// No description provided for @authDontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get authDontHaveAccount;
+
+  /// No description provided for @authSignUpLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get authSignUpLink;
+
+  /// No description provided for @authSignInErrorEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields.'**
+  String get authSignInErrorEmpty;
+
+  /// No description provided for @authSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in failed.'**
+  String get authSignInFailed;
 }
 
 class _AppLocalizationsDelegate

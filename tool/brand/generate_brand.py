@@ -24,7 +24,7 @@ from PIL import Image, ImageDraw, ImageFilter
 APP = Path(__file__).resolve().parents[2]  # smart_canteen_user_frontend/
 SOURCE = APP / "tool/brand/source.png"
 
-# ── Brand ────────────────────────────────────────────────────────────────────
+# Brand
 # Same stops as AppTheme.headerGradient, ordered light → dark so the tile reads
 # as lit from the top-left.
 GRADIENT = [
@@ -36,7 +36,7 @@ MARK_COLOR = (255, 255, 255)
 
 RENDER = 2048  # everything is drawn here, then downsampled
 
-# ── Mark geometry, in a 1024-unit design space ───────────────────────────────
+# Mark geometry, in a 1024-unit design space
 # Cloche: dome + knob over a wide tray bar and a narrower foot.
 DOME = (337, 495, 687, 785)  # bbox; chord 180°..360° = top half
 KNOB = (512, 478, 30)  # cx, cy, r
@@ -69,7 +69,7 @@ STEAM_W = 24
 MARK_BBOX = (117, 256, 908, 792)  # tight bounds of everything drawn above
 
 
-# ── Drawing ──────────────────────────────────────────────────────────────────
+# Drawing
 def _mark_transform(box):
     """Maps design-space coords into `box`, preserving aspect and centring."""
     bx0, by0, bx1, by1 = box
@@ -90,14 +90,14 @@ def draw_mark(img: Image.Image, box, color) -> None:
         d.rounded_rectangle([pt(x0, y0), pt(x1, y1)], radius=radius * s,
                             fill=color)
 
-    # ── Cloche ──
+    # Cloche
     d.chord([pt(DOME[0], DOME[1]), pt(DOME[2], DOME[3])], 180, 360, fill=color)
     kx, ky, kr = KNOB
     d.ellipse([pt(kx - kr, ky - kr), pt(kx + kr, ky + kr)], fill=color)
     rrect(TRAY, TRAY_R)
     rrect(FOOT, FOOT_R)
 
-    # ── Fork ──
+    # Fork
     ty0, ty1 = FORK_TINES_Y
     for tx in FORK_TINE_X:
         rrect((tx - FORK_TINE_W / 2, ty0, tx + FORK_TINE_W / 2, ty1),
@@ -105,12 +105,12 @@ def draw_mark(img: Image.Image, box, color) -> None:
     rrect(FORK_NECK, FORK_NECK_R)
     rrect(FORK_HANDLE, FORK_HANDLE_R)
 
-    # ── Spoon ──
+    # Spoon
     d.ellipse([pt(SPOON_BOWL[0], SPOON_BOWL[1]),
                pt(SPOON_BOWL[2], SPOON_BOWL[3])], fill=color)
     rrect(SPOON_HANDLE, SPOON_HANDLE_R)
 
-    # ── Steam ──
+    # Steam
     # Stamped rather than stroked with line(): PIL's polyline joints leave
     # visible nicks on the outside of a tight curve at this stroke width.
     cap = STEAM_W / 2 * s
@@ -195,7 +195,7 @@ def save(img: Image.Image, path: Path, size: int, flatten=None) -> None:
     out.save(path)
 
 
-# ── Outputs ──────────────────────────────────────────────────────────────────
+# Outputs
 IOS_ICONS = {
     "Icon-App-20x20@1x.png": 20, "Icon-App-20x20@2x.png": 40,
     "Icon-App-20x20@3x.png": 60, "Icon-App-29x29@1x.png": 29,

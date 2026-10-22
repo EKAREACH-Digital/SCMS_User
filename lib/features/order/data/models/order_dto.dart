@@ -1,0 +1,201 @@
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/meal_coupon.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+
+/// One line in a placed order (request body).
+class OrderItemInput {
+  final String menuItemId;
+  final int quantity;
+
+  const OrderItemInput({required this.menuItemId, required this.quantity});
+
+  Map<String, dynamic> toJson() => {
+        'menu_item_id': menuItemId,
+        'quantity': quantity,
+      };
+}
+
+/// A meal-ticket coupon minted by the backend (one per ordered item). The
+/// [qrToken] is the exact string the canteen scanner reads and redeems, so the
+/// QR the app shows must encode it verbatim.
+class CouponDto {
+  final String id;
+  final String qrToken;
+  final String? couponCode;
+  final String mealSession; // breakfast | lunch | dinner
+  final String status; // active | redeemed | expired | cancelled
+  final String? validDate; // yyyy-MM-dd
+  final String? menuItemName;
+
+  const CouponDto({
+    required this.id,
+    required this.qrToken,
+    required this.couponCode,
+    required this.mealSession,
+    required this.status,
+    required this.validDate,
+    required this.menuItemName,
+  });
+
+  factory CouponDto.fromJson(Map<String, dynamic> json) {
+    final menuItem = json['menuItem'] ?? json['menu_item'];
+    return CouponDto(
+      id: json['id'] as String,
+      qrToken: json['qr_token'] as String,
+      couponCode: json['coupon_code'] as String?,
+      mealSession: json['meal_session'] as String? ?? '',
+      status: json['status'] as String? ?? 'active',
+      validDate: json['valid_date'] as String?,
+      menuItemName:
+          menuItem is Map<String, dynamic> ? menuItem['name'] as String? : null,
+    );
+  }
+
+  bool get isActive => status == 'active';
+
+  MealCoupon toEntity() => MealCoupon(
+        id: id,
+        qrToken: qrToken,
+        couponCode: couponCode,
+        mealSession: mealSession,
+        status: status,
+        validDate: validDate,
+        menuItemName: menuItemName,
+      );
+}
+
+/// The result of `POST /orders` — the order plus the coupons minted for it.
+class PlacedOrderDto {
+  final String id;
+  final double totalAmount;
+  final String mealSession;
+  final String status;
+  final List<CouponDto> coupons;
+
+  const PlacedOrderDto({
+    required this.id,
+    required this.totalAmount,
+    required this.mealSession,
+    required this.status,
+    required this.coupons,
+  });
+
+  factory PlacedOrderDto.fromJson(Map<String, dynamic> json) {
+    final couponsJson = (json['coupons'] as List<dynamic>?) ?? const [];
+    return PlacedOrderDto(
+      id: json['id'] as String,
+      totalAmount: _toDouble(json['total_amount']),
+      mealSession: json['meal_session'] as String? ?? '',
+      status: json['status'] as String? ?? 'pending',
+      coupons: couponsJson
+          .map((e) => CouponDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  PlacedOrder toEntity() => PlacedOrder(
+        id: id,
+        totalAmount: totalAmount,
+        mealSession: mealSession,
+        status: status,
+        coupons: coupons.map((c) => c.toEntity()).toList(),
+      );
+
+  static double _toDouble(dynamic value) => switch (value) {
+        num n => n.toDouble(),
+        String s => double.tryParse(s) ?? 0.0,
+        _ => 0.0,
+      };
+}
+
+/// One line of a past order (a menu item + quantity), for history display.
+class OrderLineDto {
+  final String name;
+  final int quantity;
+
+  /// The dish's photo (`image_url` on the joined menu item). The backend
+  /// already returns the full menu item on `GET /orders/my`, so history can
+  /// show the same picture the menu does.
+  final String? imageUrl;
+
+  /// What one unit cost. Read from the order line's own `unit_price` when the
+  /// backend snapshots it, so a past order keeps the price it was actually
+  /// charged at rather than today's menu price; the joined menu item is only a
+  /// fallback. Null when neither is present — history then shows the order
+  /// total without a per-line breakdown.
+  final double? unitPrice;
+
+  const OrderLineDto({
+    required this.name,
+    required this.quantity,
+    this.imageUrl,
+    this.unitPrice,
+  });
+
+  /// Total charged for this line.
+  double? get lineTotal =>
+      unitPrice == null ? null : unitPrice! * quantity;
+
+  factory OrderLineDto.fromJson(Map<String, dynamic> json) {
+    final menuItem = json['menuItem'] ?? json['menu_item'];
+    final asMap = menuItem is Map<String, dynamic> ? menuItem : null;
+    final image = asMap?['image_url'] as String?;
+    final rawPrice =
+        json['unit_price'] ?? json['price'] ?? asMap?['price'];
+    return OrderLineDto(
+      name: asMap?['name'] as String? ?? 'Item',
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      imageUrl: (image != null && image.isNotEmpty) ? image : null,
+      unitPrice: rawPrice == null ? null : PlacedOrderDto._toDouble(rawPrice),
+    );
+  }
+
+  OrderItem toEntity() => OrderItem(
+        name: name,
+        quantity: quantity,
+        imageUrl: imageUrl,
+        unitPrice: unitPrice,
+      );
+}
+
+/// A past order from `GET /orders/my`, used by the History screen.
+class OrderSummaryDto {
+  final String id;
+  final double totalAmount;
+  final String status; // pending | preparing | ready | completed | cancelled
+  final String mealSession;
+  final DateTime createdAt;
+  final List<OrderLineDto> items;
+
+  const OrderSummaryDto({
+    required this.id,
+    required this.totalAmount,
+    required this.status,
+    required this.mealSession,
+    required this.createdAt,
+    required this.items,
+  });
+
+  factory OrderSummaryDto.fromJson(Map<String, dynamic> json) {
+    final itemsJson = (json['items'] as List<dynamic>?) ?? const [];
+    return OrderSummaryDto(
+      id: json['id'] as String,
+      totalAmount: PlacedOrderDto._toDouble(json['total_amount']),
+      status: json['status'] as String? ?? 'pending',
+      mealSession: json['meal_session'] as String? ?? '',
+      createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ??
+          DateTime.now(),
+      items: itemsJson
+          .map((e) => OrderLineDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Order toEntity() => Order(
+        id: id,
+        totalAmount: totalAmount,
+        status: status,
+        mealSession: mealSession,
+        createdAt: createdAt,
+        items: items.map((i) => i.toEntity()).toList(),
+      );
+}

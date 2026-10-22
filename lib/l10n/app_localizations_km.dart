@@ -482,4 +482,113 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get authResendCode => 'មិនបានទទួល? ផ្ញើលេខកូដម្តងទៀត';
+
+  @override
+  String get authRegisterTitle => 'ចុះឈ្មោះ';
+
+  @override
+  String get authRegisterFirstName => 'នាមខ្លួន';
+
+  @override
+  String get authRegisterFirstNameHint => 'សុខា';
+
+  @override
+  String get authRegisterLastName => 'នាមត្រកូល';
+
+  @override
+  String get authRegisterLastNameHint => 'ចាន់';
+
+  @override
+  String get authRegisterEmailLabel => 'អ៊ីម៉ែល';
+
+  @override
+  String get authRegisterEmailHint => 'បញ្ចូលអ៊ីម៉ែលរបស់អ្នក';
+
+  @override
+  String get authRegisterPasswordLabel => 'ពាក្យសម្ងាត់';
+
+  @override
+  String get authRegisterPasswordRequirement => 'ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ';
+
+  @override
+  String get authRegisterConfirmPasswordLabel => 'បញ្ជាក់ពាក្យសម្ងាត់';
+
+  @override
+  String get authRegisterNext => 'បន្ទាប់';
+
+  @override
+  String get authRegisterCreating => 'កំពុងបង្កើតគណនី…';
+
+  @override
+  String get authRegisterChooseSchool => 'ជ្រើសរើសសាលារបស់អ្នក';
+
+  @override
+  String get authRegisterSelectBranch => 'ជ្រើសរើសសាខា';
+
+  @override
+  String get authRegisterCreateAccount => 'បង្កើតគណនី';
+
+  @override
+  String get authAlreadyHaveAccount => 'មានគណនីរួចហើយ? ';
+
+  @override
+  String get authSignInLink => 'ចូលគណនី';
+
+  @override
+  String get authRegisterErrorName => 'សូមបញ្ចូលនាមខ្លួន និងនាមត្រកូលរបស់អ្នក។';
+
+  @override
+  String get authRegisterErrorEmail => 'សូមបញ្ចូលអ៊ីម៉ែលឱ្យបានត្រឹមត្រូវ។';
+
+  @override
+  String get authRegisterErrorPasswordMatch => 'ពាក្យសម្ងាត់មិនត្រូវគ្នា។';
+
+  @override
+  String get authRegisterFailed => 'ការចុះឈ្មោះបរាជ័យ។';
+
+  @override
+  String get authRegisterErrorSchool => 'សូមជ្រើសរើសសាលារបស់អ្នក។';
+
+  @override
+  String get authRegisterErrorBranch => 'សូមជ្រើសរើសសាខារបស់អ្នក។';
+
+  @override
+  String get authRegisterSaveFailed =>
+      'មិនអាចរក្សាទុកព័ត៌មានរបស់អ្នក។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get authSignInTitle => 'ចូលគណនី';
+
+  @override
+  String get authSignInButton => 'ចូល';
+
+  @override
+  String get authSignInLoading => 'កំពុងចូល…';
+
+  @override
+  String get authSignInEmailLabel => 'អ៊ីម៉ែល';
+
+  @override
+  String get authSignInEmailHint => 'បញ្ចូលអ៊ីម៉ែលរបស់អ្នក';
+
+  @override
+  String get authSignInPasswordLabel => 'ពាក្យសម្ងាត់';
+
+  @override
+  String get authSignInPasswordHint => 'បញ្ចូលពាក្យសម្ងាត់របស់អ្នក';
+
+  @override
+  String get authOrContinueWith => 'ឬបន្តជាមួយ';
+
+  @override
+  String get authDontHaveAccount => 'មិនទាន់មានគណនី? ';
+
+  @override
+  String get authSignUpLink => 'ចុះឈ្មោះ';
+
+  @override
+  String get authSignInErrorEmpty => 'សូមបំពេញព័ត៌មានទាំងអស់។';
+
+  @override
+  String get authSignInFailed => 'ការចូលគណនីបរាជ័យ។';
 }
