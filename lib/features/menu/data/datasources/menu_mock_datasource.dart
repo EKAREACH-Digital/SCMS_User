@@ -1,4 +1,5 @@
 import 'package:smart_canteen_user_frontend/features/menu/data/datasources/menu_datasource.dart';
+import 'package:smart_canteen_user_frontend/features/menu/data/models/active_menu_dto.dart';
 import 'package:smart_canteen_user_frontend/features/menu/data/models/menu_dto.dart';
 
 /// In-memory [MenuDatasource] for tests and offline work.
@@ -78,6 +79,71 @@ class MenuMockDatasource implements MenuDatasource {
       schoolId: 'mock-school-cadt',
     ),
   ];
+
+  @override
+  Future<ActiveMenuDto> getActiveMenu({
+    required String branchId,
+    String? canteenId,
+    DateTime? date,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 600));
+    final day = date ?? DateTime.now();
+    final canteens = [
+      _canteen('mock-canteen-a', 'Canteen A', ['Breakfast', 'Lunch']),
+      _canteen('mock-canteen-b', 'Canteen B', ['Drinks']),
+    ];
+    return ActiveMenuDto(
+      date: day.toIso8601String().substring(0, 10),
+      dayOfWeek: day.weekday - 1,
+      branch: ActiveMenuBranchDto(
+        id: branchId,
+        name: 'Main Campus',
+        schoolId: 'mock-school-cadt',
+      ),
+      menu: const ActiveMenuInfoDto(id: 'mock-menu-week', name: 'This Week'),
+      canteens: [
+        for (final c in canteens)
+          if (canteenId == null || c.id == canteenId) c,
+      ],
+    );
+  }
+
+  /// A canteen serving [_items] of the given categories. Dish '8' is sold out
+  /// so the greyed-out state can be tried.
+  static ActiveMenuCanteenDto _canteen(
+    String id,
+    String name,
+    List<String> categories,
+  ) => ActiveMenuCanteenDto(
+    id: id,
+    name: name,
+    categories: [
+      for (final category in categories)
+        ActiveMenuCategoryDto(
+          id: 'mock-category-${category.toLowerCase()}',
+          name: category,
+          items: [
+            for (final item in _items)
+              if (item.categoryName == category)
+                ActiveMenuItemDto(
+                  compositionId: 'mock-composition-${item.id}',
+                  menuItemId: item.id,
+                  name: item.name,
+                  description: item.description,
+                  price: item.price,
+                  quantityAvailable: 20,
+                  soldOut: item.id == '8',
+                ),
+          ],
+        ),
+    ],
+  );
+
+  @override
+  Future<MenuItemDto> getMenuItem(String menuItemId) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return _items.firstWhere((i) => i.id == menuItemId);
+  }
 
   @override
   Future<List<MenuItemDto>> getMenuItems({String? schoolId}) async {

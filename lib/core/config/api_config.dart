@@ -76,7 +76,16 @@ abstract final class ApiConfig {
   /// `is_home` marking the student's saved one.
   static const String pickupBranches = '/$version/pickup/branches';
 
-  // Menu
+  // Menu — see docs/features/student-menu-api.md
+
+  /// `GET /menus/active?branch_id=&canteen_id=&date=` (public) — the student
+  /// menu: one date's orderable dishes for a branch, grouped by canteen and
+  /// category.
+  static const String menusActive = '/$version/menus/active';
+
+  /// `GET /menu-items/:id` (public) — one dish's detail.
+  static String menuItemById(String id) => '/$version/menu-items/$id';
+
   /// `GET /menu-items` — menu items, filterable by `school_id`,
   /// `availability_status`, paginated (`limit` max 100).
   static const String menuItems = '/$version/menu-items';

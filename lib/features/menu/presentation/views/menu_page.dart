@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -7,15 +6,14 @@ import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/empty_state_widget.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/menu_chip.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/widgets/menu_page/menu_food_list_item.dart';
 
-/// See All / Menu page — vertical list with category filter chips and a
-/// sticky "View Cart" button at the bottom.
+/// Full menu list — sticky tab bar at the top filters by category,
+/// sticky "View Cart" button floats above the list at the bottom.
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -24,7 +22,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  static const _filters = [
+  static const _tabs = [
     'All',
     'Breakfast',
     'Lunch',
@@ -43,8 +41,6 @@ class _MenuPageState extends State<MenuPage> {
     'desserts',
   ];
 
-  int _selectedFilter = 0;
-
   @override
   void initState() {
     super.initState();
@@ -53,121 +49,94 @@ class _MenuPageState extends State<MenuPage> {
     });
   }
 
-  List<FoodItem> _visibleItems(List<FoodItem> all) {
-    final cat = _cats[_selectedFilter];
-    if (cat.isEmpty) return all;
-    return all.where((f) => f.category == cat).toList();
-  }
+  List<FoodItem> _filtered(List<FoodItem> all, String cat) =>
+      cat.isEmpty ? all : all.where((f) => f.category == cat).toList();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.bgColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+    return DefaultTabController(
+      length: _tabs.length,
+      child: Scaffold(
         backgroundColor: context.bgColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-          onPressed: () => context.pop(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: context.bgColor,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+            onPressed: () => context.pop(),
+          ),
+          title: Text(
+            'Home',
+            style: AppFonts.heading2.copyWith(color: context.textColor),
+          ),
+          bottom: TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            labelColor: AppColors.primary,
+            unselectedLabelColor: context.mutedColor,
+            indicatorColor: AppColors.primary,
+            indicatorSize: TabBarIndicatorSize.label,
+            dividerColor: context.borderColor,
+            labelStyle: AppFonts.heading4.copyWith(
+              fontWeight: AppFonts.semiBold,
+            ),
+            unselectedLabelStyle: AppFonts.heading4,
+            tabs: _tabs.map((t) => Tab(text: t)).toList(),
+          ),
         ),
-        title: Text(
-          'Home',
-          style: AppFonts.heading2.copyWith(color: context.textColor),
-        ),
-      ),
-      body: Consumer<MenuViewModel>(
-        builder: (context, menu, _) {
-          return Stack(
-            children: [
-              Column(
-                children: [
-                  _CategoryChips(
-                    selected: _selectedFilter,
-                    onSelected: (i) {
-                      HapticFeedback.selectionClick();
-                      setState(() => _selectedFilter = i);
-                    },
-                    filters: _filters,
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: switch (menu.state) {
-                      ViewState.error => EmptyStateWidget(
-                        icon: Icons.cloud_off_rounded,
-                        title: 'Could not load menu',
-                        body: menu.errorMessage ?? 'Please try again.',
-                        retryLabel: 'Retry',
-                        onRetry: () => menu.load(force: true),
+        body: Consumer<MenuViewModel>(
+          builder: (context, menu, _) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: switch (menu.state) {
+                    ViewState.error => EmptyStateWidget(
+                      icon: Icons.cloud_off_rounded,
+                      title: 'Could not load menu',
+                      body: menu.errorMessage ?? 'Please try again.',
+                      retryLabel: 'Retry',
+                      onRetry: () => menu.load(force: true),
+                    ),
+                    ViewState.loading ||
+                    ViewState.idle => const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
                       ),
-                      ViewState.loading || ViewState.idle => const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
+                    ),
+                    ViewState.success => TabBarView(
+                      children: List.generate(
+                        _tabs.length,
+                        (i) => _FoodList(
+                          items: _filtered(menu.items, _cats[i]),
                         ),
                       ),
-                      ViewState.success => _FoodList(
-                        items: _visibleItems(menu.items),
-                      ),
-                    },
-                  ),
-                ],
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Consumer<CartViewModel>(
-                  builder: (context, cart, _) {
-                    if (cart.totalItems == 0) return const SizedBox.shrink();
-                    return _ViewCartBar(
-                      itemCount: cart.totalItems,
-                      onViewCart: () => context.push(AppPaths.orderSummary),
-                    );
+                    ),
                   },
                 ),
-              ),
-            ],
-          );
-        },
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Consumer<CartViewModel>(
+                    builder: (context, cart, _) {
+                      if (cart.totalItems == 0) return const SizedBox.shrink();
+                      return _ViewCartBar(
+                        itemCount: cart.totalItems,
+                        onViewCart: () => context.push(AppPaths.orderSummary),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 }
-
-// Category chips
-
-class _CategoryChips extends StatelessWidget {
-  const _CategoryChips({
-    required this.selected,
-    required this.onSelected,
-    required this.filters,
-  });
-
-  final int selected;
-  final ValueChanged<int> onSelected;
-  final List<String> filters;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      child: Row(
-        children: List.generate(filters.length, (i) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: GestureDetector(
-              onTap: () => onSelected(i),
-              child: MenuChip(label: filters[i], selected: selected == i),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-}
-
-// Scrollable food list
 
 class _FoodList extends StatelessWidget {
   const _FoodList({required this.items});
@@ -190,8 +159,6 @@ class _FoodList extends StatelessWidget {
     );
   }
 }
-
-// Sticky "View Cart" bar
 
 class _ViewCartBar extends StatelessWidget {
   const _ViewCartBar({required this.itemCount, required this.onViewCart});

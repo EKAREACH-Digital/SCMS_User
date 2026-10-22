@@ -129,8 +129,17 @@ class AuthViewModel extends ChangeNotifier {
     ),
   );
 
-  /// `POST /auth/resend-otp` — a new sign-up code by user id.
-  Future<void> resendOtp(String userId) => _authRepository.resendOtp(userId);
+  /// `POST /auth/resend-otp` — a new sign-up code by user id. Returns null on
+  /// success, or the reason to show (e.g. the 60 s cooldown's 429).
+  Future<String?> resendOtp(String userId) async {
+    try {
+      await _authRepository.resendOtp(userId);
+      return null;
+    } catch (e, s) {
+      AppLogger.e('Resending the sign-up code failed', e, s);
+      return _describe(e);
+    }
+  }
 
   /// `POST /auth/resend-verification` — a new sign-up code by email, after a
   /// login rejected with "verify your email".
@@ -195,12 +204,26 @@ class AuthViewModel extends ChangeNotifier {
 
   // Onboarding & password
 
-  /// `GET /schools` — the onboarding school dropdown.
-  Future<List<School>> loadSchools() => _authRepository.getSchools();
+  /// `GET /schools` — the onboarding school dropdown. Null if it failed.
+  Future<List<School>?> loadSchools() async {
+    try {
+      return await _authRepository.getSchools();
+    } catch (e, s) {
+      AppLogger.e('Loading schools failed', e, s);
+      return null;
+    }
+  }
 
   /// `GET /pickup/branches` — the onboarding branch dropdown for [schoolId].
-  Future<List<Branch>> loadBranches(String schoolId) =>
-      _authRepository.getBranches(schoolId);
+  /// Null if it failed.
+  Future<List<Branch>?> loadBranches(String schoolId) async {
+    try {
+      return await _authRepository.getBranches(schoolId);
+    } catch (e, s) {
+      AppLogger.e('Loading branches failed', e, s);
+      return null;
+    }
+  }
 
   /// Saves the onboarding details (name, phone, school) via
   /// `POST /auth/complete-profile`, which also marks the account

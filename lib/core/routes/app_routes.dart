@@ -4,9 +4,11 @@ abstract final class AppRoutes {
   static const signIn = 'signIn';
   static const signUp = 'signUp';
   static const forgotPassword = 'forgotPassword';
+  static const verifyEmail = 'verifyEmail';
   static const completeProfile = 'completeProfile';
   static const home = 'home';
   static const menu = 'menu';
+  static const cart = 'cart';
   static const weeklyMenu = 'weeklyMenu';
   static const orderSummary = 'orderSummary';
   static const paymentMethod = 'paymentMethod';
@@ -28,7 +30,8 @@ abstract final class AppRoutes {
 ///
 /// Routes that take an argument receive it through `extra`:
 /// - [forgotPassword]  `String?` — email to pre-fill
-/// - [completeProfile] `User` — the signed-in user to onboard
+/// - [verifyEmail]     `Map<String, String>` — `userId`, `email`, `password`
+///                     from sign-up
 /// - [paymentMethod]   `double` — order total
 /// - [topUp]           `double?` — amount already chosen upstream
 abstract final class AppPaths {
@@ -36,9 +39,11 @@ abstract final class AppPaths {
   static const signIn = '/sign-in';
   static const signUp = '/sign-up';
   static const forgotPassword = '/forgot-password';
+  static const verifyEmail = '/verify-email';
   static const completeProfile = '/complete-profile';
   static const home = '/home';
   static const menu = '/menu';
+  static const cart = '/cart';
   static const weeklyMenu = '/weekly-menu';
   static const orderSummary = '/order-summary';
   static const paymentMethod = '/choose-payment-method';
@@ -61,5 +66,5 @@ abstract final class AppPaths {
 
   /// The bottom-nav tabs, in bar order. Each is a branch of the shell route,
   /// so `context.go(AppPaths.menu)` switches tab and keeps each tab's state.
-  static const tabs = [home, menu, qr, history, settings];
+  static const tabs = [home, cart, qr, history, settings];
 }

@@ -15,6 +15,7 @@
 
   "navHome": "ទំព័រដើម",
   "navMenu": "ម៉ឺនុយ",
+  "navCart": "រទេះ",
   "navQrPay": "បង់ប្រាក់ QR",
   "navHistory": "ប្រវត្តិ",
   "navSettings": "ការកំណត់",
@@ -198,5 +199,21 @@
   "authDontHaveAccount": "មិនទាន់មានគណនី? ",
   "authSignUpLink": "ចុះឈ្មោះ",
   "authSignInErrorEmpty": "សូមបំពេញព័ត៌មានទាំងអស់។",
-  "authSignInFailed": "ការចូលគណនីបរាជ័យ។"
+  "authSignInFailed": "ការចូលគណនីបរាជ័យ។",
+
+  "authVerifyEmailTitle": "ផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នក",
+  "authVerifyEmailBody": "យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ទៅ {email}។ សូមបញ្ចូលវានៅខាងក្រោម ដើម្បីបើកដំណើរការគណនីរបស់អ្នក។",
+  "authVerifyCodeLabel": "លេខកូដផ្ទៀងផ្ទាត់",
+  "authVerifyCodeHint": "បញ្ចូលលេខកូដ ៦ ខ្ទង់",
+  "authVerifyButton": "ផ្ទៀងផ្ទាត់",
+  "authVerifying": "កំពុងផ្ទៀងផ្ទាត់…",
+  "authVerifyErrorCode": "សូមបញ្ចូលលេខកូដ ៦ ខ្ទង់ឱ្យគ្រប់។",
+  "authVerifyFailed": "មិនអាចផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នកបានទេ។",
+  "authResendIn": "ផ្ញើលេខកូដម្តងទៀតក្នុង {seconds} វិនាទី",
+  "authCodeResent": "លេខកូដថ្មីកំពុងត្រូវបានផ្ញើ។",
+  "authRegisterPhoneLabel": "លេខទូរស័ព្ទ",
+  "authRegisterPhoneHint": "+855 12 345 678",
+  "authRegisterErrorPhone": "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក។",
+  "authRegisterSelectBranchHint": "ជ្រើសរើសសាខារបស់អ្នក",
+  "authRegisterLoadFailed": "មិនអាចទាញយកបញ្ជីបានទេ។ សូមព្យាយាមម្តងទៀត។"
 }

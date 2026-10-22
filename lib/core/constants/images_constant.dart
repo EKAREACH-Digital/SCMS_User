@@ -5,9 +5,18 @@ abstract final class ImageConst {
   static const String _root = 'assets';
   static const String _foods = '$_root/foods';
   static const String _navBar = '$_root/navBar';
+  static const String _banner = '$_root/banner';
 
   // App logo
   static const String logo = '$_root/logo.png';
+
+  // Home screen promotional banners
+  static const String banner1 = '$_banner/banner1.jpg';
+  static const String banner2 = '$_banner/banner2.jpg';
+  static const String banner3 = '$_banner/banner3.jpeg';
+
+  /// All banners in display order — used by the home carousel.
+  static const List<String> banners = [banner1, banner2, banner3];
 
   // Bank logos
   static const String aba = '$_root/aba.png';

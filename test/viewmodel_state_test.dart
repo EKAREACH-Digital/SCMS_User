@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
+import 'package:smart_canteen_user_frontend/features/menu/domain/entities/daily_menu.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/weekly_menu.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/repositories/menu_repository.dart';
@@ -34,6 +35,16 @@ class _FlakyMenuRepository implements MenuRepository {
 
   @override
   Future<WeeklyMenu?> getCurrentWeeklyMenu({String? schoolId}) async => null;
+
+  @override
+  Future<DailyMenu> getActiveMenu({
+    required String branchId,
+    String? canteenId,
+    DateTime? date,
+  }) => throw UnimplementedError();
+
+  @override
+  Future<FoodItem> getMenuItem(String menuItemId) => throw UnimplementedError();
 }
 
 /// ViewModels expose an enum [ViewState] plus separate data and error fields.

@@ -1,0 +1,14 @@
+# Code generation for DTOs (data/models/*_dto.dart).
+# Run: dart run build_runner build   (watch mode: dart run build_runner watch)
+targets:
+  $default:
+    builders:
+      json_serializable:
+        generate_for:
+          - lib/features/**/data/models/*.dart
+        options:
+          # Backend JSON is snake_case: menu_item_id ↔ menuItemId.
+          field_rename: snake
+          # Response DTOs only parse. A request DTO opts in with
+          # @JsonSerializable(createFactory: false, createToJson: true).
+          create_to_json: false

@@ -6,12 +6,13 @@ import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_navigatio
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step1.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step2.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step3.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/sign_in_page.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/splash_page.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/home_page.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
-import 'package:smart_canteen_user_frontend/features/menu/presentation/views/food_detail_page.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/menu_page.dart';
+import 'package:smart_canteen_user_frontend/features/menu/presentation/views/food_detail_page.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/weekly_menu_page.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_page.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_settings_page.dart';
@@ -35,8 +36,7 @@ abstract final class AppRouter {
     AppPaths.signIn,
     AppPaths.signUp,
     AppPaths.forgotPassword,
-    // Reachable by unauthenticated users coming from Step 1 of registration.
-    AppPaths.completeProfile,
+    AppPaths.verifyEmail,
   };
 
   static GoRouter create(AuthViewModel auth) => GoRouter(
@@ -61,17 +61,22 @@ abstract final class AppRouter {
         builder: (_, _) => const RegisterStep1Page(),
       ),
       GoRoute(
-        path: AppPaths.completeProfile,
-        name: AppRoutes.completeProfile,
-        // Receives Step 1 data (email, password, fullName) via route extra.
+        path: AppPaths.verifyEmail,
+        name: AppRoutes.verifyEmail,
+        // Receives the sign-up's userId, email and password via route extra.
         builder: (_, state) {
           final data = Map<String, String>.from(state.extra as Map);
           return RegisterStep2Page(
+            userId: data['userId']!,
             email: data['email']!,
             password: data['password']!,
-            fullName: data['fullName']!,
           );
         },
+      ),
+      GoRoute(
+        path: AppPaths.completeProfile,
+        name: AppRoutes.completeProfile,
+        builder: (_, _) => const RegisterStep3Page(),
       ),
       // Bottom-nav tabs. Each branch keeps its own navigation stack and state.
       StatefulShellRoute.indexedStack(
@@ -79,11 +84,16 @@ abstract final class AppRouter {
             ScaffoldWithNavBar(navigationShell: navigationShell),
         branches: [
           _tab(AppPaths.home, AppRoutes.home, const HomePage()),
-          _tab(AppPaths.menu, AppRoutes.menu, const MenuPage()),
+          _tab(AppPaths.cart, AppRoutes.cart, const OrderSummaryPage()),
           _tab(AppPaths.qr, AppRoutes.qr, const QrPage()),
           _tab(AppPaths.history, AppRoutes.history, const HistoryPage()),
           _tab(AppPaths.settings, AppRoutes.settings, const SettingsPage()),
         ],
+      ),
+      GoRoute(
+        path: AppPaths.menu,
+        name: AppRoutes.menu,
+        builder: (_, _) => const MenuPage(),
       ),
       GoRoute(
         path: AppPaths.weeklyMenu,
@@ -150,10 +160,9 @@ abstract final class AppRouter {
 
   /// The only auth redirect in the app (RULE 7):
   /// - no session → protected pages bounce to the splash (which offers sign-in);
+  /// - signed in with an incomplete profile → Complete Profile, from any page.
+  ///   The backend doesn't block an incomplete profile, so the app must;
   /// - a restored session on the splash → straight into the app.
-  ///
-  /// Where to go right after an explicit sign-in (home or onboarding) is left
-  /// to the sign-in page, which knows which flow the user took.
   static String? _redirect(AuthViewModel auth, GoRouterState state) {
     final isPublic = _publicPaths.contains(state.matchedLocation);
     switch (auth.status) {
@@ -165,6 +174,11 @@ abstract final class AppRouter {
       case AuthStatus.unauthenticated:
         return isPublic ? null : AppPaths.splash;
       case AuthStatus.authenticated:
+        if (auth.user?.needsProfileCompletion ?? false) {
+          return state.matchedLocation == AppPaths.completeProfile
+              ? null
+              : AppPaths.completeProfile;
+        }
         return state.matchedLocation == AppPaths.splash ? AppPaths.home : null;
     }
   }
@@ -195,19 +209,12 @@ class ScaffoldWithNavBar extends StatelessWidget {
         // Lets the glass bar float over the tab and blur what's behind it.
         extendBody: true,
         body: navigationShell,
-        bottomNavigationBar: SafeArea(
-          // Keeps the bar above the system navigation bar on older Android
-          // devices that don't honour edge-to-edge insets.
-          top: false,
-          left: false,
-          right: false,
-          child: SmartCanteenNavigationBarButton(
-            currentIndex: navigationShell.currentIndex,
-            // Tapping the current tab again resets it to its first page.
-            onTap: (index) => navigationShell.goBranch(
-              index,
-              initialLocation: index == navigationShell.currentIndex,
-            ),
+        bottomNavigationBar: SmartCanteenNavigationBarButton(
+          currentIndex: navigationShell.currentIndex,
+          // Tapping the current tab again resets it to its first page.
+          onTap: (index) => navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
           ),
         ),
       ),

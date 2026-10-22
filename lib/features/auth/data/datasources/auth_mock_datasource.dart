@@ -25,8 +25,8 @@ class AuthMockDatasource implements AuthDatasource {
   // In-memory account state so mock changes persist for the app session.
   // The account starts complete (phone + school) so sign-in goes straight
   // home, and Google-only (no password) so "Set a password" is reachable.
-  String? _firstName = 'John';
-  String? _lastName = 'Doe';
+  String? _firstName = 'firstname';
+  String? _lastName = 'lastname';
   String? _phone = '+85512345678';
   SchoolDto? _school = _mockSchools.first;
   String? _homeBranchId = 'mock-branch-cadt-main';

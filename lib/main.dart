@@ -12,7 +12,7 @@ import 'package:smart_canteen_user_frontend/core/routes/app_router.dart';
 import 'package:smart_canteen_user_frontend/core/services/order_alert_service.dart';
 import 'package:smart_canteen_user_frontend/core/services/storage_service.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/features/auth/data/datasources/auth_mock_datasource.dart';
+import 'package:smart_canteen_user_frontend/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:smart_canteen_user_frontend/features/auth/domain/repositories/auth_repository.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
@@ -79,17 +79,16 @@ class SmartCanteenApp extends StatelessWidget {
 
         // Repositories
         Provider<AuthRepository>(
-          // Auth is mocked so the UI can be tested without a backend.
-          // To switch back to real: replace AuthMockDatasource() with
-          // AuthRemoteDatasource(c.read<Dio>()).
           create: (c) => AuthRepositoryImpl(
-            AuthMockDatasource(),
+            AuthRemoteDatasource(c.read<Dio>()),
             c.read<StorageService>(),
           ),
         ),
         Provider<MenuRepository>(
-          create: (c) =>
-              MenuRepositoryImpl(MenuRemoteDatasource(c.read<Dio>())),
+          create: (c) => MenuRepositoryImpl(
+            MenuRemoteDatasource(c.read<Dio>()),
+            imageHost: AppConfig.apiBaseUrl,
+          ),
         ),
         Provider<OrderRepository>(
           create: (c) =>

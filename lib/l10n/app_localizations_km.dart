@@ -45,6 +45,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get navMenu => 'ម៉ឺនុយ';
 
   @override
+  String get navCart => 'រទេះ';
+
+  @override
   String get navQrPay => 'បង់ប្រាក់ QR';
 
   @override
@@ -591,4 +594,54 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get authSignInFailed => 'ការចូលគណនីបរាជ័យ។';
+
+  @override
+  String get authVerifyEmailTitle => 'ផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នក';
+
+  @override
+  String authVerifyEmailBody(String email) {
+    return 'យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ទៅ $email។ សូមបញ្ចូលវានៅខាងក្រោម ដើម្បីបើកដំណើរការគណនីរបស់អ្នក។';
+  }
+
+  @override
+  String get authVerifyCodeLabel => 'លេខកូដផ្ទៀងផ្ទាត់';
+
+  @override
+  String get authVerifyCodeHint => 'បញ្ចូលលេខកូដ ៦ ខ្ទង់';
+
+  @override
+  String get authVerifyButton => 'ផ្ទៀងផ្ទាត់';
+
+  @override
+  String get authVerifying => 'កំពុងផ្ទៀងផ្ទាត់…';
+
+  @override
+  String get authVerifyErrorCode => 'សូមបញ្ចូលលេខកូដ ៦ ខ្ទង់ឱ្យគ្រប់។';
+
+  @override
+  String get authVerifyFailed => 'មិនអាចផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នកបានទេ។';
+
+  @override
+  String authResendIn(int seconds) {
+    return 'ផ្ញើលេខកូដម្តងទៀតក្នុង $seconds វិនាទី';
+  }
+
+  @override
+  String get authCodeResent => 'លេខកូដថ្មីកំពុងត្រូវបានផ្ញើ។';
+
+  @override
+  String get authRegisterPhoneLabel => 'លេខទូរស័ព្ទ';
+
+  @override
+  String get authRegisterPhoneHint => '+855 12 345 678';
+
+  @override
+  String get authRegisterErrorPhone => 'សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក។';
+
+  @override
+  String get authRegisterSelectBranchHint => 'ជ្រើសរើសសាខារបស់អ្នក';
+
+  @override
+  String get authRegisterLoadFailed =>
+      'មិនអាចទាញយកបញ្ជីបានទេ។ សូមព្យាយាមម្តងទៀត។';
 }

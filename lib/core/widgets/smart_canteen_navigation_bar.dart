@@ -42,27 +42,22 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
         GlassTab(
           icon: const Icon(Icons.home_rounded),
           label: l10n.navHome,
-          // glowColor: AppColors.primary,
         ),
         GlassTab(
-          icon: const Icon(Icons.restaurant_menu_rounded),
-          label: l10n.navMenu,
-          // glowColor: AppColors.primary,
+          icon: const Icon(Icons.shopping_cart_rounded),
+          label: l10n.navCart,
         ),
         GlassTab(
           icon: const Icon(Icons.qr_code_scanner_rounded),
           label: l10n.navQrPay,
-          // glowColor: AppColors.secondary,
         ),
         GlassTab(
           icon: const Icon(Icons.receipt_long_rounded),
           label: l10n.navHistory,
-          // glowColor: AppColors.primary,
         ),
         GlassTab(
           icon: const Icon(Icons.settings_rounded),
           label: l10n.navSettings,
-          // glowColor: AppColors.primary,
         ),
       ],
     );

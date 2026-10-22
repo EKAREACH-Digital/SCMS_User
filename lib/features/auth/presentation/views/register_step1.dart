@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
@@ -7,18 +10,16 @@ import 'package:smart_canteen_user_frontend/core/utils/password_validator.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_text_field.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/step_progress_indicator.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_field_radius.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_logo.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
-/// Border radius applied to every text field on the register screens.
-/// Change this value to adjust the roundness across both steps at once.
-const _kFieldRadius = BorderRadius.all(Radius.circular(8));
-
-/// Register flow — Step 1.
+/// Sign-up, step 1 of 3.
 ///
-/// Validates First Name, Last Name, E-mail, Password, and Confirm Password
-/// locally, then passes the data to Step 2 via route extra.
-/// No API call is made here — account creation happens in Step 2.
+/// Validates name, email and password, then creates the inactive account
+/// (`POST /auth/register`, which emails a 6-digit code) and opens
+/// [AppPaths.verifyEmail] with the new user's id.
 class RegisterStep1Page extends StatefulWidget {
   const RegisterStep1Page({super.key});
 
@@ -32,6 +33,7 @@ class _RegisterStep1PageState extends State<RegisterStep1Page> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -49,7 +51,7 @@ class _RegisterStep1PageState extends State<RegisterStep1Page> {
     );
   }
 
-  void _handleNext() {
+  Future<void> _handleNext() async {
     final l10n = AppLocalizations.of(context)!;
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
@@ -75,14 +77,27 @@ class _RegisterStep1PageState extends State<RegisterStep1Page> {
       return;
     }
 
-    // Push Step 2 so Step 1 stays in the stack — the user can pop back to edit.
-    context.push(
-      AppPaths.completeProfile,
-      extra: {
-        'email': email,
-        'password': password,
-        'fullName': '$firstName $lastName',
-      },
+    setState(() => _isSubmitting = true);
+    final vm = context.read<AuthViewModel>();
+    // POST /auth/register — creates the account; the code goes to [email].
+    final userId = await vm.register(
+      email: email,
+      password: password,
+      fullName: '$firstName $lastName',
+    );
+    if (!mounted) return;
+    setState(() => _isSubmitting = false);
+
+    if (userId == null) {
+      _showError(vm.errorMessage ?? l10n.authRegisterFailed);
+      return;
+    }
+    // Pushed so the user can come back and fix a mistyped email.
+    unawaited(
+      context.push(
+        AppPaths.verifyEmail,
+        extra: {'userId': userId, 'email': email, 'password': password},
+      ),
     );
   }
 
@@ -109,7 +124,7 @@ class _RegisterStep1PageState extends State<RegisterStep1Page> {
                 ),
               ),
               const SizedBox(height: 20),
-              const StepProgressIndicator(currentStep: 1),
+              const StepProgressIndicator(currentStep: 1, totalSteps: 3),
               const SizedBox(height: 32),
               _RegisterStep1Form(
                 l10n: l10n,
@@ -118,7 +133,8 @@ class _RegisterStep1PageState extends State<RegisterStep1Page> {
                 emailController: _emailController,
                 passwordController: _passwordController,
                 confirmController: _confirmController,
-                onNext: _handleNext,
+                isSubmitting: _isSubmitting,
+                onNext: _isSubmitting ? null : _handleNext,
               ),
               const SizedBox(height: 20),
               _SignInLink(
@@ -147,6 +163,7 @@ class _RegisterStep1Form extends StatelessWidget {
     required this.emailController,
     required this.passwordController,
     required this.confirmController,
+    required this.isSubmitting,
     required this.onNext,
   });
 
@@ -156,7 +173,8 @@ class _RegisterStep1Form extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController confirmController;
-  final VoidCallback onNext;
+  final bool isSubmitting;
+  final VoidCallback? onNext;
 
   @override
   Widget build(BuildContext context) {
@@ -174,15 +192,15 @@ class _RegisterStep1Form extends StatelessWidget {
           label: l10n.authRegisterEmailLabel,
           hintText: l10n.authRegisterEmailHint,
           keyboardType: TextInputType.emailAddress,
-          borderRadius: _kFieldRadius,
+          borderRadius: kAuthFieldRadius,
         ),
         const SizedBox(height: 18),
         SmartCanteenTextField(
           controller: passwordController,
           label: l10n.authRegisterPasswordLabel,
-          hintText: '••••••••',
+          hintText: '',
           obscureText: true,
-          borderRadius: _kFieldRadius,
+          borderRadius: kAuthFieldRadius,
         ),
         const SizedBox(height: 6),
         Text(
@@ -193,13 +211,14 @@ class _RegisterStep1Form extends StatelessWidget {
         SmartCanteenTextField(
           controller: confirmController,
           label: l10n.authRegisterConfirmPasswordLabel,
-          hintText: '••••••••',
+          hintText: '',
           obscureText: true,
-          borderRadius: _kFieldRadius,
+          borderRadius: kAuthFieldRadius,
         ),
         const SizedBox(height: 32),
         SmartCanteenButton(
           label: l10n.authRegisterNext,
+          isLoading: isSubmitting,
           onPressed: onNext,
         ),
       ],
@@ -230,7 +249,7 @@ class _NameRow extends StatelessWidget {
             label: l10n.authRegisterFirstName,
             hintText: l10n.authRegisterFirstNameHint,
             keyboardType: TextInputType.name,
-            borderRadius: _kFieldRadius,
+            borderRadius: kAuthFieldRadius,
           ),
         ),
         const SizedBox(width: 12),
@@ -240,7 +259,7 @@ class _NameRow extends StatelessWidget {
             label: l10n.authRegisterLastName,
             hintText: l10n.authRegisterLastNameHint,
             keyboardType: TextInputType.name,
-            borderRadius: _kFieldRadius,
+            borderRadius: kAuthFieldRadius,
           ),
         ),
       ],

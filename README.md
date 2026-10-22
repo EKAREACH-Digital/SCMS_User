@@ -32,7 +32,16 @@ Run `flutter doctor` and fix anything it reports before continuing.
 flutter pub get
 ```
 
-### 2. Create your `.env`
+### 2. Generate code
+
+DTOs use `json_serializable`. The generated `*.g.dart` files are committed, but regenerate them after changing any DTO in `data/models/`:
+
+```bash
+dart run build_runner build      # once
+dart run build_runner watch      # keep regenerating while you edit
+```
+
+### 3. Create your `.env`
 
 `.env` is bundled into the app as an asset, so **the app will not build without it**.
 
@@ -50,7 +59,7 @@ Then set `API_BASE_URL` for where you run the app. Leave out the API version, be
 
 Fill in the Google and Microsoft keys only if you use those sign-ins. `.env` is git-ignored, and everything in it ships inside the app, so put **only public identifiers** in it, never a secret.
 
-### 3. Run
+### 4. Run
 
 ```bash
 flutter devices        # list simulators / connected phones
@@ -91,6 +100,7 @@ Strings live in `lib/l10n/app_en.arb` and `app_km.arb` (English and Khmer). `App
 * **Routing**: [GoRouter](https://pub.dev/packages/go_router)
 * **Networking**: [Dio](https://pub.dev/packages/dio), with an auth interceptor that adds the Bearer token and refreshes it
 * **Secure storage**: [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) for auth tokens
+* **JSON**: [json_serializable](https://pub.dev/packages/json_serializable) + [build_runner](https://pub.dev/packages/build_runner) for DTOs (`build.yaml` holds the shared options)
 * **Config**: [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) (`.env` read through `AppConfig`)
 * **Auth**: [google_sign_in](https://pub.dev/packages/google_sign_in), [msal_auth](https://pub.dev/packages/msal_auth) (Microsoft)
 * **QR**: [qr_flutter](https://pub.dev/packages/qr_flutter) (show coupons), [mobile_scanner](https://pub.dev/packages/mobile_scanner) (scan)

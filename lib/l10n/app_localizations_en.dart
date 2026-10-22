@@ -45,6 +45,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMenu => 'Menu';
 
   @override
+  String get navCart => 'Cart';
+
+  @override
   String get navQrPay => 'QR Pay';
 
   @override
@@ -488,13 +491,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authRegisterFirstName => 'First Name';
 
   @override
-  String get authRegisterFirstNameHint => 'John';
+  String get authRegisterFirstNameHint => 'firstname';
 
   @override
   String get authRegisterLastName => 'Last Name';
 
   @override
-  String get authRegisterLastNameHint => 'Doe';
+  String get authRegisterLastNameHint => 'lastname';
 
   @override
   String get authRegisterEmailLabel => 'E-mail';
@@ -589,4 +592,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSignInFailed => 'Sign in failed.';
+
+  @override
+  String get authVerifyEmailTitle => 'Verify your email';
+
+  @override
+  String authVerifyEmailBody(String email) {
+    return 'We sent a 6-digit code to $email. Enter it below to activate your account.';
+  }
+
+  @override
+  String get authVerifyCodeLabel => 'Verification code';
+
+  @override
+  String get authVerifyCodeHint => 'Enter the 6-digit code';
+
+  @override
+  String get authVerifyButton => 'Verify';
+
+  @override
+  String get authVerifying => 'Verifying…';
+
+  @override
+  String get authVerifyErrorCode => 'Enter the complete 6-digit code.';
+
+  @override
+  String get authVerifyFailed => 'Could not verify your email.';
+
+  @override
+  String authResendIn(int seconds) {
+    return 'Send another code in ${seconds}s';
+  }
+
+  @override
+  String get authCodeResent => 'A new code is on its way.';
+
+  @override
+  String get authRegisterPhoneLabel => 'Phone number';
+
+  @override
+  String get authRegisterPhoneHint => '+855 12 345 678';
+
+  @override
+  String get authRegisterErrorPhone => 'Please enter your phone number.';
+
+  @override
+  String get authRegisterSelectBranchHint => 'Select your branch';
+
+  @override
+  String get authRegisterLoadFailed =>
+      'Could not load the list. Please try again.';
 }

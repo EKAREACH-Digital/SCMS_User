@@ -15,6 +15,7 @@
 
   "navHome": "Home",
   "navMenu": "Menu",
+  "navCart": "Cart",
   "navQrPay": "QR Pay",
   "navHistory": "History",
   "navSettings": "Settings",
@@ -190,9 +191,9 @@
 
   "authRegisterTitle": "Register",
   "authRegisterFirstName": "First Name",
-  "authRegisterFirstNameHint": "John",
+  "authRegisterFirstNameHint": "firstname",
   "authRegisterLastName": "Last Name",
-  "authRegisterLastNameHint": "Doe",
+  "authRegisterLastNameHint": "lastname",
   "authRegisterEmailLabel": "E-mail",
   "authRegisterEmailHint": "Enter your email",
   "authRegisterPasswordLabel": "Password",
@@ -224,5 +225,31 @@
   "authDontHaveAccount": "Don't have an account? ",
   "authSignUpLink": "Sign Up",
   "authSignInErrorEmpty": "Please fill in all fields.",
-  "authSignInFailed": "Sign in failed."
+  "authSignInFailed": "Sign in failed.",
+
+  "authVerifyEmailTitle": "Verify your email",
+  "authVerifyEmailBody": "We sent a 6-digit code to {email}. Enter it below to activate your account.",
+  "@authVerifyEmailBody": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "authVerifyCodeLabel": "Verification code",
+  "authVerifyCodeHint": "Enter the 6-digit code",
+  "authVerifyButton": "Verify",
+  "authVerifying": "Verifying…",
+  "authVerifyErrorCode": "Enter the complete 6-digit code.",
+  "authVerifyFailed": "Could not verify your email.",
+  "authResendIn": "Send another code in {seconds}s",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "authCodeResent": "A new code is on its way.",
+  "authRegisterPhoneLabel": "Phone number",
+  "authRegisterPhoneHint": "+855 12 345 678",
+  "authRegisterErrorPhone": "Please enter your phone number.",
+  "authRegisterSelectBranchHint": "Select your branch",
+  "authRegisterLoadFailed": "Could not load the list. Please try again."
 }

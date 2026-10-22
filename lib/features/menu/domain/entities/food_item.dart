@@ -21,6 +21,18 @@ class FoodItem {
   /// The school (tenant) this dish belongs to — an order is scoped to it.
   final String? schoolId;
 
+  /// The canteen serving this dish on the daily menu.
+  final String? canteenId;
+
+  final int? calories;
+
+  /// Portions planned for the day, when the menu says.
+  final int? quantityAvailable;
+
+  /// True when the dish is out for the day: show it greyed out and block
+  /// ordering.
+  final bool soldOut;
+
   const FoodItem({
     required this.id,
     required this.name,
@@ -33,6 +45,10 @@ class FoodItem {
     this.imageUrl,
     this.colorSeed = 0,
     this.schoolId,
+    this.canteenId,
+    this.calories,
+    this.quantityAvailable,
+    this.soldOut = false,
   });
 
   FoodItem copyWith({
@@ -47,6 +63,10 @@ class FoodItem {
     String? imageUrl,
     int? colorSeed,
     String? schoolId,
+    String? canteenId,
+    int? calories,
+    int? quantityAvailable,
+    bool? soldOut,
   }) {
     return FoodItem(
       id: id ?? this.id,
@@ -60,6 +80,10 @@ class FoodItem {
       imageUrl: imageUrl ?? this.imageUrl,
       colorSeed: colorSeed ?? this.colorSeed,
       schoolId: schoolId ?? this.schoolId,
+      canteenId: canteenId ?? this.canteenId,
+      calories: calories ?? this.calories,
+      quantityAvailable: quantityAvailable ?? this.quantityAvailable,
+      soldOut: soldOut ?? this.soldOut,
     );
   }
 }

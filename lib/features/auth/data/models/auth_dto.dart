@@ -1,9 +1,14 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:smart_canteen_user_frontend/features/auth/domain/entities/school.dart';
 import 'package:smart_canteen_user_frontend/features/auth/domain/entities/user.dart';
+
+part 'auth_dto.g.dart';
 
 // API shapes for the auth feature. They mirror the backend JSON and stay in the
 // data layer — the repository hands entities (via `toEntity`) to everyone else.
 
+@JsonSerializable()
 class RoleDto {
   final String id;
   final String name;
@@ -11,9 +16,10 @@ class RoleDto {
   const RoleDto({required this.id, required this.name});
 
   factory RoleDto.fromJson(Map<String, dynamic> json) =>
-      RoleDto(id: json['id'] as String, name: json['name'] as String);
+      _$RoleDtoFromJson(json);
 }
 
+@JsonSerializable()
 class SchoolDto {
   final String id;
   final String name;
@@ -21,7 +27,7 @@ class SchoolDto {
   const SchoolDto({required this.id, required this.name});
 
   factory SchoolDto.fromJson(Map<String, dynamic> json) =>
-      SchoolDto(id: json['id'] as String, name: json['name'] as String);
+      _$SchoolDtoFromJson(json);
 
   School toEntity() => School(id: id, name: name);
 }
@@ -29,6 +35,7 @@ class SchoolDto {
 /// Mirrors the backend `User` entity (backend `src/modules/users/entities/user.entity.ts`),
 /// as returned by `GET /users/me`, `POST /auth/register` and in the `user`
 /// field of auth responses.
+@JsonSerializable()
 class UserProfileDto {
   final String id;
   final String email;
@@ -36,8 +43,11 @@ class UserProfileDto {
   final String? lastName;
   final String? phone;
   final String? avatarUrl;
+  @JsonKey(defaultValue: 'active')
   final String status;
+  @JsonKey(readValue: _readRole)
   final RoleDto? role;
+  @JsonKey(readValue: _readSchool)
   final SchoolDto? school;
   final String? homeBranchId;
 
@@ -47,6 +57,8 @@ class UserProfileDto {
 
   /// True when the account has a password set, so email/password sign-in works.
   /// False for Google-only accounts — the app offers "Set a password" then.
+  /// Absent on the raw `/users/me` entity, where a password is assumed.
+  @JsonKey(defaultValue: true)
   final bool canUseEmailPassword;
 
   const UserProfileDto({
@@ -64,29 +76,15 @@ class UserProfileDto {
     this.canUseEmailPassword = true,
   });
 
-  factory UserProfileDto.fromJson(Map<String, dynamic> json) => UserProfileDto(
-    id: json['id'] as String,
-    email: json['email'] as String,
-    firstName: json['first_name'] as String?,
-    lastName: json['last_name'] as String?,
-    phone: json['phone'] as String?,
-    avatarUrl: json['avatar_url'] as String?,
-    status: json['status'] as String? ?? 'active',
-    role: _parseRole(json['role']),
-    school: _parseSchool(json),
-    homeBranchId: json['home_branch_id'] as String?,
-    profileCompleted: json['profile_completed'] as bool?,
-    // Backend sends this on auth responses (serializeUser). Absent on the
-    // raw /users/me entity, where we assume a password exists.
-    canUseEmailPassword: json['can_use_email_password'] as bool? ?? true,
-  );
+  factory UserProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileDtoFromJson(json);
 
   /// `role` is the joined relation object in both shapes today; a bare name
   /// string is tolerated so a flattened payload can't crash parsing.
-  static RoleDto? _parseRole(dynamic role) {
-    if (role is Map<String, dynamic>) return RoleDto.fromJson(role);
-    if (role is String && role.isNotEmpty) return RoleDto(id: '', name: role);
-    return null;
+  static Object? _readRole(Map<dynamic, dynamic> json, String key) {
+    final role = json[key];
+    if (role is String && role.isNotEmpty) return {'id': '', 'name': role};
+    return role is Map ? role : null;
   }
 
   /// `school` arrives in two different shapes:
@@ -97,13 +95,12 @@ class UserProfileDto {
   ///   school's **name string**, with the id left in `school_id`.
   ///
   /// Handling both keeps either response parseable.
-  static SchoolDto? _parseSchool(Map<String, dynamic> json) {
-    final school = json['school'];
-    if (school is Map<String, dynamic>) return SchoolDto.fromJson(school);
+  static Object? _readSchool(Map<dynamic, dynamic> json, String key) {
+    final school = json[key];
     if (school is String && school.isNotEmpty) {
-      return SchoolDto(id: json['school_id'] as String? ?? '', name: school);
+      return {'id': json['school_id'] ?? '', 'name': school};
     }
-    return null;
+    return school is Map ? school : null;
   }
 
   User toEntity() => User(

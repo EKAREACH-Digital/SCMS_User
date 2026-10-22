@@ -170,6 +170,12 @@ abstract class AppLocalizations {
   /// **'Menu'**
   String get navMenu;
 
+  /// No description provided for @navCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get navCart;
+
   /// No description provided for @navQrPay.
   ///
   /// In en, this message translates to:
@@ -989,7 +995,7 @@ abstract class AppLocalizations {
   /// No description provided for @authRegisterFirstNameHint.
   ///
   /// In en, this message translates to:
-  /// **'John'**
+  /// **'firstname'**
   String get authRegisterFirstNameHint;
 
   /// No description provided for @authRegisterLastName.
@@ -1001,7 +1007,7 @@ abstract class AppLocalizations {
   /// No description provided for @authRegisterLastNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Doe'**
+  /// **'lastname'**
   String get authRegisterLastNameHint;
 
   /// No description provided for @authRegisterEmailLabel.
@@ -1189,6 +1195,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in failed.'**
   String get authSignInFailed;
+
+  /// No description provided for @authVerifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get authVerifyEmailTitle;
+
+  /// No description provided for @authVerifyEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a 6-digit code to {email}. Enter it below to activate your account.'**
+  String authVerifyEmailBody(String email);
+
+  /// No description provided for @authVerifyCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code'**
+  String get authVerifyCodeLabel;
+
+  /// No description provided for @authVerifyCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code'**
+  String get authVerifyCodeHint;
+
+  /// No description provided for @authVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get authVerifyButton;
+
+  /// No description provided for @authVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying…'**
+  String get authVerifying;
+
+  /// No description provided for @authVerifyErrorCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the complete 6-digit code.'**
+  String get authVerifyErrorCode;
+
+  /// No description provided for @authVerifyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify your email.'**
+  String get authVerifyFailed;
+
+  /// No description provided for @authResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Send another code in {seconds}s'**
+  String authResendIn(int seconds);
+
+  /// No description provided for @authCodeResent.
+  ///
+  /// In en, this message translates to:
+  /// **'A new code is on its way.'**
+  String get authCodeResent;
+
+  /// No description provided for @authRegisterPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get authRegisterPhoneLabel;
+
+  /// No description provided for @authRegisterPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+855 12 345 678'**
+  String get authRegisterPhoneHint;
+
+  /// No description provided for @authRegisterErrorPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number.'**
+  String get authRegisterErrorPhone;
+
+  /// No description provided for @authRegisterSelectBranchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your branch'**
+  String get authRegisterSelectBranchHint;
+
+  /// No description provided for @authRegisterLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the list. Please try again.'**
+  String get authRegisterLoadFailed;
 }
 
 class _AppLocalizationsDelegate

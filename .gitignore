@@ -52,3 +52,5 @@ app.*.map.json
 .claude/
 CLAUDE.md
 docs
+
+lib/features/home/presentation/views/ordering_process
