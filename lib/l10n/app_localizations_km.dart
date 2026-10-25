@@ -350,6 +350,23 @@ class AppLocalizationsKm extends AppLocalizations {
   String get daySun => 'អាទិត្យ';
 
   @override
+  String get menuTabAll => 'ទាំងអស់';
+
+  @override
+  String get menuTabSnacks => 'អាហារសម្រន់';
+
+  @override
+  String get menuTabDrinks => 'ភេសជ្ជៈ';
+
+  @override
+  String get menuTabDesserts => 'បង្អែម';
+
+  @override
+  String menuViewCart(int count) {
+    return 'មើលរទេះ ($count)';
+  }
+
+  @override
   String get menuEmptyTitle => 'រកមិនឃើញទំនិញ';
 
   @override
@@ -644,4 +661,71 @@ class AppLocalizationsKm extends AppLocalizations {
   @override
   String get authRegisterLoadFailed =>
       'មិនអាចទាញយកបញ្ជីបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get authForgotPasswordPageTitle => 'កំណត់ពាក្យសម្ងាត់ឡើងវិញ';
+
+  @override
+  String get authForgotPasswordEmailBody =>
+      'បញ្ចូលអ៊ីម៉ែលដែលភ្ជាប់ទៅគណនីរបស់អ្នក។ យើងនឹងផ្ញើលេខកូដបន្លំ។';
+
+  @override
+  String get authForgotPasswordEmailLabel => 'អ៊ីម៉ែល';
+
+  @override
+  String get authForgotPasswordEmailHint => 'បញ្ចូលអ៊ីម៉ែលរបស់អ្នក';
+
+  @override
+  String get authForgotPasswordSendCode => 'ផ្ញើលេខកូដ';
+
+  @override
+  String get authForgotPasswordSending => 'កំពុងផ្ញើ…';
+
+  @override
+  String get authForgotPasswordErrorEmail => 'សូមបញ្ចូលអ៊ីម៉ែលត្រឹមត្រូវ។';
+
+  @override
+  String authForgotPasswordCodeSentBody(String email) {
+    return 'យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ទៅ $email។ សូមបញ្ចូលវានៅខាងក្រោម។';
+  }
+
+  @override
+  String get authForgotPasswordVerifyButton => 'ផ្ទៀងផ្ទាត់លេខកូដ';
+
+  @override
+  String get authForgotPasswordVerifyFailed =>
+      'លេខកូដនេះមិនត្រឹមត្រូវ ឬផុតកំណត់ហើយ។';
+
+  @override
+  String get authForgotPasswordNewPasswordTitle => 'កំណត់ពាក្យសម្ងាត់ថ្មី';
+
+  @override
+  String get authForgotPasswordNewPasswordBody =>
+      'ជ្រើសពាក្យសម្ងាត់ដែលអ្នកមិនធ្លាប់ប្រើ។';
+
+  @override
+  String get authForgotPasswordNewPasswordLabel => 'ពាក្យសម្ងាត់ថ្មី';
+
+  @override
+  String get authForgotPasswordNewPasswordHint => 'បញ្ចូលពាក្យសម្ងាត់ថ្មី';
+
+  @override
+  String get authForgotPasswordConfirmLabel => 'បញ្ជាក់ពាក្យសម្ងាត់';
+
+  @override
+  String get authForgotPasswordConfirmHint => 'បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត';
+
+  @override
+  String get authForgotPasswordResetButton => 'កំណត់ឡើងវិញ';
+
+  @override
+  String get authForgotPasswordResetting => 'កំពុងកំណត់ឡើងវិញ…';
+
+  @override
+  String get authForgotPasswordResetFailed =>
+      'មិនអាចកំណត់ពាក្យសម្ងាត់ឡើងវិញបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get authForgotPasswordErrorPasswordMatch =>
+      'ពាក្យសម្ងាត់មិនត្រូវគ្នា។';
 }

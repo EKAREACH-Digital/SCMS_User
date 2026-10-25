@@ -184,7 +184,7 @@ class _AddButton extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             color: AppColors.primary,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(32),
           ),
           child: const Icon(
             Icons.add_rounded,

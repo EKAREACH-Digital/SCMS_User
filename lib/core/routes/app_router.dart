@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_navigation_bar.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/views/forgot_password_page.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step1.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step2.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step3.dart';
@@ -59,6 +60,14 @@ abstract final class AppRouter {
         path: AppPaths.signUp,
         name: AppRoutes.signUp,
         builder: (_, _) => const RegisterStep1Page(),
+      ),
+      GoRoute(
+        path: AppPaths.forgotPassword,
+        name: AppRoutes.forgotPassword,
+        // Receives an optional pre-filled email via route extra.
+        builder: (_, state) => ForgotPasswordPage(
+          email: state.extra as String?,
+        ),
       ),
       GoRoute(
         path: AppPaths.verifyEmail,

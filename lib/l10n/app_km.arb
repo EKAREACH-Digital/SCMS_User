@@ -115,6 +115,16 @@
   "daySat": "សៅរ៍",
   "daySun": "អាទិត្យ",
 
+  "menuTabAll": "ទាំងអស់",
+  "menuTabSnacks": "អាហារសម្រន់",
+  "menuTabDrinks": "ភេសជ្ជៈ",
+  "menuTabDesserts": "បង្អែម",
+  "menuViewCart": "មើលរទេះ ({count})",
+  "@menuViewCart": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "menuEmptyTitle": "រកមិនឃើញទំនិញ",
   "menuEmptyBody": "សូមកែតម្រូវតម្រង ឬការស្វែងរករបស់អ្នក",
   "menuFoodType": "ប្រភេទអាហារ",
@@ -215,5 +225,31 @@
   "authRegisterPhoneHint": "+855 12 345 678",
   "authRegisterErrorPhone": "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក។",
   "authRegisterSelectBranchHint": "ជ្រើសរើសសាខារបស់អ្នក",
-  "authRegisterLoadFailed": "មិនអាចទាញយកបញ្ជីបានទេ។ សូមព្យាយាមម្តងទៀត។"
+  "authRegisterLoadFailed": "មិនអាចទាញយកបញ្ជីបានទេ។ សូមព្យាយាមម្តងទៀត។",
+
+  "authForgotPasswordPageTitle": "កំណត់ពាក្យសម្ងាត់ឡើងវិញ",
+  "authForgotPasswordEmailBody": "បញ្ចូលអ៊ីម៉ែលដែលភ្ជាប់ទៅគណនីរបស់អ្នក។ យើងនឹងផ្ញើលេខកូដបន្លំ។",
+  "authForgotPasswordEmailLabel": "អ៊ីម៉ែល",
+  "authForgotPasswordEmailHint": "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក",
+  "authForgotPasswordSendCode": "ផ្ញើលេខកូដ",
+  "authForgotPasswordSending": "កំពុងផ្ញើ…",
+  "authForgotPasswordErrorEmail": "សូមបញ្ចូលអ៊ីម៉ែលត្រឹមត្រូវ។",
+  "authForgotPasswordCodeSentBody": "យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ទៅ {email}។ សូមបញ្ចូលវានៅខាងក្រោម។",
+  "@authForgotPasswordCodeSentBody": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "authForgotPasswordVerifyButton": "ផ្ទៀងផ្ទាត់លេខកូដ",
+  "authForgotPasswordVerifyFailed": "លេខកូដនេះមិនត្រឹមត្រូវ ឬផុតកំណត់ហើយ។",
+  "authForgotPasswordNewPasswordTitle": "កំណត់ពាក្យសម្ងាត់ថ្មី",
+  "authForgotPasswordNewPasswordBody": "ជ្រើសពាក្យសម្ងាត់ដែលអ្នកមិនធ្លាប់ប្រើ។",
+  "authForgotPasswordNewPasswordLabel": "ពាក្យសម្ងាត់ថ្មី",
+  "authForgotPasswordNewPasswordHint": "បញ្ចូលពាក្យសម្ងាត់ថ្មី",
+  "authForgotPasswordConfirmLabel": "បញ្ជាក់ពាក្យសម្ងាត់",
+  "authForgotPasswordConfirmHint": "បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត",
+  "authForgotPasswordResetButton": "កំណត់ឡើងវិញ",
+  "authForgotPasswordResetting": "កំពុងកំណត់ឡើងវិញ…",
+  "authForgotPasswordResetFailed": "មិនអាចកំណត់ពាក្យសម្ងាត់ឡើងវិញបានទេ។ សូមព្យាយាមម្តងទៀត។",
+  "authForgotPasswordErrorPasswordMatch": "ពាក្យសម្ងាត់មិនត្រូវគ្នា។"
 }

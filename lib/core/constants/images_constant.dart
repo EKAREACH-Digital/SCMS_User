@@ -39,6 +39,9 @@ abstract final class ImageConst {
   static const String navBarVector2 = '$_navBar/Vector-2.png';
   static const String navBarQrCode = '$_navBar/bi_qr-code.png';
 
+  // Lottie animations
+  static const String cookingLoader = '$_root/lottie/cooking_loader.json';
+
   // Dishes and drinks
   static const String beefLokLak = '$_foods/beef_lok_lak.png';
   static const String chickenWithRice = '$_foods/chicken_with_rice.png';

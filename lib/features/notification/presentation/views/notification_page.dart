@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_widgets.dart';
 import 'package:smart_canteen_user_frontend/features/notification/domain/entities/notification_item.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/viewmodels/notification_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
@@ -65,10 +62,6 @@ class _NotificationPageState extends State<NotificationPage> {
         // Not fetched yet (idle) or fetching.
         _ => const Center(child: CircularProgressIndicator()),
       },
-      bottomNavigationBar: SmartCanteenNavigationBarButton(
-        currentIndex: -1,
-        onTap: (i) => context.go(AppPaths.tabs[i]),
-      ),
     );
   }
 }

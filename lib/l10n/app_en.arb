@@ -136,6 +136,16 @@
   "daySat": "Sat",
   "daySun": "Sun",
 
+  "menuTabAll": "All",
+  "menuTabSnacks": "Snacks",
+  "menuTabDrinks": "Drinks",
+  "menuTabDesserts": "Desserts",
+  "menuViewCart": "View Cart ({count})",
+  "@menuViewCart": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "menuEmptyTitle": "No items found",
   "menuEmptyBody": "Try adjusting your filters or search",
   "menuFoodType": "Food Type",
@@ -251,5 +261,31 @@
   "authRegisterPhoneHint": "+855 12 345 678",
   "authRegisterErrorPhone": "Please enter your phone number.",
   "authRegisterSelectBranchHint": "Select your branch",
-  "authRegisterLoadFailed": "Could not load the list. Please try again."
+  "authRegisterLoadFailed": "Could not load the list. Please try again.",
+
+  "authForgotPasswordPageTitle": "Reset Password",
+  "authForgotPasswordEmailBody": "Enter the email address linked to your account. We'll send you a reset code.",
+  "authForgotPasswordEmailLabel": "Email Address",
+  "authForgotPasswordEmailHint": "Enter your email",
+  "authForgotPasswordSendCode": "Send Code",
+  "authForgotPasswordSending": "Sending…",
+  "authForgotPasswordErrorEmail": "Please enter a valid email address.",
+  "authForgotPasswordCodeSentBody": "We sent a 6-digit reset code to {email}. Enter it below.",
+  "@authForgotPasswordCodeSentBody": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "authForgotPasswordVerifyButton": "Verify Code",
+  "authForgotPasswordVerifyFailed": "That code is invalid or has expired.",
+  "authForgotPasswordNewPasswordTitle": "Set new password",
+  "authForgotPasswordNewPasswordBody": "Choose a password you haven't used before.",
+  "authForgotPasswordNewPasswordLabel": "New Password",
+  "authForgotPasswordNewPasswordHint": "Enter new password",
+  "authForgotPasswordConfirmLabel": "Confirm Password",
+  "authForgotPasswordConfirmHint": "Re-enter new password",
+  "authForgotPasswordResetButton": "Reset Password",
+  "authForgotPasswordResetting": "Resetting…",
+  "authForgotPasswordResetFailed": "Could not reset your password. Please try again.",
+  "authForgotPasswordErrorPasswordMatch": "Passwords do not match."
 }

@@ -347,6 +347,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get daySun => 'Sun';
 
   @override
+  String get menuTabAll => 'All';
+
+  @override
+  String get menuTabSnacks => 'Snacks';
+
+  @override
+  String get menuTabDrinks => 'Drinks';
+
+  @override
+  String get menuTabDesserts => 'Desserts';
+
+  @override
+  String menuViewCart(int count) {
+    return 'View Cart ($count)';
+  }
+
+  @override
   String get menuEmptyTitle => 'No items found';
 
   @override
@@ -642,4 +659,71 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authRegisterLoadFailed =>
       'Could not load the list. Please try again.';
+
+  @override
+  String get authForgotPasswordPageTitle => 'Reset Password';
+
+  @override
+  String get authForgotPasswordEmailBody =>
+      'Enter the email address linked to your account. We\'ll send you a reset code.';
+
+  @override
+  String get authForgotPasswordEmailLabel => 'Email Address';
+
+  @override
+  String get authForgotPasswordEmailHint => 'Enter your email';
+
+  @override
+  String get authForgotPasswordSendCode => 'Send Code';
+
+  @override
+  String get authForgotPasswordSending => 'Sending…';
+
+  @override
+  String get authForgotPasswordErrorEmail =>
+      'Please enter a valid email address.';
+
+  @override
+  String authForgotPasswordCodeSentBody(String email) {
+    return 'We sent a 6-digit reset code to $email. Enter it below.';
+  }
+
+  @override
+  String get authForgotPasswordVerifyButton => 'Verify Code';
+
+  @override
+  String get authForgotPasswordVerifyFailed =>
+      'That code is invalid or has expired.';
+
+  @override
+  String get authForgotPasswordNewPasswordTitle => 'Set new password';
+
+  @override
+  String get authForgotPasswordNewPasswordBody =>
+      'Choose a password you haven\'t used before.';
+
+  @override
+  String get authForgotPasswordNewPasswordLabel => 'New Password';
+
+  @override
+  String get authForgotPasswordNewPasswordHint => 'Enter new password';
+
+  @override
+  String get authForgotPasswordConfirmLabel => 'Confirm Password';
+
+  @override
+  String get authForgotPasswordConfirmHint => 'Re-enter new password';
+
+  @override
+  String get authForgotPasswordResetButton => 'Reset Password';
+
+  @override
+  String get authForgotPasswordResetting => 'Resetting…';
+
+  @override
+  String get authForgotPasswordResetFailed =>
+      'Could not reset your password. Please try again.';
+
+  @override
+  String get authForgotPasswordErrorPasswordMatch => 'Passwords do not match.';
 }

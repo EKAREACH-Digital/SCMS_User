@@ -11,6 +11,7 @@ import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_i
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/widgets/menu_page/menu_food_list_item.dart';
+import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
 /// Full menu list — sticky tab bar at the top filters by category,
 /// sticky "View Cart" button floats above the list at the bottom.
@@ -22,15 +23,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  static const _tabs = [
-    'All',
-    'Breakfast',
-    'Lunch',
-    'Dinner',
-    'Snacks',
-    'Drinks',
-    'Desserts',
-  ];
+  // Backend category identifiers — parallel to the tab labels built in build().
   static const _cats = [
     '',
     'breakfast',
@@ -54,8 +47,19 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final tabs = [
+      l10n.menuTabAll,
+      l10n.slotBreakfast,
+      l10n.slotLunch,
+      l10n.slotDinner,
+      l10n.menuTabSnacks,
+      l10n.menuTabDrinks,
+      l10n.menuTabDesserts,
+    ];
+
     return DefaultTabController(
-      length: _tabs.length,
+      length: tabs.length,
       child: Scaffold(
         backgroundColor: context.bgColor,
         appBar: AppBar(
@@ -68,7 +72,7 @@ class _MenuPageState extends State<MenuPage> {
             onPressed: () => context.pop(),
           ),
           title: Text(
-            'Home',
+            l10n.navMenu,
             style: AppFonts.heading2.copyWith(color: context.textColor),
           ),
           bottom: TabBar(
@@ -83,7 +87,7 @@ class _MenuPageState extends State<MenuPage> {
               fontWeight: AppFonts.semiBold,
             ),
             unselectedLabelStyle: AppFonts.heading4,
-            tabs: _tabs.map((t) => Tab(text: t)).toList(),
+            tabs: tabs.map((t) => Tab(text: t)).toList(),
           ),
         ),
         body: Consumer<MenuViewModel>(
@@ -94,9 +98,9 @@ class _MenuPageState extends State<MenuPage> {
                   child: switch (menu.state) {
                     ViewState.error => EmptyStateWidget(
                       icon: Icons.cloud_off_rounded,
-                      title: 'Could not load menu',
-                      body: menu.errorMessage ?? 'Please try again.',
-                      retryLabel: 'Retry',
+                      title: l10n.menuErrorTitle,
+                      body: menu.errorMessage ?? l10n.commonRetry,
+                      retryLabel: l10n.commonRetry,
                       onRetry: () => menu.load(force: true),
                     ),
                     ViewState.loading ||
@@ -107,7 +111,7 @@ class _MenuPageState extends State<MenuPage> {
                     ),
                     ViewState.success => TabBarView(
                       children: List.generate(
-                        _tabs.length,
+                        tabs.length,
                         (i) => _FoodList(
                           items: _filtered(menu.items, _cats[i]),
                         ),
@@ -145,11 +149,12 @@ class _FoodList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (items.isEmpty) {
-      return const EmptyStateWidget(
+      return EmptyStateWidget(
         icon: Icons.search_off_rounded,
-        title: 'Nothing in this category',
-        body: 'Try a different filter.',
+        title: l10n.menuEmptyTitle,
+        body: l10n.menuEmptyBody,
       );
     }
     return ListView.builder(
@@ -168,6 +173,7 @@ class _ViewCartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       decoration: BoxDecoration(
@@ -181,7 +187,7 @@ class _ViewCartBar extends StatelessWidget {
         ],
       ),
       child: SmartCanteenButton(
-        label: 'View Cart ($itemCount)',
+        label: l10n.menuViewCart(itemCount),
         onPressed: onViewCart,
       ),
     );

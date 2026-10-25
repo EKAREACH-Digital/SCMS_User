@@ -54,6 +54,7 @@ dependencies:
   qr_flutter: ^4.1.0
   pinput: ^5.0.0
   json_annotation: ^4.12.0
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -143,12 +144,12 @@ flutter:
     # Top level: bank and sign-in logos, plus msal_config.json — MSAL's Android
     # config, loaded at runtime by AndroidConfig.configFilePath.
     - assets/
-    # Dish and drink photos.
-    - assets/foods/
     # Promotional banners shown in the home screen carousel.
     - assets/banner/
     # Bottom navigation bar icons.
     - assets/navBar/
+    # Lottie animations.
+    - assets/lottie/
     # Environment config, read by AppConfig. Git-ignored — copy .env.example.
     - .env
 

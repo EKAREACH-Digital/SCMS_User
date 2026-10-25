@@ -728,6 +728,36 @@ abstract class AppLocalizations {
   /// **'Sun'**
   String get daySun;
 
+  /// No description provided for @menuTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get menuTabAll;
+
+  /// No description provided for @menuTabSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Snacks'**
+  String get menuTabSnacks;
+
+  /// No description provided for @menuTabDrinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinks'**
+  String get menuTabDrinks;
+
+  /// No description provided for @menuTabDesserts.
+  ///
+  /// In en, this message translates to:
+  /// **'Desserts'**
+  String get menuTabDesserts;
+
+  /// No description provided for @menuViewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'View Cart ({count})'**
+  String menuViewCart(int count);
+
   /// No description provided for @menuEmptyTitle.
   ///
   /// In en, this message translates to:
@@ -1285,6 +1315,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not load the list. Please try again.'**
   String get authRegisterLoadFailed;
+
+  /// No description provided for @authForgotPasswordPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get authForgotPasswordPageTitle;
+
+  /// No description provided for @authForgotPasswordEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email address linked to your account. We\'ll send you a reset code.'**
+  String get authForgotPasswordEmailBody;
+
+  /// No description provided for @authForgotPasswordEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get authForgotPasswordEmailLabel;
+
+  /// No description provided for @authForgotPasswordEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get authForgotPasswordEmailHint;
+
+  /// No description provided for @authForgotPasswordSendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Code'**
+  String get authForgotPasswordSendCode;
+
+  /// No description provided for @authForgotPasswordSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get authForgotPasswordSending;
+
+  /// No description provided for @authForgotPasswordErrorEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address.'**
+  String get authForgotPasswordErrorEmail;
+
+  /// No description provided for @authForgotPasswordCodeSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a 6-digit reset code to {email}. Enter it below.'**
+  String authForgotPasswordCodeSentBody(String email);
+
+  /// No description provided for @authForgotPasswordVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Code'**
+  String get authForgotPasswordVerifyButton;
+
+  /// No description provided for @authForgotPasswordVerifyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is invalid or has expired.'**
+  String get authForgotPasswordVerifyFailed;
+
+  /// No description provided for @authForgotPasswordNewPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set new password'**
+  String get authForgotPasswordNewPasswordTitle;
+
+  /// No description provided for @authForgotPasswordNewPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a password you haven\'t used before.'**
+  String get authForgotPasswordNewPasswordBody;
+
+  /// No description provided for @authForgotPasswordNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get authForgotPasswordNewPasswordLabel;
+
+  /// No description provided for @authForgotPasswordNewPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get authForgotPasswordNewPasswordHint;
+
+  /// No description provided for @authForgotPasswordConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get authForgotPasswordConfirmLabel;
+
+  /// No description provided for @authForgotPasswordConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter new password'**
+  String get authForgotPasswordConfirmHint;
+
+  /// No description provided for @authForgotPasswordResetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get authForgotPasswordResetButton;
+
+  /// No description provided for @authForgotPasswordResetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Resetting…'**
+  String get authForgotPasswordResetting;
+
+  /// No description provided for @authForgotPasswordResetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reset your password. Please try again.'**
+  String get authForgotPasswordResetFailed;
+
+  /// No description provided for @authForgotPasswordErrorPasswordMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get authForgotPasswordErrorPasswordMatch;
 }
 
 class _AppLocalizationsDelegate
