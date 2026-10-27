@@ -1,5 +1,3 @@
-import 'package:smart_canteen_user_frontend/features/order/domain/entities/meal_coupon.dart';
-
 /// A past order, as returned by `GET /orders/my`.
 class Order {
   final String id;
@@ -84,35 +82,57 @@ class NewOrderItem {
   }
 }
 
-/// The result of placing an order — the order plus the coupons minted for it.
+/// The result of `POST /orders/checkout`: order id + payment session details.
+///
+/// [qrImage] is an SVG URL (CutLuy) or a `data:image/png;base64,...` string
+/// (ABA PayWay). Render it based on [provider].
+/// [deeplink] is the `abamobilebank://` URI for ABA PayWay — may be null for
+/// CutLuy or when the gateway doesn't return one.
+/// [expiresAt] is the QR expiry time; may be null for ABA PayWay (default 15
+/// minutes from checkout).
 class PlacedOrder {
-  final String id;
+  final String orderId;
+  final String provider;
   final double totalAmount;
-  final String mealSession;
-  final String status;
-  final List<MealCoupon> coupons;
+  final String qrString;
+  final String qrImage;
+  final String? checkoutUrl;
+  final String? deeplink;
+  final DateTime? expiresAt;
 
   const PlacedOrder({
-    required this.id,
+    required this.orderId,
+    required this.provider,
     required this.totalAmount,
-    required this.mealSession,
-    required this.status,
-    required this.coupons,
+    required this.qrString,
+    required this.qrImage,
+    this.checkoutUrl,
+    this.deeplink,
+    this.expiresAt,
   });
 
+  /// True when this is a CutLuy (Bakong) order; false for ABA PayWay.
+  bool get isCutluy => provider == 'CUTLUY';
+
   PlacedOrder copyWith({
-    String? id,
+    String? orderId,
+    String? provider,
     double? totalAmount,
-    String? mealSession,
-    String? status,
-    List<MealCoupon>? coupons,
+    String? qrString,
+    String? qrImage,
+    String? checkoutUrl,
+    String? deeplink,
+    DateTime? expiresAt,
   }) {
     return PlacedOrder(
-      id: id ?? this.id,
+      orderId: orderId ?? this.orderId,
+      provider: provider ?? this.provider,
       totalAmount: totalAmount ?? this.totalAmount,
-      mealSession: mealSession ?? this.mealSession,
-      status: status ?? this.status,
-      coupons: coupons ?? this.coupons,
+      qrString: qrString ?? this.qrString,
+      qrImage: qrImage ?? this.qrImage,
+      checkoutUrl: checkoutUrl ?? this.checkoutUrl,
+      deeplink: deeplink ?? this.deeplink,
+      expiresAt: expiresAt ?? this.expiresAt,
     );
   }
 }

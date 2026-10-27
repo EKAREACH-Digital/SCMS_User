@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_text_field.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/form/smart_canteen_text_field.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/widgets/food_detail/food_detail_hero_image.dart';
@@ -55,20 +55,33 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
               _FoodDetailAppBar(item: item),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 120),
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                  child: _ItemNamePrice(item: item),
+                ),
+              ),
+              // Full-width divider — no horizontal padding so it reaches both edges.
+              const SliverToBoxAdapter(
+                child: Divider(
+                  color: AppColors.border,
+                  thickness: 1,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _ItemNamePrice(item: item),
-                      const SizedBox(height: 20),
                       _NoteField(controller: _noteController),
                       const SizedBox(height: 24),
-                      _QuantityRow(
-                        quantity: _quantity,
-                        onIncrement: () => setState(() => _quantity++),
-                        onDecrement: () {
-                          if (_quantity > 1) setState(() => _quantity--);
-                        },
+                      Center(
+                        child: _QuantityRow(
+                          quantity: _quantity,
+                          onIncrement: () => setState(() => _quantity++),
+                          onDecrement: () {
+                            if (_quantity > 1) setState(() => _quantity--);
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -116,10 +129,6 @@ class _FoodDetailAppBar extends StatelessWidget {
           child: const Icon(Icons.arrow_back_ios_new, size: 18),
         ),
       ),
-      title: Text(
-        'All Food',
-        style: AppFonts.heading3.copyWith(color: context.textColor),
-      ),
       flexibleSpace: FlexibleSpaceBar(
         background: FoodDetailHeroImage(item: item),
       ),
@@ -136,11 +145,10 @@ class _ItemNamePrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
+        Text(
             item.name,
             style: AppFonts.heading1.copyWith(
               color: context.textColor,
@@ -148,8 +156,7 @@ class _ItemNamePrice extends StatelessWidget {
               fontSize: 22,
             ),
           ),
-        ),
-        const SizedBox(width: 12),
+        const SizedBox(height: 12),
         Text(
           '\$${item.price.toStringAsFixed(2)}',
           style: AppFonts.heading1.copyWith(
@@ -175,11 +182,11 @@ class _NoteField extends StatelessWidget {
       controller: controller,
       label: 'Add Note',
       hintText: 'Any special requests?',
-      prefixIcon: const Icon(
-        Icons.edit_note_rounded,
-        color: AppColors.primary,
-        size: 20,
-      ),
+      // prefixIcon: const Icon(
+      //   Icons.edit_note_rounded,
+      //   color: AppColors.primary,
+      //   size: 20,
+      // ),
     );
   }
 }
@@ -199,21 +206,12 @@ class _QuantityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Quantity',
-          style: AppFonts.heading2.copyWith(color: context.textColor),
-        ),
-        QuantitySelector(
-          quantity: quantity,
-          onIncrement: onIncrement,
-          onDecrement: onDecrement,
-          minQuantity: 1,
-          size: 44,
-        ),
-      ],
+    return QuantitySelector(
+      quantity: quantity,
+      onIncrement: onIncrement,
+      onDecrement: onDecrement,
+      minQuantity: 1,
+      size: 44,
     );
   }
 }
@@ -247,7 +245,7 @@ class _AddToCartBar extends StatelessWidget {
           ),
         ],
       ),
-      child: SmartCanteenButton(
+      child: AppButton(
         label: 'Add to Cart  •  \$${total.toStringAsFixed(2)}',
         onPressed: onAddToCart,
       ),

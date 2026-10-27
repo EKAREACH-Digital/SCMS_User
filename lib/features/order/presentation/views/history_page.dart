@@ -16,17 +16,30 @@ const Color _kGray = Color(0xFF9E9E9E); // neutral
 // and dark card backgrounds, unlike a pure yellow.
 const Color _kAmber = Color(0xFFF9A825);
 
-/// [OrderRecord.status] carries the English token the state layer produces
-/// ('Completed' / 'Pending' / 'Failed'), which is also what the comparisons in
-/// this file branch on. Translate it only at the point of display.
+/// [OrderRecord.status] carries the English token the state layer produces,
+/// which is also what the comparisons in this file branch on.
+/// Translate it only at the point of display.
 String _statusLabel(AppLocalizations l10n, OrderRecord record) =>
     switch (record.status) {
+      'Awaiting Payment' => 'Awaiting Payment',
+      'Paid' => 'Paid',
+      'Preparing' => 'Preparing',
+      'Ready' => 'Ready for Pickup',
       // A finished meal order is "Redeemed" — the same word the staff
       // dashboard uses when it scans the ticket.
       'Completed' => l10n.statusRedeemed,
       'Failed' => l10n.statusFailed,
       _ => l10n.statusPending,
     };
+
+/// Color for a status badge. Green = positive progress, amber = waiting,
+/// red = money spent / failed, grey = cancelled (no charge).
+Color _statusColor(String status) => switch (status) {
+  'Paid' || 'Ready' => const Color(0xFF2E7D32), // green
+  'Completed' => _kRed, // spent = red expense
+  'Failed' => _kRed,
+  _ => _kAmber, // Awaiting Payment, Preparing, Pending
+};
 
 /// How the transaction list is ordered.
 enum _SortBy { newest, amountHigh, amountLow }
@@ -55,12 +68,22 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   _SortBy _sort = _SortBy.newest;
 
+  // Tracks the last TickerMode value so we can detect when this tab
+  // becomes active (TickerMode flips false → true on each tab switch).
+  bool? _wasTickerEnabled;
+
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _load();
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final enabled = TickerMode.valuesOf(context).enabled;
+    // Load on first visit (null → true) and on every subsequent tab switch
+    // (false → true). Ignored when the tab goes inactive (true → false).
+    if (_wasTickerEnabled != enabled && enabled) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _load();
+      });
+    }
+    _wasTickerEnabled = enabled;
   }
 
   /// Fetches history. Also the retry action on the error state.
@@ -85,6 +108,9 @@ class _HistoryPageState extends State<HistoryPage> {
     HapticFeedback.selectionClick();
     showModalBottomSheet<void>(
       context: context,
+      // The tab's own navigator sits under the nav bar, so a sheet opened there
+      // stops above it; the root navigator lets it cover the full screen.
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _SortSheet(
         current: _sort,
@@ -110,7 +136,7 @@ class _HistoryPageState extends State<HistoryPage> {
             // Once there is data, keep showing it — a failed background
             // refresh shouldn't blank out a list the user can still read.
             child: orders.isNotEmpty
-                ? _buildList(sorted)
+                ? _OrderList(sorted: sorted)
                 : state.isLoading
                 ? const _LoadingState()
                 : state.error != null
@@ -119,24 +145,6 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildList(List<OrderRecord> sorted) {
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      itemCount: sorted.length,
-      itemBuilder: (context, index) {
-        final order = sorted[index];
-        return _FadeInItem(
-          key: ValueKey('${_sort}_${order.id}'),
-          index: index,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _OrderCard(order: order),
-          ),
-        );
-      },
     );
   }
 }
@@ -179,8 +187,9 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
             tween: Tween(begin: 0, end: 1),
             duration: const Duration(milliseconds: 550),
             curve: Curves.easeInOut,
-            builder: (context, t, child) => Opacity(
+            builder: (context, t, child) => AnimatedOpacity(
               opacity: t,
+              duration: Duration.zero,
               child: Transform.translate(
                 offset: Offset(0, (1 - t) * 14),
                 child: child,
@@ -194,9 +203,9 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.historyTitle,
-                        style: TextStyle(
+                        style: AppFonts.heading1.copyWith(
                           fontSize: 24,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: AppFonts.bold,
                           color: context.textColor,
                           letterSpacing: -0.5,
                         ),
@@ -204,9 +213,8 @@ class _HistoryHeaderState extends State<_HistoryHeader> {
                       const SizedBox(height: 2),
                       Text(
                         AppLocalizations.of(context)!.historySubtitle,
-                        style: TextStyle(
+                        style: AppFonts.heading4.copyWith(
                           fontSize: 12.5,
-                          fontWeight: FontWeight.w500,
                           color: context.mutedColor,
                           letterSpacing: 0.1,
                         ),
@@ -287,6 +295,9 @@ class _OrderCardState extends State<_OrderCard> {
     HapticFeedback.selectionClick();
     showModalBottomSheet<void>(
       context: context,
+      // The tab's own navigator sits under the nav bar, so a sheet opened there
+      // stops above it; the root navigator lets it cover the full screen.
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _DetailsSheet(order: widget.order),
@@ -296,17 +307,16 @@ class _OrderCardState extends State<_OrderCard> {
   @override
   Widget build(BuildContext context) {
     final order = widget.order;
-    final isPending = order.status == 'Pending';
     final isFailed = order.status == 'Failed';
     final isCompleted = order.status == 'Completed';
+    final isInProgress = !isFailed && !isCompleted;
 
-    // Color cues: red = spent, amber = pending, grey = a cancelled order that
-    // was never charged.
-    final statusColor = isFailed || isCompleted ? _kRed : _kAmber;
+    // Color cues: red = spent/failed, amber/green = in-progress, grey = cancelled.
+    final statusColor = _statusColor(order.status);
 
     final amountColor = isFailed
         ? _kGray
-        : isPending
+        : isInProgress
         ? _kAmber
         : _kRed;
     final amountLabel = '\$${order.total.toStringAsFixed(2)}';
@@ -360,9 +370,8 @@ class _OrderCardState extends State<_OrderCard> {
                           order.items,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
+                          style: AppFonts.heading3.copyWith(
+                            fontWeight: AppFonts.bold,
                             color: context.textColor,
                             letterSpacing: -0.1,
                           ),
@@ -381,9 +390,8 @@ class _OrderCardState extends State<_OrderCard> {
                                 order.date,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: AppFonts.heading5.copyWith(
                                   fontSize: 11.5,
-                                  fontWeight: FontWeight.w500,
                                   color: context.mutedColor,
                                   letterSpacing: 0.1,
                                 ),
@@ -397,9 +405,9 @@ class _OrderCardState extends State<_OrderCard> {
                             AppLocalizations.of(
                               context,
                             )!.historyItemCount(itemCount),
-                            style: const TextStyle(
+                            style: AppFonts.heading5.copyWith(
                               fontSize: 11,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: AppFonts.semiBold,
                               color: AppColors.primary,
                             ),
                           ),
@@ -413,9 +421,8 @@ class _OrderCardState extends State<_OrderCard> {
                     children: [
                       Text(
                         amountLabel,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                        style: AppFonts.heading2.copyWith(
+                          fontWeight: AppFonts.bold,
                           color: amountColor,
                           letterSpacing: -0.3,
                         ),
@@ -513,10 +520,9 @@ class _StatusBadgeState extends State<_StatusBadge>
           ],
           Text(
             widget.label,
-            style: TextStyle(
-              fontSize: 10,
+            style: AppFonts.heading5.copyWith(
               color: widget.color,
-              fontWeight: FontWeight.w700,
+              fontWeight: AppFonts.bold,
               letterSpacing: 0.2,
             ),
           ),
@@ -530,7 +536,11 @@ class _StatusBadgeState extends State<_StatusBadge>
       animation: _controller,
       builder: (context, child) {
         final t = Curves.easeInOut.transform(_controller.value);
-        return Opacity(opacity: 0.65 + 0.35 * t, child: child);
+        return AnimatedOpacity(
+          opacity: 0.65 + 0.35 * t,
+          duration: Duration.zero,
+          child: child,
+        );
       },
       child: pill,
     );
@@ -594,9 +604,8 @@ class _ErrorState extends StatelessWidget {
             Text(
               AppLocalizations.of(context)!.historyErrorTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppFonts.heading2.copyWith(
+                fontWeight: AppFonts.bold,
                 color: context.textColor,
               ),
             ),
@@ -604,10 +613,10 @@ class _ErrorState extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppFonts.heading3.copyWith(
                 fontSize: 13,
                 color: context.mutedColor,
-                fontWeight: FontWeight.w400,
+                fontWeight: AppFonts.regular,
               ),
             ),
             const SizedBox(height: 18),
@@ -689,9 +698,9 @@ class _RetryButtonState extends State<_RetryButton> {
               _busy
                   ? AppLocalizations.of(context)!.historyRetrying
                   : AppLocalizations.of(context)!.historyRetry,
-              style: const TextStyle(
+              style: AppFonts.heading3.copyWith(
                 fontSize: 13.5,
-                fontWeight: FontWeight.w700,
+                fontWeight: AppFonts.bold,
                 color: Colors.white,
                 letterSpacing: 0.1,
               ),
@@ -730,19 +739,18 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.historyEmptyTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppFonts.heading2.copyWith(
+              fontWeight: AppFonts.bold,
               color: context.textColor,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             AppLocalizations.of(context)!.historyEmptyBody,
-            style: TextStyle(
+            style: AppFonts.heading3.copyWith(
               fontSize: 13,
               color: context.mutedColor,
-              fontWeight: FontWeight.w400,
+              fontWeight: AppFonts.regular,
             ),
           ),
         ],
@@ -816,77 +824,79 @@ class _DetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return SafeArea(
-      top: false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.cardColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-        // An order with many lines can outgrow the sheet, so the body scrolls
-        // while the grabber and title stay put.
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: context.borderColor,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        color: context.cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      // Pads inside the card (not a SafeArea around it) so the white reaches
+      // the screen edge behind the gesture bar.
+      padding: EdgeInsets.fromLTRB(
+        24,
+        12,
+        24,
+        24 + MediaQuery.paddingOf(context).bottom,
+      ),
+      // An order with many lines can outgrow the sheet, so the body scrolls
+      // while the grabber and title stay put.
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: context.borderColor,
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 18),
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: SizedBox(
-                    width: 44,
-                    height: 44,
-                    child: _FoodThumbnail(order: order),
-                  ),
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: _FoodThumbnail(order: order),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.historyOrderDetails,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: context.textColor,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        order.date,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: context.mutedColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Flexible(
-              child: SingleChildScrollView(
-                child: _FoodOrderDetails(order: order),
               ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.historyOrderDetails,
+                      style: AppFonts.heading2.copyWith(
+                        fontSize: 18,
+                        fontWeight: AppFonts.bold,
+                        color: context.textColor,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      order.date,
+                      style: AppFonts.heading4.copyWith(
+                        color: context.mutedColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Flexible(
+            child: SingleChildScrollView(
+              child: _FoodOrderDetails(order: order),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -902,51 +912,55 @@ class _SortSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.cardColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: context.borderColor,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        color: context.cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      // Pads inside the card (not a SafeArea around it) so the white reaches
+      // the screen edge behind the gesture bar.
+      padding: EdgeInsets.fromLTRB(
+        24,
+        12,
+        24,
+        24 + MediaQuery.paddingOf(context).bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: context.borderColor,
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 18),
-            Text(
-              AppLocalizations.of(context)!.commonSortBy,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: context.textColor,
-              ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            AppLocalizations.of(context)!.commonSortBy,
+            style: AppFonts.heading2.copyWith(
+              fontSize: 18,
+              fontWeight: AppFonts.bold,
+              color: context.textColor,
             ),
-            const SizedBox(height: 12),
-            for (final value in _SortBy.values)
-              _SortTile(
-                label: value.label(AppLocalizations.of(context)!),
-                icon: value.icon,
-                selected: current == value,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  onSelected(value);
-                  Navigator.pop(context);
-                },
-              ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          for (final value in _SortBy.values)
+            _SortTile(
+              label: value.label(AppLocalizations.of(context)!),
+              icon: value.icon,
+              selected: current == value,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onSelected(value);
+                Navigator.pop(context);
+              },
+            ),
+        ],
       ),
     );
   }
@@ -994,9 +1008,8 @@ class _SortTile extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              style: AppFonts.heading3.copyWith(
+                fontWeight: selected ? AppFonts.bold : AppFonts.medium,
                 color: selected ? AppColors.primary : context.textColor,
               ),
             ),
@@ -1028,9 +1041,8 @@ class _FoodOrderDetails extends StatelessWidget {
       children: [
         Text(
           l10n.historyItems,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppFonts.heading4.copyWith(
+            fontWeight: AppFonts.semiBold,
             color: context.mutedColor,
           ),
         ),
@@ -1042,9 +1054,9 @@ class _FoodOrderDetails extends StatelessWidget {
           _DetailRow(
             label: l10n.historyItems,
             value: order.items,
-            valueStyle: const TextStyle(
+            valueStyle: AppFonts.heading3.copyWith(
               fontSize: 13,
-              fontWeight: FontWeight.w600,
+              fontWeight: AppFonts.semiBold,
               color: AppColors.primary,
             ),
           )
@@ -1062,9 +1074,8 @@ class _FoodOrderDetails extends StatelessWidget {
         _DetailRow(
           label: l10n.historyTotalAmount,
           value: '\$${order.total.toStringAsFixed(2)}',
-          valueStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
+          valueStyle: AppFonts.heading3.copyWith(
+            fontWeight: AppFonts.bold,
             color: AppColors.primary,
           ),
         ),
@@ -1072,9 +1083,8 @@ class _FoodOrderDetails extends StatelessWidget {
         _DetailRow(
           label: l10n.historyInKhr,
           value: '៛${(order.total * 4000).toStringAsFixed(0)}',
-          valueStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          valueStyle: AppFonts.heading4.copyWith(
+            fontWeight: AppFonts.semiBold,
             color: context.mutedColor,
           ),
         ),
@@ -1082,10 +1092,9 @@ class _FoodOrderDetails extends StatelessWidget {
         _DetailRow(
           label: l10n.historyOrderedOn,
           value: order.date,
-          valueStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: context.textColor,
+          valueStyle: AppFonts.heading4.copyWith(
+            fontWeight: AppFonts.semiBold,
+            color: context.mutedColor,
           ),
         ),
         if (order.session != null) ...[
@@ -1093,10 +1102,9 @@ class _FoodOrderDetails extends StatelessWidget {
           _DetailRow(
             label: l10n.historyMealSession,
             value: order.session!,
-            valueStyle: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+            valueStyle: AppFonts.heading4.copyWith(
+              fontWeight: AppFonts.semiBold,
+              color: context.mutedColor,
             ),
           ),
         ],
@@ -1104,14 +1112,9 @@ class _FoodOrderDetails extends StatelessWidget {
         _DetailRow(
           label: l10n.historyStatus,
           value: _statusLabel(l10n, order),
-          valueStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: order.status == 'Completed'
-                ? AppColors.primary
-                : order.status == 'Failed'
-                ? _kRed
-                : _kAmber,
+          valueStyle: AppFonts.heading4.copyWith(
+            fontWeight: AppFonts.semiBold,
+            color: _statusColor(order.status),
           ),
         ),
       ],
@@ -1136,16 +1139,16 @@ class _OrderLineRow extends StatelessWidget {
         Container(
           constraints: const BoxConstraints(minWidth: 28),
           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(6),
-          ),
+          // decoration: BoxDecoration(
+          //   color: AppColors.primary.withValues(alpha: 0.1),
+          //   borderRadius: BorderRadius.circular(6),
+          // ),
           child: Text(
             '×${line.quantity}',
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: AppFonts.heading5.copyWith(
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: AppFonts.bold,
               color: AppColors.primary,
             ),
           ),
@@ -1159,9 +1162,9 @@ class _OrderLineRow extends StatelessWidget {
                 line.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: AppFonts.heading3.copyWith(
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: AppFonts.semiBold,
                   color: context.textColor,
                 ),
               ),
@@ -1170,7 +1173,10 @@ class _OrderLineRow extends StatelessWidget {
               if (line.unitPrice != null && line.quantity > 1)
                 Text(
                   '\$${line.unitPrice!.toStringAsFixed(2)} each',
-                  style: TextStyle(fontSize: 11, color: context.mutedColor),
+                  style: AppFonts.heading5.copyWith(
+                    fontSize: 11,
+                    color: context.mutedColor,
+                  ),
                 ),
             ],
           ),
@@ -1180,9 +1186,9 @@ class _OrderLineRow extends StatelessWidget {
           line.lineTotal == null
               ? '—'
               : '\$${line.lineTotal!.toStringAsFixed(2)}',
-          style: TextStyle(
+          style: AppFonts.heading3.copyWith(
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: AppFonts.bold,
             color: line.lineTotal == null
                 ? context.mutedColor
                 : AppColors.primary,
@@ -1210,11 +1216,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: context.mutedColor,
-          ),
+          style: AppFonts.heading4.copyWith(color: context.mutedColor),
         ),
         const SizedBox(width: 16),
         Flexible(
@@ -1223,7 +1225,7 @@ class _DetailRow extends StatelessWidget {
             textAlign: TextAlign.end,
             style:
                 valueStyle ??
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                AppFonts.heading4.copyWith(fontWeight: AppFonts.semiBold),
           ),
         ),
       ],
@@ -1231,54 +1233,23 @@ class _DetailRow extends StatelessWidget {
   }
 }
 
-// Staggered fade-in wrapper for list items
+// Sorted order list
 
-class _FadeInItem extends StatefulWidget {
-  const _FadeInItem({super.key, required this.index, required this.child});
+class _OrderList extends StatelessWidget {
+  const _OrderList({required this.sorted});
 
-  final int index;
-  final Widget child;
-
-  @override
-  State<_FadeInItem> createState() => _FadeInItemState();
-}
-
-class _FadeInItemState extends State<_FadeInItem>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _fade;
-  late final Animation<Offset> _slide;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-    _slide = Tween<Offset>(
-      begin: const Offset(0, 0.12),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-    // Stagger by index, capped so long lists don't lag.
-    final delay = Duration(milliseconds: 60 * (widget.index.clamp(0, 8)));
-    Future.delayed(delay, () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final List<OrderRecord> sorted;
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(position: _slide, child: widget.child),
+    return ListView.builder(
+      padding: EdgeInsets.fromLTRB(16, 8, 16, MediaQuery.paddingOf(context).bottom + 50),
+      itemCount: sorted.length,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: _OrderCard(order: sorted[index]),
+      ),
     );
   }
 }
+

@@ -5,7 +5,12 @@ import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/cart_entry.dart';
 
-/// Single row in the cart list: thumbnail + name + price + delete + quantity.
+/// Single row in the cart list: thumbnail · name · price · delete · quantity.
+///
+/// Layout matches the order-summary design:
+///   [image] | name (top)
+///            price
+///            [trash]  ···  [− qty +]
 class CartItemRow extends StatelessWidget {
   const CartItemRow({
     super.key,
@@ -37,22 +42,25 @@ class CartItemRow extends StatelessWidget {
         ],
       ),
       child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _CartThumbnail(entry: entry),
           const SizedBox(width: 12),
+          // Name + price
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.item.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFonts.heading3.copyWith(
-                    color: context.textColor,
-                    fontWeight: AppFonts.semiBold,
+                if (entry.item.name.isNotEmpty)
+                  Text(
+                    entry.item.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppFonts.heading3.copyWith(
+                      color: context.textColor,
+                      fontWeight: AppFonts.semiBold,
+                    ),
                   ),
-                ),
                 const SizedBox(height: 4),
                 Text(
                   '\$${(entry.item.price * entry.quantity).toStringAsFixed(2)}',
@@ -64,38 +72,46 @@ class CartItemRow extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
+          // Delete + quantity controls
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: onDelete,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: AppColors.accentRed.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(7),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _DeleteButton(onDelete: onDelete),
+                  const SizedBox(width: 20),
+                  QuantitySelector(
+                    quantity: entry.quantity,
+                    onIncrement: onIncrement,
+                    onDecrement: onDecrement,
+                    minQuantity: 1,
                   ),
-                  child: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.accentRed,
-                    size: 16,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              QuantitySelector(
-                quantity: entry.quantity,
-                onIncrement: onIncrement,
-                onDecrement: onDecrement,
-                minQuantity: 1,
-                size: 32,
+                ],
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({required this.onDelete});
+
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onDelete,
+      child: const Icon(
+          Icons.delete_outline_rounded,
+          color: AppColors.accentRed,
+          size: 28,
+        ),
     );
   }
 }
@@ -114,21 +130,21 @@ class _CartThumbnail extends StatelessWidget {
         entry.item.imagePath != null && entry.item.imagePath!.isNotEmpty;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: SizedBox(
-        width: 64,
-        height: 64,
+        width: 88,
+        height: 88,
         child: hasUrl
             ? Image.network(
                 entry.item.imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, err, st) => _Placeholder(idx: idx),
+                errorBuilder: (_, _, _) => _Placeholder(idx: idx),
               )
             : hasAsset
             ? Image.asset(
                 entry.item.imagePath!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, err, st) => _Placeholder(idx: idx),
+                errorBuilder: (_, _, _) => _Placeholder(idx: idx),
               )
             : _Placeholder(idx: idx),
       ),
@@ -154,7 +170,7 @@ class _Placeholder extends StatelessWidget {
       child: Icon(
         kFoodIcons[idx % kFoodIcons.length],
         color: AppColors.onPrimary.withValues(alpha: 0.8),
-        size: 24,
+        size: 28,
       ),
     );
   }

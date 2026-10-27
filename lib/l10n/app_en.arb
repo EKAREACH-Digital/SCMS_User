@@ -170,6 +170,15 @@
   "cartScholarDiscount": "Scholar Discount",
   "cartServiceFee": "Service Fee",
   "cartTotal": "Total",
+  "cartTitle": "Cart",
+  "cartItemSection": "Item",
+  "cartPaymentSummary": "Payment Summary",
+  "cartDiscount": "Discount",
+  "cartApplyCoupon": "Apply coupon",
+  "cartSelectPaymentMethod": "Select Payment Method",
+  "cartCheckout": "Checkout",
+  "cartBrowseMenu": "Browse Menu",
+  "cartPaymentComingSoon": "Payment flow will be connected here.",
 
   "couponExpiredTitle": "Coupon Expired",
   "couponExpiredBody": "Your QR ticket has expired. Please purchase a new coupon to continue.",
@@ -287,5 +296,11 @@
   "authForgotPasswordResetButton": "Reset Password",
   "authForgotPasswordResetting": "Resetting…",
   "authForgotPasswordResetFailed": "Could not reset your password. Please try again.",
-  "authForgotPasswordErrorPasswordMatch": "Passwords do not match."
+  "authForgotPasswordErrorPasswordMatch": "Passwords do not match.",
+
+  "dialogOkButton": "OK",
+
+  "paymentQuitTitle": "Quit payment?",
+  "paymentQuitBody": "Your order has not been paid. Are you sure you want to leave?",
+  "paymentQuitConfirm": "Yes, quit"
 }

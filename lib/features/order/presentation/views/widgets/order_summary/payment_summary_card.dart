@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
 /// Subtotal / Discount / Total card with a dotted divider above the total row.
 ///
@@ -19,31 +20,20 @@ class PaymentSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: BoxDecoration(color: context.cardColor),
       child: Column(
         children: [
           _SummaryRow(
-            label: 'Sub Total',
+            label: l10n.cartSubtotal,
             value: '\$${subtotal.toStringAsFixed(2)}',
             labelStyle: AppFonts.heading3.copyWith(color: context.mutedColor),
             valueStyle: AppFonts.heading3.copyWith(color: context.textColor),
           ),
           const SizedBox(height: 10),
           _SummaryRow(
-            label: 'Discount',
+            label: l10n.cartDiscount,
             value: discount > 0
                 ? '-\$${discount.toStringAsFixed(2)}'
                 : '\$0.00',
@@ -56,7 +46,7 @@ class PaymentSummaryCard extends StatelessWidget {
           const _DottedDivider(),
           const SizedBox(height: 12),
           _SummaryRow(
-            label: 'Total',
+            label: l10n.cartTotal,
             value: '\$${total.toStringAsFixed(2)}',
             labelStyle: AppFonts.heading2.copyWith(color: context.textColor),
             valueStyle: AppFonts.heading2.copyWith(color: AppColors.primary),
@@ -92,29 +82,46 @@ class _SummaryRow extends StatelessWidget {
   }
 }
 
-/// A row of evenly-spaced dashes that mimics a dashed/dotted horizontal rule.
+/// Dashed horizontal rule drawn with [CustomPainter] so it fills the exact
+/// available width with no gap on the right.
 class _DottedDivider extends StatelessWidget {
   const _DottedDivider();
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const dashWidth = 6.0;
-        const dashSpace = 4.0;
-        final count = (constraints.maxWidth / (dashWidth + dashSpace)).floor();
-        return Row(
-          children: List.generate(
-            count,
-            (_) => Container(
-              width: dashWidth,
-              height: 1.5,
-              margin: const EdgeInsets.only(right: dashSpace),
-              color: AppColors.border,
-            ),
-          ),
-        );
-      },
+    return const SizedBox(
+      height: 1.5,
+      width: double.infinity,
+      child: CustomPaint(
+        painter: _DashPainter(color: AppColors.darkBackground),
+      ),
     );
   }
+}
+
+class _DashPainter extends CustomPainter {
+  const _DashPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const dashWidth = 6.0;
+    const dashSpace = 4.0;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = size.height
+      ..strokeCap = StrokeCap.square;
+
+    final y = size.height / 2;
+    double x = 0;
+    while (x < size.width) {
+      final end = (x + dashWidth).clamp(0.0, size.width);
+      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
+      x += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashPainter old) => old.color != color;
 }

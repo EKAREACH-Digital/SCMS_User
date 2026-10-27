@@ -261,7 +261,8 @@ class AuthRemoteDatasource implements AuthDatasource {
     required String currentPassword,
     required String newPassword,
   }) async {
-    // POST /auth/password/change — temporary-password accounts pick a new one.
+    // POST /auth/password/change — temporary-password accounts pick a new one,
+    // and signed-in users change theirs from Settings.
     await _post(ApiConfig.changePassword, {
       'current_password': currentPassword,
       'new_password': newPassword,

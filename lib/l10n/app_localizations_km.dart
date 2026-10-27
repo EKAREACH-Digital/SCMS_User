@@ -428,6 +428,33 @@ class AppLocalizationsKm extends AppLocalizations {
   String get cartTotal => 'សរុប';
 
   @override
+  String get cartTitle => 'រទេះទំនិញ';
+
+  @override
+  String get cartItemSection => 'ទំនិញ';
+
+  @override
+  String get cartPaymentSummary => 'សេចក្តីសង្ខេបការទូទាត់';
+
+  @override
+  String get cartDiscount => 'បញ្ចុះតម្លៃ';
+
+  @override
+  String get cartApplyCoupon => 'ប្រើគូប៉ុង';
+
+  @override
+  String get cartSelectPaymentMethod => 'ជ្រើសរើសវិធីទូទាត់';
+
+  @override
+  String get cartCheckout => 'ទូទាត់';
+
+  @override
+  String get cartBrowseMenu => 'មើលម៉ឺនុយ';
+
+  @override
+  String get cartPaymentComingSoon => 'ការទូទាត់នឹងត្រូវភ្ជាប់នៅទីនេះ។';
+
+  @override
   String get couponExpiredTitle => 'គូប៉ុងផុតកំណត់';
 
   @override
@@ -728,4 +755,17 @@ class AppLocalizationsKm extends AppLocalizations {
   @override
   String get authForgotPasswordErrorPasswordMatch =>
       'ពាក្យសម្ងាត់មិនត្រូវគ្នា។';
+
+  @override
+  String get dialogOkButton => 'យល់ព្រម';
+
+  @override
+  String get paymentQuitTitle => 'ចាកចេញពីការទូទាត់?';
+
+  @override
+  String get paymentQuitBody =>
+      'ការបញ្ជាទិញរបស់អ្នកមិនទាន់បានទូទាត់នៅឡើយ។ តើអ្នកប្រាកដថាចង់ចាកចេញ?';
+
+  @override
+  String get paymentQuitConfirm => 'បាទ/ចាស ចាកចេញ';
 }

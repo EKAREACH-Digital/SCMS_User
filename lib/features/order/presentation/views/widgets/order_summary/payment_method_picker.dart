@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:smart_canteen_user_frontend/core/constants/images_constant.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
 /// Available payment methods shown in the cart screen.
 enum CartPaymentMethod { bakong, abaPay }
 
-/// Radio-style payment method picker.
+/// Radio-style payment method picker with bank logos.
 class PaymentMethodPicker extends StatelessWidget {
   const PaymentMethodPicker({
     super.key,
@@ -22,21 +24,26 @@ class PaymentMethodPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Payment Method',
-          style: AppFonts.heading2.copyWith(color: context.textColor),
+          AppLocalizations.of(context)!.cartSelectPaymentMethod,
+          style: AppFonts.heading2.copyWith(
+            color: AppColors.primary,
+            fontWeight: AppFonts.semiBold,
+          ),
         ),
         const SizedBox(height: 12),
         _MethodTile(
+          logo: ImageConst.bakong,
           label: 'BAKONG',
-          icon: Icons.account_balance_wallet_outlined,
+          subtitle: 'ទូទាត់តាម បាគង',
           value: CartPaymentMethod.bakong,
           selected: selected,
           onTap: () => onChanged(CartPaymentMethod.bakong),
         ),
         const SizedBox(height: 8),
         _MethodTile(
+          logo: ImageConst.aba,
           label: 'ABA PAY',
-          icon: Icons.credit_card_outlined,
+          subtitle: 'ទូទាត់តាម ABA',
           value: CartPaymentMethod.abaPay,
           selected: selected,
           onTap: () => onChanged(CartPaymentMethod.abaPay),
@@ -48,15 +55,17 @@ class PaymentMethodPicker extends StatelessWidget {
 
 class _MethodTile extends StatelessWidget {
   const _MethodTile({
+    required this.logo,
     required this.label,
-    required this.icon,
+    required this.subtitle,
     required this.value,
     required this.selected,
     required this.onTap,
   });
 
+  final String logo;
   final String label;
-  final IconData icon;
+  final String subtitle;
   final CartPaymentMethod value;
   final CartPaymentMethod selected;
   final VoidCallback onTap;
@@ -69,11 +78,9 @@ class _MethodTile extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.07)
-              : context.cardColor,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.border,
@@ -82,15 +89,35 @@ class _MethodTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary, size: 20),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                logo,
+                width: 44,
+                height: 44,
+                fit: BoxFit.cover,
+              ),
+            ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                label,
-                style: AppFonts.heading3.copyWith(
-                  color: context.textColor,
-                  fontWeight: isSelected ? AppFonts.semiBold : AppFonts.regular,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppFonts.heading3.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: AppFonts.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: AppFonts.heading4.copyWith(
+                      color: context.mutedColor,
+                    ),
+                  ),
+                ],
               ),
             ),
             AnimatedContainer(
@@ -103,7 +130,6 @@ class _MethodTile extends StatelessWidget {
                   color: isSelected ? AppColors.primary : AppColors.border,
                   width: isSelected ? 6 : 1.5,
                 ),
-                color: isSelected ? AppColors.primary : Colors.transparent,
               ),
             ),
           ],

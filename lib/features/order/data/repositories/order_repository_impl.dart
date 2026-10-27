@@ -11,26 +11,36 @@ class OrderRepositoryImpl implements OrderRepository {
 
   @override
   Future<PlacedOrder> placeOrder({
-    required String schoolId,
+    required String menuId,
     required String mealSession,
     required List<NewOrderItem> items,
+    required String provider,
+    String currency = 'USD',
+    String? branchId,
   }) async {
     final dto = await _datasource.placeOrder(
-      schoolId: schoolId,
+      menuId: menuId,
       mealSession: mealSession,
       items: [
         for (final i in items)
           OrderItemInput(menuItemId: i.menuItemId, quantity: i.quantity),
       ],
+      provider: provider,
+      currency: currency,
+      branchId: branchId,
     );
     return dto.toEntity();
   }
 
   @override
-  Future<List<MealCoupon>> getActiveCoupons() async =>
-      (await _datasource.getActiveCoupons()).map((c) => c.toEntity()).toList();
+  Future<Order> getOrderById(String orderId) async =>
+      (await _datasource.getOrderById(orderId)).toEntity();
 
   @override
   Future<List<Order>> getMyOrders() async =>
       (await _datasource.getMyOrders()).map((o) => o.toEntity()).toList();
+
+  @override
+  Future<List<MealCoupon>> getActiveCoupons() async =>
+      (await _datasource.getActiveCoupons()).map((c) => c.toEntity()).toList();
 }

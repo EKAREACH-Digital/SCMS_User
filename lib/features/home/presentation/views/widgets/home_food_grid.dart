@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 
@@ -54,7 +55,7 @@ class HomeFoodCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Image section ─────────────────────────────────────────────
+          // Image section
           Stack(
             children: [
               ClipRRect(
@@ -67,19 +68,40 @@ class HomeFoodCard extends StatelessWidget {
               Positioned(
                 bottom: 8,
                 right: 8,
+                // Watches the cart quantity for this item.
+                // When quantity is 0 --> shows a '+' circle that adds the item
+                // directly to the cart on tap.
+                // When quantity > 0 --> transforms into an inline QuantitySelector
+                // so the user can adjust without leaving the screen.
+                // Tapping the card image still navigates to the detail page.
                 child: Consumer<CartViewModel>(
-                  builder: (context, cart, _) => _CircularAddButton(
-                    inCart: cart.quantityOf(item.id) > 0,
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      cart.add(item);
-                    },
-                  ),
+                  builder: (context, cart, _) {
+                    final qty = cart.quantityOf(item.id);
+                    if (qty == 0) {
+                      return _CircularAddButton(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          cart.add(item);
+                        },
+                      );
+                    }
+                    return _OverlayQuantity(
+                      quantity: qty,
+                      onIncrement: () {
+                        HapticFeedback.lightImpact();
+                        cart.increment(item.id);
+                      },
+                      onDecrement: () {
+                        HapticFeedback.lightImpact();
+                        cart.decrement(item.id);
+                      },
+                    );
+                  },
                 ),
               ),
             ],
           ),
-          // ── Text details ──────────────────────────────────────────────
+          // Text details
           const SizedBox(height: 8),
           Text(
             item.name,
@@ -159,11 +181,12 @@ class _Placeholder extends StatelessWidget {
   }
 }
 
-/// Circular add/check button overlaid at the bottom-right of the image.
+/// Initial state: a single filled circle with a `+` icon.
+/// Tapping immediately adds one unit to the cart, which causes the parent
+/// [Consumer] to rebuild with qty > 0 and swap this for [_OverlayQuantity].
 class _CircularAddButton extends StatelessWidget {
-  const _CircularAddButton({required this.inCart, required this.onTap});
+  const _CircularAddButton({required this.onTap});
 
-  final bool inCart;
   final VoidCallback onTap;
 
   @override
@@ -174,7 +197,7 @@ class _CircularAddButton extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: inCart ? AppColors.secondary : AppColors.primary,
+          color: AppColors.primary,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
@@ -184,11 +207,40 @@ class _CircularAddButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Icon(
-          inCart ? Icons.check_rounded : Icons.add_rounded,
-          color: AppColors.onPrimary,
-          size: 18,
-        ),
+        child: const Icon(Icons.add_rounded, color: AppColors.onPrimary, size: 18),
+      ),
+    );
+  }
+}
+
+/// Transformed state: replaces the `+` circle once qty > 0.
+/// Uses [QuantitySelector] at a compact size to fit the image overlay.
+/// Decrementing to 0 causes the parent [Consumer] to swap back to
+/// [_CircularAddButton].
+class _OverlayQuantity extends StatelessWidget {
+  const _OverlayQuantity({
+    required this.quantity,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
+
+  final int quantity;
+  final VoidCallback onIncrement;
+  final VoidCallback onDecrement;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      decoration: BoxDecoration(
+        color: context.cardColor.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(32),
+      ),
+      child: QuantitySelector(
+        quantity: quantity,
+        onIncrement: onIncrement,
+        onDecrement: onDecrement,
+        size: 26,
       ),
     );
   }

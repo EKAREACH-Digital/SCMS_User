@@ -144,6 +144,15 @@
   "cartScholarDiscount": "ការបញ្ចុះតម្លៃសម្រាប់សិស្ស",
   "cartServiceFee": "ថ្លៃសេវា",
   "cartTotal": "សរុប",
+  "cartTitle": "រទេះទំនិញ",
+  "cartItemSection": "ទំនិញ",
+  "cartPaymentSummary": "សេចក្តីសង្ខេបការទូទាត់",
+  "cartDiscount": "បញ្ចុះតម្លៃ",
+  "cartApplyCoupon": "ប្រើគូប៉ុង",
+  "cartSelectPaymentMethod": "ជ្រើសរើសវិធីទូទាត់",
+  "cartCheckout": "ទូទាត់",
+  "cartBrowseMenu": "មើលម៉ឺនុយ",
+  "cartPaymentComingSoon": "ការទូទាត់នឹងត្រូវភ្ជាប់នៅទីនេះ។",
 
   "couponExpiredTitle": "គូប៉ុងផុតកំណត់",
   "couponExpiredBody": "សំបុត្រ QR របស់អ្នកបានផុតកំណត់។ សូមទិញគូប៉ុងថ្មីដើម្បីបន្ត។",
@@ -251,5 +260,11 @@
   "authForgotPasswordResetButton": "កំណត់ឡើងវិញ",
   "authForgotPasswordResetting": "កំពុងកំណត់ឡើងវិញ…",
   "authForgotPasswordResetFailed": "មិនអាចកំណត់ពាក្យសម្ងាត់ឡើងវិញបានទេ។ សូមព្យាយាមម្តងទៀត។",
-  "authForgotPasswordErrorPasswordMatch": "ពាក្យសម្ងាត់មិនត្រូវគ្នា។"
+  "authForgotPasswordErrorPasswordMatch": "ពាក្យសម្ងាត់មិនត្រូវគ្នា។",
+
+  "dialogOkButton": "យល់ព្រម",
+
+  "paymentQuitTitle": "ចាកចេញពីការទូទាត់?",
+  "paymentQuitBody": "ការបញ្ជាទិញរបស់អ្នកមិនទាន់បានទូទាត់នៅឡើយ។ តើអ្នកប្រាកដថាចង់ចាកចេញ?",
+  "paymentQuitConfirm": "បាទ/ចាស ចាកចេញ"
 }

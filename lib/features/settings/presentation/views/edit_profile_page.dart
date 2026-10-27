@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/settings_widgets.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
+import 'package:smart_canteen_user_frontend/features/settings/presentation/views/widgets/settings_widgets.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -211,7 +211,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   const SizedBox(height: 36),
                   SettingsFadeIn(
                     index: 3,
-                    child: SmartCanteenButton(
+                    child: AppButton(
                       label: _saving ? 'Saving…' : 'Save Changes',
                       gradient: const LinearGradient(
                         colors: [AppColors.primaryDark, AppColors.primaryLight],
@@ -287,9 +287,9 @@ class _AvatarPicker extends StatelessWidget {
                   : Center(
                       child: Text(
                         initials,
-                        style: const TextStyle(
+                        style: AppFonts.heading1.copyWith(
                           fontSize: 34,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: AppFonts.bold,
                           color: AppColors.primary,
                         ),
                       ),
@@ -348,10 +348,9 @@ class _LabeledField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: AppFonts.heading3.copyWith(
             color: AppColors.primary,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppFonts.semiBold,
             letterSpacing: 0.2,
           ),
         ),
@@ -361,9 +360,9 @@ class _LabeledField extends StatelessWidget {
           keyboardType: keyboardType,
           validator: validator,
           readOnly: readOnly,
-          style: TextStyle(
+          style: AppFonts.heading2.copyWith(
             fontSize: 15,
-            fontWeight: FontWeight.w500,
+            fontWeight: AppFonts.medium,
             color: readOnly ? context.mutedColor : context.textColor,
           ),
           decoration: InputDecoration(
@@ -377,9 +376,8 @@ class _LabeledField extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             helper!,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+            style: AppFonts.heading4.copyWith(
+              fontWeight: AppFonts.medium,
               color: context.mutedColor,
             ),
           ),
@@ -426,9 +424,9 @@ class _SheetOption extends StatelessWidget {
               const SizedBox(width: 14),
               Text(
                 label,
-                style: TextStyle(
+                style: AppFonts.heading2.copyWith(
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: AppFonts.semiBold,
                   color: color,
                 ),
               ),

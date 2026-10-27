@@ -10,8 +10,8 @@ import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 /// Wraps [GlassTabBar.bottom] from `liquid_glass_widgets` to provide the
 /// same 5-tab navigation (Home / Menu / QR / History / Settings) that the
 /// app shell (`ScaffoldWithNavBar` in `app_router.dart`) switches between.
-class SmartCanteenNavigationBarButton extends StatelessWidget {
-  const SmartCanteenNavigationBarButton({
+class AppNavigationBar extends StatelessWidget {
+  const AppNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
@@ -44,8 +44,8 @@ class SmartCanteenNavigationBarButton extends StatelessWidget {
           label: l10n.navHome,
         ),
         GlassTab(
-          icon: const Icon(Icons.shopping_cart_rounded),
-          label: l10n.navCart,
+          icon: const Icon(Icons.restaurant_menu_rounded),
+          label: l10n.navMenu,
         ),
         GlassTab(
           icon: const Icon(Icons.qr_code_scanner_rounded),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr/qr.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
@@ -15,11 +15,14 @@ import 'package:smart_canteen_user_frontend/features/payment/presentation/viewmo
 import 'package:smart_canteen_user_frontend/features/wallet/presentation/viewmodels/balance_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
+/// [Deprecated_File]
+///  Left over from before refactor
+
 /// Gateway-backed wallet top-up.
 ///
-/// Flow: ask our backend to open a payment session → show the KHQR (and an
-/// "open ABA" shortcut for same-device payment) → poll until the backend says
-/// it's paid → refresh the wallet balance.
+/// Flow: ask our backend to open a payment session --> show the KHQR (and an
+/// "open ABA" shortcut for same-device payment) --> poll until the backend says
+/// it's paid --> refresh the wallet balance.
 ///
 /// Confirmation is poll-driven because the gateway's callback can't reach a
 /// local dev backend. In production both paths run; the backend settles once.
@@ -119,9 +122,7 @@ class _TopUpPageState extends State<TopUpPage> with WidgetsBindingObserver {
     });
 
     try {
-      final session = await context.read<TopUpViewModel>().startTopUp(
-        amount,
-      );
+      final session = await context.read<TopUpViewModel>().startTopUp(amount);
       if (!mounted) return;
       setState(() {
         _session = session;
@@ -357,9 +358,9 @@ class _PreparingView extends StatelessWidget {
         children: [
           Text(
             '\$${amountUsd.toStringAsFixed(2)}',
-            style: const TextStyle(
+            style: AppFonts.heading1.copyWith(
               fontSize: 30,
-              fontWeight: FontWeight.w800,
+              fontWeight: AppFonts.bold,
               color: AppColors.primary,
             ),
           ),
@@ -375,7 +376,10 @@ class _PreparingView extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             l10n.topupPreparing,
-            style: TextStyle(fontSize: 13.5, color: context.mutedColor),
+            style: AppFonts.heading3.copyWith(
+              fontSize: 13.5,
+              color: context.mutedColor,
+            ),
           ),
         ],
       ),
@@ -407,9 +411,9 @@ class _WaitingView extends StatelessWidget {
         Text(
           '\$${session.amountUsd.toStringAsFixed(2)}',
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: AppFonts.heading1.copyWith(
             fontSize: 30,
-            fontWeight: FontWeight.w800,
+            fontWeight: AppFonts.bold,
             color: AppColors.primary,
           ),
         ),
@@ -430,18 +434,14 @@ class _WaitingView extends StatelessWidget {
                 ),
               ],
             ),
-            child: QrImageView(
-              data: session.qrString,
-              size: 220,
-              backgroundColor: Colors.white,
-            ),
+            child: _QrWidget(data: session.qrString, size: 220),
           ),
         ),
         const SizedBox(height: 20),
         Text(
           l10n.topupScanHint,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: AppFonts.heading3.copyWith(
             fontSize: 13,
             color: context.mutedColor,
             height: 1.5,
@@ -461,7 +461,10 @@ class _WaitingView extends StatelessWidget {
           Text(
             error!,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12.5, color: Color(0xFFE53935)),
+            style: AppFonts.heading4.copyWith(
+              fontSize: 12.5,
+              color: const Color(0xFFE53935),
+            ),
           ),
         ],
         const SizedBox(height: 24),
@@ -479,7 +482,10 @@ class _WaitingView extends StatelessWidget {
             const SizedBox(width: 10),
             Text(
               l10n.topupWaiting,
-              style: TextStyle(fontSize: 13.5, color: context.mutedColor),
+              style: AppFonts.heading3.copyWith(
+                fontSize: 13.5,
+                color: context.mutedColor,
+              ),
             ),
           ],
         ),
@@ -530,9 +536,9 @@ class _FailedView extends StatelessWidget {
         Text(
           l10n.topupNotCompletedTitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: AppFonts.heading1.copyWith(
             fontSize: 19,
-            fontWeight: FontWeight.w800,
+            fontWeight: AppFonts.bold,
             color: context.textColor,
           ),
         ),
@@ -541,8 +547,7 @@ class _FailedView extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
+            style: AppFonts.heading3.copyWith(
               color: context.mutedColor,
               height: 1.5,
             ),
@@ -562,6 +567,67 @@ class _FailedView extends StatelessWidget {
       ],
     );
   }
+}
+
+// QR code renderer
+
+/// Renders [data] as a QR code using the `qr` package matrix.
+/// The white background is provided by the caller's container.
+class _QrWidget extends StatelessWidget {
+  const _QrWidget({required this.data, required this.size});
+
+  final String data;
+  final double size;
+
+  static QrImage _parseQrImage(String data) {
+    // QrCode.fromData auto-selects the smallest type number that fits the data.
+    final code = QrCode.fromData(
+      data: data,
+      errorCorrectLevel: QrErrorCorrectLevel.M,
+    );
+    return QrImage(code);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final qrImage = _parseQrImage(data);
+    return CustomPaint(
+      size: Size(size, size),
+      painter: _QrPainter(qrImage: qrImage),
+    );
+  }
+}
+
+class _QrPainter extends CustomPainter {
+  const _QrPainter({required this.qrImage});
+
+  final QrImage qrImage;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.black;
+    final moduleCount = qrImage.moduleCount;
+    final moduleSize = size.width / moduleCount;
+
+    for (var row = 0; row < moduleCount; row++) {
+      for (var col = 0; col < moduleCount; col++) {
+        if (qrImage.isDark(row, col)) {
+          canvas.drawRect(
+            Rect.fromLTWH(
+              col * moduleSize,
+              row * moduleSize,
+              moduleSize,
+              moduleSize,
+            ),
+            paint,
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_QrPainter oldDelegate) => qrImage != oldDelegate.qrImage;
 }
 
 // Success
@@ -598,9 +664,9 @@ class _PaidView extends StatelessWidget {
         Text(
           l10n.topupSuccessTitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: AppFonts.heading1.copyWith(
             fontSize: 19,
-            fontWeight: FontWeight.w800,
+            fontWeight: AppFonts.bold,
             color: context.textColor,
           ),
         ),
@@ -608,7 +674,7 @@ class _PaidView extends StatelessWidget {
         Text(
           l10n.topupSuccessBody('\$${amountUsd.toStringAsFixed(2)}'),
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: context.mutedColor),
+          style: AppFonts.heading3.copyWith(color: context.mutedColor),
         ),
         const SizedBox(height: 32),
         FilledButton(

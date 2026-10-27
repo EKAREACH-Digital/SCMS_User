@@ -5,12 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/app_dialog.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/settings_widgets.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/dialog/app_dialog.dart';
+import 'package:smart_canteen_user_frontend/features/settings/presentation/views/widgets/settings_widgets.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
 import 'package:smart_canteen_user_frontend/features/payment/domain/entities/saved_card.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/viewmodels/payment_methods_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/widgets/add_card_sheet.dart';
+
+/// [Deprecated_File]
+///  Left over from before refactor
 
 class PaymentMethodsPage extends StatelessWidget {
   const PaymentMethodsPage({super.key});
@@ -56,7 +59,7 @@ class PaymentMethodsPage extends StatelessWidget {
             top: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
-              child: SmartCanteenButton(
+              child: AppButton(
                 label: 'Add New Card',
                 gradient: const LinearGradient(
                   colors: [AppColors.primaryDark, AppColors.primaryLight],
@@ -87,7 +90,10 @@ class PaymentMethodsPage extends StatelessWidget {
       title: 'Remove Card',
       body: Text(
         'Remove the ${card.brand.label} card ending in ${card.last4}?',
-        style: TextStyle(color: context.mutedColor, fontSize: 14, height: 1.4),
+        style: AppFonts.heading3.copyWith(
+          color: context.mutedColor,
+          height: 1.4,
+        ),
       ),
       confirmLabel: 'Remove',
       isDestructive: true,
@@ -152,10 +158,10 @@ class _CardTile extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     card.brand.label,
-                    style: const TextStyle(
+                    style: AppFonts.heading2.copyWith(
                       color: Colors.white,
                       fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: AppFonts.bold,
                     ),
                   ),
                   const Spacer(),
@@ -169,12 +175,11 @@ class _CardTile extends StatelessWidget {
                         color: Colors.white.withValues(alpha: 0.22),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Default',
-                        style: TextStyle(
+                        style: AppFonts.heading5.copyWith(
                           color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: AppFonts.bold,
                           letterSpacing: 0.3,
                         ),
                       ),
@@ -193,10 +198,9 @@ class _CardTile extends StatelessWidget {
               const SizedBox(height: 22),
               Text(
                 '•••• •••• •••• ${card.last4}',
-                style: const TextStyle(
+                style: AppFonts.heading1.copyWith(
                   color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: AppFonts.semiBold,
                   letterSpacing: 2,
                 ),
               ),
@@ -210,10 +214,10 @@ class _CardTile extends StatelessWidget {
                       children: [
                         Text(
                           'CARD HOLDER',
-                          style: TextStyle(
+                          style: AppFonts.heading5.copyWith(
                             color: Colors.white.withValues(alpha: 0.7),
                             fontSize: 9,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: AppFonts.semiBold,
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -222,10 +226,10 @@ class _CardTile extends StatelessWidget {
                           card.holder,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: AppFonts.heading3.copyWith(
                             color: Colors.white,
                             fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: AppFonts.semiBold,
                           ),
                         ),
                       ],
@@ -236,20 +240,20 @@ class _CardTile extends StatelessWidget {
                     children: [
                       Text(
                         'EXPIRES',
-                        style: TextStyle(
+                        style: AppFonts.heading5.copyWith(
                           color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 9,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: AppFonts.semiBold,
                           letterSpacing: 0.5,
                         ),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         card.expiry,
-                        style: const TextStyle(
+                        style: AppFonts.heading3.copyWith(
                           color: Colors.white,
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: AppFonts.semiBold,
                         ),
                       ),
                     ],
@@ -296,16 +300,18 @@ class _EmptyCards extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No cards saved',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppFonts.heading2.copyWith(
+              fontWeight: AppFonts.bold,
               color: context.textColor,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'Add a card to pay faster at checkout',
-            style: TextStyle(fontSize: 13, color: context.mutedColor),
+            style: AppFonts.heading3.copyWith(
+              fontSize: 13,
+              color: context.mutedColor,
+            ),
           ),
         ],
       ),

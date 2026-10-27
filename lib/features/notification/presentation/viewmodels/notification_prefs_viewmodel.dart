@@ -4,7 +4,7 @@ import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
 import 'package:smart_canteen_user_frontend/features/notification/domain/repositories/notification_repository.dart';
 
-/// User-controllable notification preferences shown in Settings → Notifications.
+/// User-controllable notification preferences shown in Settings --> Notifications.
 ///
 /// Loaded for the signed-in user (`GET /users/me`) and persisted
 /// (`PATCH /users/:id/notification-preferences`) on every toggle. Updates are

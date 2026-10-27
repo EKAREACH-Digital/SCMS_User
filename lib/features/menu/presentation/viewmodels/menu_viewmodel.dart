@@ -3,46 +3,52 @@ import 'package:flutter/foundation.dart';
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
+import 'package:smart_canteen_user_frontend/features/menu/domain/entities/daily_menu.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/repositories/menu_repository.dart';
 
-/// Loads the backend menu once and shares it between the home and menu
-/// screens (and the cart). The backend has no ratings, so cards fall back to
-/// gradient + icon placeholders for anything it doesn't provide.
+/// Loads today's active menu for the user's home branch and shares it between
+/// the home and menu screens (and the cart). Uses `GET /menus/active?branch_id=`
+/// so only dishes scheduled for today are shown.
 class MenuViewModel extends ChangeNotifier {
   MenuViewModel(this._menuRepository);
 
   final MenuRepository _menuRepository;
 
   ViewState _state = ViewState.idle;
-  List<FoodItem> _items = const [];
+  DailyMenu? _dailyMenu;
   String? _errorMessage;
 
   ViewState get state => _state;
 
-  /// The loaded dishes; empty until [state] is [ViewState.success].
-  List<FoodItem> get items => _items;
+  /// Every dish across all canteens for today; empty until [state] is [ViewState.success].
+  List<FoodItem> get items => _dailyMenu?.items ?? const [];
+
+  /// The loaded daily menu; null until [state] is [ViewState.success].
+  DailyMenu? get dailyMenu => _dailyMenu;
 
   /// Why the last load failed; null unless [state] is [ViewState.error].
   String? get errorMessage => _errorMessage;
 
-  /// The school the loaded menu belongs to — used to scope a placed order to
-  /// the correct tenant. Captured from the fetched items.
-  String? _schoolId;
-  String? get schoolId => _schoolId;
-
-  /// Loads the menu. No-ops once loaded unless [force] is set.
-  Future<void> load({String? schoolId, bool force = false}) async {
+  /// `GET /menus/active` — today's orderable dishes for [branchId] (the user's
+  /// `home_branch_id`). No-ops once loaded unless [force] is set. When
+  /// [branchId] is null the call is skipped and the error state is shown.
+  Future<void> load({String? branchId, bool force = false}) async {
     if (_state == ViewState.success && !force) return;
+
+    if (branchId == null) {
+      _errorMessage = 'No branch selected. Please complete your profile.';
+      _setState(ViewState.error);
+      return;
+    }
 
     _setState(ViewState.loading);
     try {
-      final foods = await _menuRepository.getMenuItems(schoolId: schoolId);
-      _schoolId = foods.isNotEmpty ? foods.first.schoolId : null;
-      _items = foods;
+      // GET /menus/active — today's menu for the student's home branch.
+      _dailyMenu = await _menuRepository.getActiveMenu(branchId: branchId);
       _setState(ViewState.success);
     } catch (e, s) {
-      AppLogger.e('Loading the menu failed', e, s);
+      AppLogger.e('Loading the active menu failed', e, s);
       _errorMessage = e is ApiException
           ? e.message
           : "Couldn't load the menu. Please try again.";

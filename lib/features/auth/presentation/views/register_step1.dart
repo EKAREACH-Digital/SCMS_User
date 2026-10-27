@@ -7,9 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/password_validator.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_text_field.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/step_progress_indicator.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/form/smart_canteen_text_field.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/step_progress_indicator.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_field_radius.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_logo.dart';
@@ -216,7 +216,7 @@ class _RegisterStep1Form extends StatelessWidget {
           borderRadius: kAuthFieldRadius,
         ),
         const SizedBox(height: 32),
-        SmartCanteenButton(
+        AppButton(
           label: l10n.authRegisterNext,
           isLoading: isSubmitting,
           onPressed: onNext,

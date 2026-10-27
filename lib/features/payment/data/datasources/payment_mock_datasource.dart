@@ -5,7 +5,7 @@ import 'package:smart_canteen_user_frontend/features/payment/data/models/payment
 ///
 /// Returns a real, well-formed KHQR payload (a sandbox response captured
 /// verbatim) so the QR widget renders something scannable-looking, then
-/// reports PAID after a few polls to exercise the waiting → success path
+/// reports PAID after a few polls to exercise the waiting --> success path
 /// without a backend or the ABA app.
 class PaymentMockDatasource implements PaymentDatasource {
   static const _sampleQr =

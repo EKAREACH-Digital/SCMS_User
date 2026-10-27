@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/settings_widgets.dart';
+import 'package:smart_canteen_user_frontend/features/settings/presentation/views/widgets/settings_widgets.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/viewmodels/notification_prefs_viewmodel.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
@@ -87,7 +87,7 @@ class NotificationSettingsPage extends StatelessWidget {
                           child: Text(
                             'You can change these anytime. System alerts keep '
                             'your account secure.',
-                            style: TextStyle(
+                            style: AppFonts.heading5.copyWith(
                               fontSize: 11.5,
                               height: 1.4,
                               color: context.mutedColor,

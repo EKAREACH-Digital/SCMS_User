@@ -193,7 +193,7 @@ class ActiveMenuItemDto {
     soldOut: soldOut,
   );
 
-  /// `/uploads/x.jpg` + `http://host:3000/api` → `http://host:3000/uploads/x.jpg`.
+  /// `/uploads/x.jpg` + `http://host:3000/api` --> `http://host:3000/uploads/x.jpg`.
   static String? _absolute(String? url, String? host) {
     if (url == null || host == null || url.startsWith('http')) return url;
     return Uri.parse(host).resolve(url).toString();

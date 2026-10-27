@@ -92,7 +92,8 @@ abstract class AuthRepository {
   /// Temporary-password flow, step 1 — checks the emailed code.
   Future<void> verifyAccountOtp(String otp);
 
-  /// Temporary-password flow, step 2 — replaces the current password.
+  /// Replaces the current password. Step 2 of the temporary-password flow,
+  /// and the Settings "Change Password" screen.
   Future<void> changePassword({
     required String currentPassword,
     required String newPassword,

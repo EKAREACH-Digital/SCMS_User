@@ -98,16 +98,17 @@ void main() {
   group('order', () {
     final repo = OrderRepositoryImpl(OrderMockDatasource());
 
-    test('placing an order returns its coupons as active tickets', () async {
+    test('placing an order returns a placed order with qr data', () async {
       final placed = await repo.placeOrder(
-        schoolId: 'mock-school-cadt',
+        menuId: 'mock-menu-id',
         mealSession: 'lunch',
+        provider: 'CUTLUY',
         items: const [NewOrderItem(menuItemId: '2', quantity: 1)],
       );
 
-      expect(placed.coupons, hasLength(1));
-      final active = await repo.getActiveCoupons();
-      expect(active.map((c) => c.id), contains(placed.coupons.single.id));
+      expect(placed.orderId, isNotEmpty);
+      expect(placed.qrString, isNotEmpty);
+      expect(placed.provider, 'CUTLUY');
     });
 
     test('history view model loads and labels past orders', () async {

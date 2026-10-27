@@ -3,44 +3,51 @@ import 'package:smart_canteen_user_frontend/features/order/data/models/order_dto
 
 /// In-memory [OrderDatasource] for tests and offline work.
 class OrderMockDatasource implements OrderDatasource {
-  final List<CouponDto> _coupons = [];
-
   @override
   Future<PlacedOrderDto> placeOrder({
-    required String schoolId,
+    required String menuId,
     required String mealSession,
     required List<OrderItemInput> items,
+    required String provider,
+    String currency = 'USD',
+    String? branchId,
   }) async {
     await Future.delayed(const Duration(milliseconds: 800));
-    final coupons = items
-        .map((i) => CouponDto(
-              id: 'mock-coupon-${DateTime.now().microsecondsSinceEpoch}-${i.menuItemId}',
-              qrToken: 'mock-${DateTime.now().millisecondsSinceEpoch}-${i.menuItemId}',
-              couponCode: 'MOCK123',
-              mealSession: mealSession,
-              status: 'active',
-              validDate: DateTime.now().toIso8601String().substring(0, 10),
-              menuItemName: 'Mock item',
-            ))
-        .toList();
-    _coupons.addAll(coupons);
+    final orderId = 'mock-order-${DateTime.now().millisecondsSinceEpoch}';
     return PlacedOrderDto(
-      id: 'mock-order-${DateTime.now().millisecondsSinceEpoch}',
-      totalAmount: 0,
-      mealSession: mealSession,
-      status: 'pending',
-      coupons: coupons,
+      orderId: orderId,
+      provider: provider,
+      totalAmount: items.length * 1.5,
+      // A minimal valid KHQR-style string for mock rendering.
+      qrString: '00020101021230160012mock-khqr-string5204000053031165802KH6304ABCD',
+      qrImage: 'https://cutluy.com/api/render/khqr/mock-qr.svg',
+      checkoutUrl: 'https://cutluy.com/pay/mock',
+      deeplink: provider == 'PAYWAY' ? 'abamobilebank://pay/mock' : null,
+      expiresAt: DateTime.now().add(const Duration(minutes: 5)).toIso8601String(),
+    );
+  }
+
+  @override
+  Future<OrderSummaryDto> getOrderById(String orderId) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    // Mock always returns pending_payment so polling can be tested manually.
+    return OrderSummaryDto(
+      id: orderId,
+      totalAmount: 1.5,
+      status: 'pending_payment',
+      mealSession: 'lunch',
+      createdAt: DateTime.now(),
+      items: const [],
     );
   }
 
   @override
   Future<List<CouponDto>> getActiveCoupons() async {
     await Future.delayed(const Duration(milliseconds: 400));
-    return _coupons.where((c) => c.isActive).toList();
+    return const [];
   }
 
-  /// Sample past orders so the History screen has something to render in the
-  /// mock. Dates are relative to now, so the list always looks current.
+  /// Sample past orders so the History screen has something to render.
   @override
   Future<List<OrderSummaryDto>> getMyOrders() async {
     await Future.delayed(const Duration(milliseconds: 400));
@@ -60,7 +67,7 @@ class OrderMockDatasource implements OrderDatasource {
       OrderSummaryDto(
         id: 'mock-order-2',
         totalAmount: 1.25,
-        status: 'pending',
+        status: 'pending_payment',
         mealSession: 'breakfast',
         createdAt: now.subtract(const Duration(days: 1, hours: 2)),
         items: const [

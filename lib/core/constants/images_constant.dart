@@ -10,6 +10,10 @@ abstract final class ImageConst {
   // App logo
   static const String logo = '$_root/logo.png';
 
+  /// White line-art waves (SVG), drawn faintly over the Settings header.
+  static const String waveVectorPattern =
+      '$_root/redesign_wave_vector_pattern.svg';
+
   // Home screen promotional banners
   static const String banner1 = '$_banner/banner1.jpg';
   static const String banner2 = '$_banner/banner2.jpg';
@@ -41,6 +45,7 @@ abstract final class ImageConst {
 
   // Lottie animations
   static const String cookingLoader = '$_root/lottie/cooking_loader.json';
+  static const String checkMark = '$_root/lottie/check_mark.json';
 
   // Dishes and drinks
   static const String beefLokLak = '$_foods/beef_lok_lak.png';

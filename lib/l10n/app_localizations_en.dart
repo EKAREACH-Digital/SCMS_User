@@ -426,6 +426,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartTotal => 'Total';
 
   @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String get cartItemSection => 'Item';
+
+  @override
+  String get cartPaymentSummary => 'Payment Summary';
+
+  @override
+  String get cartDiscount => 'Discount';
+
+  @override
+  String get cartApplyCoupon => 'Apply coupon';
+
+  @override
+  String get cartSelectPaymentMethod => 'Select Payment Method';
+
+  @override
+  String get cartCheckout => 'Checkout';
+
+  @override
+  String get cartBrowseMenu => 'Browse Menu';
+
+  @override
+  String get cartPaymentComingSoon => 'Payment flow will be connected here.';
+
+  @override
   String get couponExpiredTitle => 'Coupon Expired';
 
   @override
@@ -726,4 +753,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authForgotPasswordErrorPasswordMatch => 'Passwords do not match.';
+
+  @override
+  String get dialogOkButton => 'OK';
+
+  @override
+  String get paymentQuitTitle => 'Quit payment?';
+
+  @override
+  String get paymentQuitBody =>
+      'Your order has not been paid. Are you sure you want to leave?';
+
+  @override
+  String get paymentQuitConfirm => 'Yes, quit';
 }

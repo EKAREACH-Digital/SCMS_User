@@ -151,9 +151,13 @@ class OrderHistoryViewModel extends ChangeNotifier {
   }
 
   static String _mapStatus(String backend) => switch (backend) {
-    'completed' => 'Completed',
-    'cancelled' => 'Failed',
-    _ => 'Pending',
+    'pending_payment' => 'Awaiting Payment',
+    'paid'            => 'Paid',
+    'preparing'       => 'Preparing',
+    'ready'           => 'Ready',
+    'completed'       => 'Completed',
+    'cancelled'       => 'Failed',
+    _                 => 'Pending',
   };
 
   static String _capitalize(String s) =>

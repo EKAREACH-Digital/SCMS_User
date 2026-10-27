@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/constants/images_constant.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_widgets.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_widgets.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
 class SplashPage extends StatefulWidget {
@@ -139,7 +139,7 @@ class _SplashPageState extends State<SplashPage>
                                 position: _buttonSlide,
                                 child: SizedBox(
                                   width: 180,
-                                  child: SmartCanteenButton(
+                                  child: AppButton(
                                     label: 'Get Started',
                                     onPressed: _navigateToSignIn,
                                     height: 44,

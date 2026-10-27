@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_widgets.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_widgets.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_logo.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
@@ -138,7 +138,7 @@ class _SignInFormState extends State<_SignInForm> {
           ),
         ),
         const SizedBox(height: 24),
-        SmartCanteenButton(
+        AppButton(
           label: _isSubmitting ? l10n.authSignInLoading : l10n.authSignInButton,
           onPressed: _isSubmitting ? null : _handleLogin,
         ),

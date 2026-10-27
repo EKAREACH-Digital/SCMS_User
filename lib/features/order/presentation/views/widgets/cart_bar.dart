@@ -5,6 +5,9 @@ import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/currency_formatter.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 
+/// [Deprecated_File]
+///  Left over from before refactor
+
 class CartBar extends StatefulWidget {
   const CartBar({
     super.key,

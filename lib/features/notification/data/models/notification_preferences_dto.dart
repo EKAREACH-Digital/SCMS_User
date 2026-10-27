@@ -5,7 +5,7 @@ import 'package:smart_canteen_user_frontend/features/notification/domain/entitie
 part 'notification_preferences_dto.g.dart';
 
 /// The signed-in user's push-notification preferences. Stored on the backend
-/// `User` record (`notify_*` columns) and edited from Settings → Notifications.
+/// `User` record (`notify_*` columns) and edited from Settings --> Notifications.
 /// Missing fields fall back to the backend column defaults.
 @JsonSerializable()
 class NotificationPreferencesDto {

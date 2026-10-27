@@ -1,5 +1,5 @@
 /// The signed-in user's push-notification preferences, edited from
-/// Settings → Notifications.
+/// Settings --> Notifications.
 class NotificationPreferences {
   final bool orderUpdates;
   final bool promotions;

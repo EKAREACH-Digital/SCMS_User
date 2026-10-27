@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 
-/// `[−]  n  [+]` row used on Food Detail and Cart item rows.
+/// `[−]  n  [+]` row with isolated filled-circle buttons.
 ///
 /// [quantity]    — current count.
 /// [onIncrement] — called when `+` is tapped.
 /// [onDecrement] — called when `−` is tapped (caller decides what to do at 0).
 /// [minQuantity] — lowest allowed value; the `−` button is disabled at this
 ///                 value (defaults to 1).
+/// [size]        — diameter of each circle button (defaults to 32).
 class QuantitySelector extends StatelessWidget {
   const QuantitySelector({
     super.key,
@@ -17,78 +18,59 @@ class QuantitySelector extends StatelessWidget {
     required this.onIncrement,
     required this.onDecrement,
     this.minQuantity = 1,
-    this.size = 40.0,
+    this.size = 32.0,
   });
 
   final int quantity;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final int minQuantity;
-
-  /// Height (and width) of each side button.
   final double size;
 
   @override
   Widget build(BuildContext context) {
     final canDecrement = quantity > minQuantity;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.3),
-          width: 1.5,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _CircleButton(
+          icon: Icons.remove_rounded,
+          size: size,
+          onTap: canDecrement
+              ? () {
+                  HapticFeedback.lightImpact();
+                  onDecrement();
+                }
+              : null,
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _SideButton(
-            icon: Icons.remove_rounded,
-            size: size,
-            onTap: canDecrement
-                ? () {
-                    HapticFeedback.selectionClick();
-                    onDecrement();
-                  }
-                : null,
-          ),
-          _Divider(height: size * 0.6),
-          SizedBox(
-            width: size,
-            height: size,
-            child: Center(
-              child: Text(
-                '$quantity',
-                style: AppFonts.heading3.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: AppFonts.bold,
-                ),
+        SizedBox(
+          width: size,
+          child: Center(
+            child: Text(
+              '$quantity',
+              style: AppFonts.heading3.copyWith(
+                color: context.textColor,
+                fontWeight: AppFonts.semiBold,
               ),
             ),
           ),
-          _Divider(height: size * 0.6),
-          _SideButton(
-            icon: Icons.add_rounded,
-            size: size,
-            onTap: () {
-              HapticFeedback.selectionClick();
-              onIncrement();
-            },
-          ),
-        ],
-      ),
+        ),
+        _CircleButton(
+          icon: Icons.add_rounded,
+          size: size,
+          onTap: () {
+            HapticFeedback.lightImpact();
+            onIncrement();
+          },
+        ),
+      ],
     );
   }
 }
 
-class _SideButton extends StatelessWidget {
-  const _SideButton({
-    required this.icon,
-    required this.size,
-    required this.onTap,
-  });
+class _CircleButton extends StatelessWidget {
+  const _CircleButton({required this.icon, required this.size, required this.onTap});
 
   final IconData icon;
   final double size;
@@ -96,34 +78,20 @@ class _SideButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onTap != null;
     return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
+      child: Container(
         width: size,
         height: size,
-        child: Icon(
-          icon,
-          color: onTap != null
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: enabled
               ? AppColors.primary
               : AppColors.primary.withValues(alpha: 0.3),
-          size: 18,
         ),
+        child: Icon(icon, color: AppColors.onPrimary, size: size * 0.5),
       ),
-    );
-  }
-}
-
-class _Divider extends StatelessWidget {
-  const _Divider({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: height,
-      color: AppColors.primary.withValues(alpha: 0.2),
     );
   }
 }

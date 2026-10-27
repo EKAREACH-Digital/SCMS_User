@@ -13,17 +13,24 @@ class OrderRemoteDatasource implements OrderDatasource {
 
   @override
   Future<PlacedOrderDto> placeOrder({
-    required String schoolId,
+    required String menuId,
     required String mealSession,
     required List<OrderItemInput> items,
+    required String provider,
+    String currency = 'USD',
+    String? branchId,
   }) async {
     try {
+      // POST /orders/checkout — reserves stock and opens the payment session.
       final response = await _dio.post(
-        ApiConfig.orders,
+        ApiConfig.ordersCheckout,
         data: {
-          'school_id': schoolId,
-          'meal_session': mealSession,
           'items': items.map((i) => i.toJson()).toList(),
+          'menu_id': menuId,
+          'meal_session': mealSession,
+          'provider': provider,
+          'currency': currency,
+          'branch_id': ?branchId,
         },
       );
       return PlacedOrderDto.fromJson(
@@ -37,10 +44,24 @@ class OrderRemoteDatasource implements OrderDatasource {
   }
 
   @override
+  Future<OrderSummaryDto> getOrderById(String orderId) async {
+    try {
+      // GET /orders/{id} — live status; also queries the gateway directly.
+      final response = await _dio.get(ApiConfig.orderById(orderId));
+      return OrderSummaryDto.fromJson(
+        response.data['data'] as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throw ErrorHandler.fromDio(e);
+    } catch (e) {
+      throw ApiException('Unexpected error fetching order: $e');
+    }
+  }
+
+  @override
   Future<List<CouponDto>> getActiveCoupons() async {
     try {
-      // `/coupons/my` scopes to the caller from the JWT. The plain `/coupons`
-      // list is staff-only and 403s for students.
+      // GET /coupons/my — scoped to the caller from the JWT; plain /coupons is staff-only.
       final response = await _dio.get(
         ApiConfig.couponsMy,
         queryParameters: {'status': 'active', 'limit': 100},

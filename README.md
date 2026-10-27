@@ -1,4 +1,4 @@
-# Smart Canteen — Student App
+# កង់ទីន - La Cantine (Smart Canteen)
 
 A Flutter app (iOS & Android) for students to browse the canteen menu, order meals and pick them up with a QR code, top up and pay from a digital wallet, and manage their profile and notifications.
 

@@ -32,6 +32,7 @@ import 'package:smart_canteen_user_frontend/features/order/data/repositories/ord
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/meal_coupons_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_placement_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/datasources/payment_remote_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/repositories/payment_repository_impl.dart';
 import 'package:smart_canteen_user_frontend/features/payment/domain/repositories/payment_repository.dart';
@@ -60,8 +61,8 @@ Future<void> main() async {
   );
 }
 
-/// Wires every dependency (RULE 3): datasource → repository (provided as its
-/// abstract domain type) → view model, each built from the one above it.
+/// Wires every dependency (RULE 3): datasource --> repository (provided as its
+/// abstract domain type) --> view model, each built from the one above it.
 ///
 /// Which datasource backs a repository is decided here. To run a feature
 /// without the backend, inject its mock instead, e.g.
@@ -130,6 +131,9 @@ class SmartCanteenApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (c) => OrderHistoryViewModel(c.read<OrderRepository>()),
+        ),
+        ChangeNotifierProvider(
+          create: (c) => OrderPlacementViewModel(c.read<OrderRepository>()),
         ),
         ChangeNotifierProvider(
           create: (c) => BalanceViewModel(c.read<WalletRepository>()),

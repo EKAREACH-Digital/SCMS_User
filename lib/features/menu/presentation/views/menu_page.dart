@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/empty_state_widget.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
+import 'package:smart_canteen_user_frontend/features/menu/presentation/views/widgets/empty_state_widget.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/menu_viewmodel.dart';
@@ -38,7 +38,9 @@ class _MenuPageState extends State<MenuPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<MenuViewModel>().load();
+      if (!mounted) return;
+      final branchId = context.read<AuthViewModel>().user?.homeBranchId;
+      context.read<MenuViewModel>().load(branchId: branchId);
     });
   }
 
@@ -63,18 +65,22 @@ class _MenuPageState extends State<MenuPage> {
       child: Scaffold(
         backgroundColor: context.bgColor,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: context.bgColor,
           elevation: 0,
           scrolledUnderElevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-            onPressed: () => context.pop(),
-          ),
           title: Text(
             l10n.navMenu,
             style: AppFonts.heading2.copyWith(color: context.textColor),
           ),
+          actions: [
+            Consumer<CartViewModel>(
+              builder: (context, cart, _) => _AppBarCartButton(
+                itemCount: cart.totalItems,
+                onTap: () => context.push(AppPaths.orderSummary),
+              ),
+            ),
+            const SizedBox(width: 20),
+          ],
           bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
@@ -91,50 +97,24 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
         body: Consumer<MenuViewModel>(
-          builder: (context, menu, _) {
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: switch (menu.state) {
-                    ViewState.error => EmptyStateWidget(
-                      icon: Icons.cloud_off_rounded,
-                      title: l10n.menuErrorTitle,
-                      body: menu.errorMessage ?? l10n.commonRetry,
-                      retryLabel: l10n.commonRetry,
-                      onRetry: () => menu.load(force: true),
-                    ),
-                    ViewState.loading ||
-                    ViewState.idle => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    ViewState.success => TabBarView(
-                      children: List.generate(
-                        tabs.length,
-                        (i) => _FoodList(
-                          items: _filtered(menu.items, _cats[i]),
-                        ),
-                      ),
-                    ),
-                  },
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Consumer<CartViewModel>(
-                    builder: (context, cart, _) {
-                      if (cart.totalItems == 0) return const SizedBox.shrink();
-                      return _ViewCartBar(
-                        itemCount: cart.totalItems,
-                        onViewCart: () => context.push(AppPaths.orderSummary),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
+          builder: (context, menu, _) => switch (menu.state) {
+            ViewState.error => EmptyStateWidget(
+              icon: Icons.cloud_off_rounded,
+              title: l10n.menuErrorTitle,
+              body: menu.errorMessage ?? l10n.commonRetry,
+              retryLabel: l10n.commonRetry,
+              onRetry: () => menu.load(force: true),
+            ),
+            ViewState.loading ||
+            ViewState.idle => const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+            ViewState.success => TabBarView(
+              children: List.generate(
+                tabs.length,
+                (i) => _FoodList(items: _filtered(menu.items, _cats[i])),
+              ),
+            ),
           },
         ),
       ),
@@ -158,37 +138,52 @@ class _FoodList extends StatelessWidget {
       );
     }
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        12,
+        16,
+        MediaQuery.paddingOf(context).bottom + 80,
+      ),
       itemCount: items.length,
       itemBuilder: (context, index) => MenuFoodListItem(item: items[index]),
     );
   }
 }
 
-class _ViewCartBar extends StatelessWidget {
-  const _ViewCartBar({required this.itemCount, required this.onViewCart});
+class _AppBarCartButton extends StatelessWidget {
+  const _AppBarCartButton({required this.itemCount, required this.onTap});
 
   final int itemCount;
-  final VoidCallback onViewCart;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      decoration: BoxDecoration(
-        color: context.cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, -4),
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          const Icon(Icons.shopping_bag_outlined, color: AppColors.primary, size: 26),
+          if (itemCount > 0)
+            Positioned(
+              top: -4,
+              right: -4,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  color: AppColors.accentRed,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  itemCount > 9 ? '9+' : '$itemCount',
+                  style: AppFonts.heading5.copyWith(
+                    color: AppColors.onPrimary,
+                    fontWeight: AppFonts.bold,
+                  ),
+                ),
+              ),
+            ),
         ],
-      ),
-      child: SmartCanteenButton(
-        label: l10n.menuViewCart(itemCount),
-        onPressed: onViewCart,
       ),
     );
   }

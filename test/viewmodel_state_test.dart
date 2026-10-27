@@ -16,32 +16,48 @@ class _FlakyMenuRepository implements MenuRepository {
   int calls = 0;
 
   @override
-  Future<List<FoodItem>> getMenuItems({String? schoolId}) async {
-    calls++;
-    if (calls == 1) throw const ApiException('Menu is down');
-    return const [
-      FoodItem(
-        id: '1',
-        name: 'Khmer Noodle',
-        description: '',
-        price: 2,
-        rating: 0,
-        tags: [],
-        category: 'breakfast',
-        schoolId: 'school-1',
-      ),
-    ];
-  }
-
-  @override
-  Future<WeeklyMenu?> getCurrentWeeklyMenu({String? schoolId}) async => null;
-
-  @override
   Future<DailyMenu> getActiveMenu({
     required String branchId,
     String? canteenId,
     DateTime? date,
-  }) => throw UnimplementedError();
+  }) async {
+    calls++;
+    if (calls == 1) throw const ApiException('Menu is down');
+    return DailyMenu(
+      date: DateTime(2025, 1, 1),
+      dayOfWeek: 0,
+      branchId: branchId,
+      branchName: 'Main Branch',
+      canteens: [
+        MenuCanteen(
+          id: 'c1',
+          name: 'Canteen A',
+          categories: [
+            MenuCategory(
+              name: 'breakfast',
+              items: const [
+                FoodItem(
+                  id: '1',
+                  name: 'Khmer Noodle',
+                  description: '',
+                  price: 2,
+                  rating: 0,
+                  tags: [],
+                  category: 'breakfast',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<List<FoodItem>> getMenuItems({String? schoolId}) async => const [];
+
+  @override
+  Future<WeeklyMenu?> getCurrentWeeklyMenu({String? schoolId}) async => null;
 
   @override
   Future<FoodItem> getMenuItem(String menuItemId) => throw UnimplementedError();
@@ -55,12 +71,12 @@ void main() {
     vm.addListener(() => seen.add(vm.state));
 
     expect(vm.state, ViewState.idle);
-    await vm.load();
+    await vm.load(branchId: 'branch-1');
     expect(vm.state, ViewState.error);
     expect(vm.errorMessage, 'Menu is down');
     expect(vm.items, isEmpty);
 
-    await vm.load(force: true);
+    await vm.load(branchId: 'branch-1', force: true);
     expect(seen, [
       ViewState.loading,
       ViewState.error,
@@ -69,7 +85,6 @@ void main() {
     ]);
     expect(vm.errorMessage, isNull);
     expect(vm.items.single.name, 'Khmer Noodle');
-    expect(vm.schoolId, 'school-1');
   });
 
   test(

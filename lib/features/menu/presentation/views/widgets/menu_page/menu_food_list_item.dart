@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/food_tag_chip.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 
@@ -56,18 +56,6 @@ class MenuFoodListItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  switch (foodDescriptiveTag(item.tags)) {
-                    final tag? => FoodTagChip(tag: tag),
-                    null => Text(
-                      item.description,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppFonts.heading5.copyWith(
-                        color: context.mutedColor,
-                      ),
-                    ),
-                  },
-                  const SizedBox(height: 6),
                   Text(
                     '\$${item.price.toStringAsFixed(2)}',
                     style: AppFonts.heading3.copyWith(
@@ -79,22 +67,35 @@ class MenuFoodListItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            // Watches the cart quantity for this item.
+            // When quantity is 0 --> shows a `+` circle that adds the item
+            // directly to the cart on tap.
+            // When quantity > 0 --> transforms into a QuantitySelector so the
+            // user can adjust without navigating away.
+            // Tapping the row itself still navigates to the detail page.
             Consumer<CartViewModel>(
-              builder: (context, cart, _) => _AddButton(
-                quantity: cart.quantityOf(item.id),
-                onAdd: () {
-                  HapticFeedback.selectionClick();
-                  cart.add(item);
-                },
-                onIncrement: () {
-                  HapticFeedback.selectionClick();
-                  cart.increment(item.id);
-                },
-                onDecrement: () {
-                  HapticFeedback.selectionClick();
-                  cart.decrement(item.id);
-                },
-              ),
+              builder: (context, cart, _) {
+                final qty = cart.quantityOf(item.id);
+                if (qty == 0) {
+                  return _CircleAddButton(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      cart.add(item);
+                    },
+                  );
+                }
+                return QuantitySelector(
+                  quantity: qty,
+                  onIncrement: () {
+                    HapticFeedback.lightImpact();
+                    cart.increment(item.id);
+                  },
+                  onDecrement: () {
+                    HapticFeedback.lightImpact();
+                    cart.decrement(item.id);
+                  },
+                );
+              },
             ),
           ],
         ),
@@ -161,85 +162,26 @@ class _Placeholder extends StatelessWidget {
   }
 }
 
-class _AddButton extends StatelessWidget {
-  const _AddButton({
-    required this.quantity,
-    required this.onAdd,
-    required this.onIncrement,
-    required this.onDecrement,
-  });
+/// Initial state: a single filled circle with a `+` icon.
+/// Tapping immediately adds one unit to the cart, which causes the parent
+/// [Consumer] to rebuild with qty > 0 and swap this for [QuantitySelector].
+class _CircleAddButton extends StatelessWidget {
+  const _CircleAddButton({required this.onTap});
 
-  final int quantity;
-  final VoidCallback onAdd;
-  final VoidCallback onIncrement;
-  final VoidCallback onDecrement;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    if (quantity == 0) {
-      return GestureDetector(
-        onTap: onAdd,
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: const Icon(
-            Icons.add_rounded,
-            color: AppColors.onPrimary,
-            size: 18,
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: const BoxDecoration(
+          color: AppColors.primary,
+          shape: BoxShape.circle,
         ),
-      );
-    }
-
-    return Container(
-      height: 32,
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.3),
-          width: 1.5,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: onDecrement,
-            child: const SizedBox(
-              width: 30,
-              height: 32,
-              child: Icon(
-                Icons.remove_rounded,
-                color: AppColors.primary,
-                size: 16,
-              ),
-            ),
-          ),
-          Text(
-            '$quantity',
-            style: AppFonts.heading4.copyWith(
-              color: AppColors.primary,
-              fontWeight: AppFonts.bold,
-            ),
-          ),
-          GestureDetector(
-            onTap: onIncrement,
-            child: const SizedBox(
-              width: 30,
-              height: 32,
-              child: Icon(
-                Icons.add_rounded,
-                color: AppColors.primary,
-                size: 16,
-              ),
-            ),
-          ),
-        ],
+        child: const Icon(Icons.add_rounded, color: AppColors.onPrimary, size: 18),
       ),
     );
   }

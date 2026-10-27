@@ -78,9 +78,8 @@ class SettingsSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4, bottom: 10),
             child: Text(
               title.toUpperCase(),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+              style: AppFonts.heading4.copyWith(
+                fontWeight: AppFonts.bold,
                 color: context.mutedColor,
                 letterSpacing: 0.8,
               ),
@@ -93,8 +92,8 @@ class SettingsSection extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
+                  // blurRadius: 16,
+                  offset: const Offset(0, 2), //(0,4)
                 ),
               ],
             ),
@@ -154,13 +153,13 @@ class AppPillToggle extends StatelessWidget {
             decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 4,
-                  offset: Offset(0, 1),
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black26,
+              //     blurRadius: 4,
+              //     offset: Offset(0, 1),
+              //   ),
+              // ],
             ),
           ),
         ),
@@ -228,13 +227,9 @@ class _SettingsTileState extends State<SettingsTile> {
                 ),
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(
-                        color: widget.iconColor.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
                       child: Icon(
                         widget.icon,
                         color: widget.iconColor,
@@ -248,18 +243,16 @@ class _SettingsTileState extends State<SettingsTile> {
                         children: [
                           Text(
                             widget.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
+                            style: AppFonts.heading3.copyWith(
+                              fontWeight: AppFonts.semiBold,
                               color: context.textColor,
-                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             widget.subtitle,
-                            style: TextStyle(
+                            style: AppFonts.heading5.copyWith(
                               color: context.mutedColor,
-                              fontSize: 11,
                             ),
                           ),
                         ],
@@ -279,19 +272,19 @@ class _SettingsTileState extends State<SettingsTile> {
             ),
           ),
         ),
-        if (!widget.isLast)
-          Divider(
-            indent: 70,
-            endIndent: 16,
-            height: 1,
-            color: context.borderColor,
-          ),
+        // if (!widget.isLast)
+        //   Divider(
+        //     indent: 70,
+        //     endIndent: 16,
+        //     height: 1,
+        //     color: context.borderColor,
+        //   ),
       ],
     );
   }
 }
 
-/// Simple back-button app bar header with a mint→emerald gradient,
+/// Simple back-button app bar header with a mint-->emerald gradient,
 /// used by the settings sub-screens.
 class SettingsHeader extends StatelessWidget {
   const SettingsHeader({super.key, required this.title, this.subtitle});
@@ -308,17 +301,18 @@ class SettingsHeader extends StatelessWidget {
         20,
         22,
       ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primaryLight, AppColors.primary, AppColors.primaryDark],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      // decoration: const BoxDecoration(
+      //   gradient: LinearGradient(
+      //     colors: [AppColors.primaryLight, AppColors.primary, AppColors.primaryDark],
+      //     begin: Alignment.topLeft,
+      //     end: Alignment.bottomRight,
+      //   ),
+      // ),
       child: Row(
         children: [
           Material(
-            color: Colors.white.withValues(alpha: 0.15),
+            // color: Colors.white.withValues(alpha: 0.15),
+            color: AppColors.primary.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(8),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
@@ -343,10 +337,9 @@ class SettingsHeader extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                style: AppFonts.heading1.copyWith(
+                  color: AppColors.darkBackground,
+                  fontWeight: AppFonts.medium,
                   letterSpacing: -0.3,
                 ),
               ),
@@ -354,7 +347,10 @@ class SettingsHeader extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   subtitle!,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12.5),
+                  style: AppFonts.heading4.copyWith(
+                    fontSize: 12.5,
+                    color: Colors.white70,
+                  ),
                 ),
               ],
             ],

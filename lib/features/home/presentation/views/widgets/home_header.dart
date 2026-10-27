@@ -3,18 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
-/// Top bar: user avatar (left) + greeting + notification bell (right).
+/// Top bar: user avatar (left) + greeting + cart + notification bell (right).
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
     super.key,
     required this.authViewModel,
     required this.onNotificationTap,
     required this.onAvatarTap,
+    required this.onCartTap,
+    required this.cartItemCount,
   });
 
   final AuthViewModel authViewModel;
   final VoidCallback onNotificationTap;
   final VoidCallback onAvatarTap;
+  final VoidCallback onCartTap;
+  final int cartItemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +48,8 @@ class HomeHeader extends StatelessWidget {
               ],
             ),
           ),
+          _CartButton(itemCount: cartItemCount, onTap: onCartTap),
+          const SizedBox(width: 8),
           _NotificationButton(onTap: onNotificationTap),
         ],
       ),
@@ -78,6 +84,64 @@ class _AvatarButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CartButton extends StatelessWidget {
+  const _CartButton({required this.itemCount, required this.onTap});
+
+  final int itemCount;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: context.cardColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.06),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.shopping_bag_outlined,
+              color: AppColors.primary,
+              size: 22,
+            ),
+          ),
+          if (itemCount > 0)
+            Positioned(
+              top: -4,
+              right: -4,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  color: AppColors.accentRed,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  itemCount > 9 ? '9+' : '$itemCount',
+                  style: AppFonts.heading5.copyWith(
+                    color: AppColors.onPrimary,
+                    fontWeight: AppFonts.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

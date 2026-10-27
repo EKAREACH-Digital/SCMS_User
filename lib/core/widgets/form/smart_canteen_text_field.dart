@@ -86,10 +86,9 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
+          style: AppFonts.heading3.copyWith(
             color: AppColors.primary,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppFonts.semiBold,
             letterSpacing: 0.2,
           ),
         ),
@@ -115,9 +114,8 @@ class _SmartCanteenTextFieldState extends State<SmartCanteenTextField>
                 controller: widget.controller,
                 obscureText: _obscure,
                 keyboardType: widget.keyboardType,
-                style: const TextStyle(
+                style: AppFonts.heading3.copyWith(
                   fontSize: 15,
-                  fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
                   hintText: widget.hintText,

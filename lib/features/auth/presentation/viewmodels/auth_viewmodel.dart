@@ -274,6 +274,27 @@ class AuthViewModel extends ChangeNotifier {
     return null;
   }
 
+  /// `POST /auth/password/change` — the Settings "Change Password" screen.
+  /// Returns null on success, or an error message to show (for example a
+  /// wrong current password).
+  Future<String?> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      await _authRepository.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+      return null;
+    } on ApiException catch (e) {
+      return e.message;
+    } catch (e, s) {
+      AppLogger.e('Change password failed', e, s);
+      return 'Could not change your password. Please try again.';
+    }
+  }
+
   /// Password reset, step 1 — emails a 6-digit code.
   Future<void> requestPasswordReset(String email) =>
       _authRepository.requestPasswordReset(email);

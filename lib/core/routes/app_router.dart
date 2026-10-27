@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_navigation_bar.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_navigation_bar.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/forgot_password_page.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/register_step1.dart';
@@ -17,14 +18,16 @@ import 'package:smart_canteen_user_frontend/features/menu/presentation/views/foo
 import 'package:smart_canteen_user_frontend/features/menu/presentation/views/weekly_menu_page.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_page.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_settings_page.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/bank_selection_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/history_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_summary_page.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_method_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_qr_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_success_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/qr_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/payment_methods_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/topup_page.dart';
 import 'package:smart_canteen_user_frontend/features/settings/presentation/views/about_page.dart';
+import 'package:smart_canteen_user_frontend/features/settings/presentation/views/change_password_page.dart';
 import 'package:smart_canteen_user_frontend/features/settings/presentation/views/edit_profile_page.dart';
 import 'package:smart_canteen_user_frontend/features/settings/presentation/views/settings_page.dart';
 
@@ -49,43 +52,47 @@ abstract final class AppRouter {
       GoRoute(
         path: AppPaths.splash,
         name: AppRoutes.splash,
-        builder: (_, _) => const SplashPage(),
+        pageBuilder: (_, state) => _cupertino(state, const SplashPage()),
       ),
       GoRoute(
         path: AppPaths.signIn,
         name: AppRoutes.signIn,
-        builder: (_, _) => const SignInPage(),
+        pageBuilder: (_, state) => _cupertino(state, const SignInPage()),
       ),
       GoRoute(
         path: AppPaths.signUp,
         name: AppRoutes.signUp,
-        builder: (_, _) => const RegisterStep1Page(),
+        pageBuilder: (_, state) => _cupertino(state, const RegisterStep1Page()),
       ),
       GoRoute(
         path: AppPaths.forgotPassword,
         name: AppRoutes.forgotPassword,
         // Receives an optional pre-filled email via route extra.
-        builder: (_, state) => ForgotPasswordPage(
-          email: state.extra as String?,
+        pageBuilder: (_, state) => _cupertino(
+          state,
+          ForgotPasswordPage(email: state.extra as String?),
         ),
       ),
       GoRoute(
         path: AppPaths.verifyEmail,
         name: AppRoutes.verifyEmail,
         // Receives the sign-up's userId, email and password via route extra.
-        builder: (_, state) {
+        pageBuilder: (_, state) {
           final data = Map<String, String>.from(state.extra as Map);
-          return RegisterStep2Page(
-            userId: data['userId']!,
-            email: data['email']!,
-            password: data['password']!,
+          return _cupertino(
+            state,
+            RegisterStep2Page(
+              userId: data['userId']!,
+              email: data['email']!,
+              password: data['password']!,
+            ),
           );
         },
       ),
       GoRoute(
         path: AppPaths.completeProfile,
         name: AppRoutes.completeProfile,
-        builder: (_, _) => const RegisterStep3Page(),
+        pageBuilder: (_, state) => _cupertino(state, const RegisterStep3Page()),
       ),
       // Bottom-nav tabs. Each branch keeps its own navigation stack and state.
       StatefulShellRoute.indexedStack(
@@ -93,85 +100,98 @@ abstract final class AppRouter {
             ScaffoldWithNavBar(navigationShell: navigationShell),
         branches: [
           _tab(AppPaths.home, AppRoutes.home, const HomePage()),
-          _tab(AppPaths.cart, AppRoutes.cart, const OrderSummaryPage()),
+          _tab(AppPaths.menu, AppRoutes.menu, const MenuPage()),
           _tab(AppPaths.qr, AppRoutes.qr, const QrPage()),
           _tab(AppPaths.history, AppRoutes.history, const HistoryPage()),
           _tab(AppPaths.settings, AppRoutes.settings, const SettingsPage()),
         ],
       ),
       GoRoute(
-        path: AppPaths.menu,
-        name: AppRoutes.menu,
-        builder: (_, _) => const MenuPage(),
+        path: AppPaths.menuBrowse,
+        name: AppRoutes.menuBrowse,
+        pageBuilder: (_, state) => _cupertino(state, const MenuPage()),
       ),
       GoRoute(
         path: AppPaths.weeklyMenu,
         name: AppRoutes.weeklyMenu,
-        builder: (_, _) => const WeeklyMenuPage(),
+        pageBuilder: (_, state) => _cupertino(state, const WeeklyMenuPage()),
       ),
+      // Slides up from the bottom like a bottom sheet.
       GoRoute(
         path: AppPaths.orderSummary,
         name: AppRoutes.orderSummary,
-        builder: (_, _) => const OrderSummaryPage(),
-      ),
-      GoRoute(
-        path: AppPaths.paymentMethod,
-        name: AppRoutes.paymentMethod,
-        builder: (_, state) => PaymentMethodPage(
-          totalAmount: (state.extra as num?)?.toDouble() ?? 0,
-        ),
-      ),
-      GoRoute(
-        path: AppPaths.bankSelection,
-        name: AppRoutes.bankSelection,
-        builder: (_, _) => const BankSelectionPage(),
+        pageBuilder: (_, state) => _slideUp(state, const OrderSummaryPage()),
       ),
       GoRoute(
         path: AppPaths.notifications,
         name: AppRoutes.notifications,
-        builder: (_, _) => const NotificationPage(),
+        pageBuilder: (_, state) => _cupertino(state, const NotificationPage()),
       ),
       GoRoute(
         path: AppPaths.editProfile,
         name: AppRoutes.editProfile,
-        builder: (_, _) => const EditProfilePage(),
+        pageBuilder: (_, state) => _cupertino(state, const EditProfilePage()),
       ),
       GoRoute(
         path: AppPaths.paymentMethods,
         name: AppRoutes.paymentMethods,
-        builder: (_, _) => const PaymentMethodsPage(),
+        pageBuilder: (_, state) =>
+            _cupertino(state, const PaymentMethodsPage()),
       ),
       GoRoute(
         path: AppPaths.notificationSettings,
         name: AppRoutes.notificationSettings,
-        builder: (_, _) => const NotificationSettingsPage(),
+        pageBuilder: (_, state) =>
+            _cupertino(state, const NotificationSettingsPage()),
+      ),
+      GoRoute(
+        path: AppPaths.changePassword,
+        name: AppRoutes.changePassword,
+        pageBuilder: (_, state) =>
+            _cupertino(state, const ChangePasswordPage()),
       ),
       GoRoute(
         path: AppPaths.about,
         name: AppRoutes.about,
-        builder: (_, _) => const AboutPage(),
+        pageBuilder: (_, state) => _cupertino(state, const AboutPage()),
       ),
       GoRoute(
         path: AppPaths.topUp,
         name: AppRoutes.topUp,
-        builder: (_, state) =>
-            TopUpPage(amountUsd: (state.extra as num?)?.toDouble()),
+        pageBuilder: (_, state) => _cupertino(
+          state,
+          TopUpPage(amountUsd: (state.extra as num?)?.toDouble()),
+        ),
       ),
       GoRoute(
         // Receives the FoodItem entity via `extra`. The `:id` segment is
         // included so the URL is meaningful (and deep-linkable in future).
         path: '${AppPaths.foodDetail}/:id',
         name: AppRoutes.foodDetail,
-        builder: (_, state) => FoodDetailPage(item: state.extra as FoodItem),
+        pageBuilder: (_, state) =>
+            _cupertino(state, FoodDetailPage(item: state.extra as FoodItem)),
+      ),
+      GoRoute(
+        path: AppPaths.paymentQr,
+        name: AppRoutes.paymentQr,
+        pageBuilder: (_, state) => _cupertino(
+          state,
+          PaymentQrPage(order: state.extra as PlacedOrder),
+        ),
+      ),
+      GoRoute(
+        path: AppPaths.paymentSuccess,
+        name: AppRoutes.paymentSuccess,
+        pageBuilder: (_, state) => _slideUp(state, const PaymentSuccessPage()),
       ),
     ],
   );
 
   /// The only auth redirect in the app (RULE 7):
-  /// - no session → protected pages bounce to the splash (which offers sign-in);
-  /// - signed in with an incomplete profile → Complete Profile, from any page.
+  /// - no session --> protected pages bounce to the splash (which offers sign-in);
+  /// - signed in with an incomplete profile --> Complete Profile, from any page.
   ///   The backend doesn't block an incomplete profile, so the app must;
-  /// - a restored session on the splash → straight into the app.
+  /// - a restored session on the splash --> straight into the app.
   static String? _redirect(AuthViewModel auth, GoRouterState state) {
     final isPublic = _publicPaths.contains(state.matchedLocation);
     switch (auth.status) {
@@ -196,6 +216,26 @@ abstract final class AppRouter {
       StatefulShellBranch(
         routes: [GoRoute(path: path, name: name, builder: (_, _) => page)],
       );
+
+  static CupertinoPage<void> _cupertino(GoRouterState state, Widget child) =>
+      CupertinoPage<void>(key: state.pageKey, child: child);
+
+  static CustomTransitionPage<void> _slideUp(
+    GoRouterState state,
+    Widget child,
+  ) => CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (_, animation, _, child) => SlideTransition(
+      position: animation.drive(
+        Tween(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
+      ),
+      child: child,
+    ),
+  );
 }
 
 /// Bottom-nav shell: the Liquid Glass nav bar around the current tab.
@@ -218,7 +258,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         // Lets the glass bar float over the tab and blur what's behind it.
         extendBody: true,
         body: navigationShell,
-        bottomNavigationBar: SmartCanteenNavigationBarButton(
+        bottomNavigationBar: AppNavigationBar(
           currentIndex: navigationShell.currentIndex,
           // Tapping the current tab again resets it to its first page.
           onTap: (index) => navigationShell.goBranch(

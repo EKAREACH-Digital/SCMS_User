@@ -7,12 +7,12 @@ import 'package:smart_canteen_user_frontend/core/constants/images_constant.dart'
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/cart_bar.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/widgets/home_food_grid.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/widgets/home_header.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/widgets/promo_banner.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/sample_menu_items.dart';
+import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,16 +30,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<MenuViewModel>().load();
+      final branchId = context.read<AuthViewModel>().user?.homeBranchId;
+      context.read<MenuViewModel>().load(branchId: branchId);
       context.read<AuthViewModel>().refreshProfile();
     });
   }
 
   Future<void> _onRefresh() async {
     setState(() => _refreshing = true);
+    await context.read<AuthViewModel>().refreshProfile();
+    if (!mounted) return;
+    final branchId = context.read<AuthViewModel>().user?.homeBranchId;
     await Future.wait([
-      context.read<MenuViewModel>().load(force: true),
-      context.read<AuthViewModel>().refreshProfile(),
+      context.read<MenuViewModel>().load(branchId: branchId, force: true),
       // Minimum display time so the animation doesn't flash on fast networks.
       Future.delayed(const Duration(milliseconds: 1000)),
     ]);
@@ -65,12 +68,14 @@ class _HomePageState extends State<HomePage> {
                 slivers: [
                   // Section 1: Top navigation bar
                   SliverToBoxAdapter(
-                    child: Consumer<AuthViewModel>(
-                      builder: (context, auth, _) => HomeHeader(
+                    child: Consumer2<AuthViewModel, CartViewModel>(
+                      builder: (context, auth, cart, _) => HomeHeader(
                         authViewModel: auth,
                         onNotificationTap: () =>
                             context.push(AppPaths.notifications),
                         onAvatarTap: () => context.go(AppPaths.settings),
+                        onCartTap: () => context.push(AppPaths.orderSummary),
+                        cartItemCount: cart.totalItems,
                       ),
                     ),
                   ),
@@ -96,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: _MenuSectionHeader(
-                        onSeeAll: () => context.push(AppPaths.menu),
+                        onSeeAll: () => context.push(AppPaths.menuBrowse),
                       ),
                     ),
                   ),

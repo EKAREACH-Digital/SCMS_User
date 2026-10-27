@@ -8,8 +8,8 @@ import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
 import 'package:pinput/pinput.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/step_progress_indicator.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/step_progress_indicator.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_logo.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/verify_email/resend_code_button.dart';
@@ -258,7 +258,7 @@ class _VerifyButton extends StatelessWidget {
     return Consumer<AuthViewModel>(
       builder: (_, vm, _) {
         final busy = vm.state == ViewState.loading;
-        return SmartCanteenButton(
+        return AppButton(
           label: l10n.authVerifyButton,
           isLoading: busy,
           onPressed: onPressed,

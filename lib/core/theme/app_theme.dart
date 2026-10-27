@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_colors.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_fonts.dart';
@@ -25,12 +24,12 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
-      textTheme: GoogleFonts.plusJakartaSansTextTheme().apply(
+      textTheme: ThemeData.light().textTheme.apply(
         bodyColor: AppColors.text,
         displayColor: AppColors.text,
       ),
-      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
-      fontFamilyFallback: const ['KantumruyPro'],
+      fontFamily: AppFonts.family,
+      fontFamilyFallback: AppFonts.fallback,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.text,
@@ -57,11 +56,11 @@ class AppTheme {
         unselectedItemColor: AppColors.mutedText,
         type: BottomNavigationBarType.fixed,
       ),
-      navigationBarTheme: const NavigationBarThemeData(
+      navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.card,
         indicatorColor: AppColors.primaryTint,
         labelTextStyle: WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600),
+          AppFonts.heading4.copyWith(fontWeight: AppFonts.semiBold),
         ),
       ),
       cardTheme: CardThemeData(
@@ -75,7 +74,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.card,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.border),
@@ -86,7 +88,10 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primaryDark, width: 1.3),
+          borderSide: const BorderSide(
+            color: AppColors.primaryDark,
+            width: 1.3,
+          ),
         ),
       ),
     );
@@ -107,11 +112,12 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.darkBackground,
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(
-        ThemeData.dark().textTheme,
-      ).apply(bodyColor: AppColors.darkText, displayColor: AppColors.darkText),
-      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
-      fontFamilyFallback: const ['KantumruyPro'],
+      textTheme: ThemeData.dark().textTheme.apply(
+        bodyColor: AppColors.darkText,
+        displayColor: AppColors.darkText,
+      ),
+      fontFamily: AppFonts.family,
+      fontFamilyFallback: AppFonts.fallback,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.darkCard,
         foregroundColor: AppColors.darkText,
@@ -147,7 +153,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.darkCard,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.darkBorder),
@@ -158,9 +167,16 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primaryDark, width: 1.3),
+          borderSide: const BorderSide(
+            color: AppColors.primaryDark,
+            width: 1.3,
+          ),
         ),
-        hintStyle: const TextStyle(color: AppColors.darkMutedText),
+        // 16sp regular, the same size as Material 3's default hint (bodyLarge).
+        hintStyle: AppFonts.heading2.copyWith(
+          color: AppColors.darkMutedText,
+          fontWeight: AppFonts.regular,
+        ),
       ),
     );
   }
@@ -170,10 +186,11 @@ class AppTheme {
 extension AppThemeX on BuildContext {
   bool get _dark => Theme.of(this).brightness == Brightness.dark;
 
-  Color get bgColor     => _dark ? AppColors.darkBackground : AppColors.background;
-  Color get cardColor   => _dark ? AppColors.darkCard       : AppColors.card;
-  Color get textColor   => _dark ? AppColors.darkText       : AppColors.text;
-  Color get mutedColor  => _dark ? AppColors.darkMutedText  : AppColors.mutedText;
-  Color get borderColor => _dark ? AppColors.darkBorder     : AppColors.border;
-  Color get surfaceColor=> _dark ? AppColors.darkSurface    : AppColors.primaryTint;
+  Color get bgColor => _dark ? AppColors.darkBackground : AppColors.background;
+  Color get cardColor => _dark ? AppColors.darkCard : AppColors.card;
+  Color get textColor => _dark ? AppColors.darkText : AppColors.text;
+  Color get mutedColor => _dark ? AppColors.darkMutedText : AppColors.mutedText;
+  Color get borderColor => _dark ? AppColors.darkBorder : AppColors.border;
+  Color get surfaceColor =>
+      _dark ? AppColors.darkSurface : AppColors.primaryTint;
 }

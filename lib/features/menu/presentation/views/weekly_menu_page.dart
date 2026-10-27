@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/weekly_menu.dart';
-import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/weekly_menu_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
@@ -29,8 +29,9 @@ class _WeeklyMenuPageState extends State<WeeklyMenuPage> {
     });
   }
 
+  // GET /menus — weekly schedule scoped to the student's school.
   Future<void> _load() => context.read<WeeklyMenuViewModel>().load(
-    schoolId: context.read<MenuViewModel>().schoolId,
+    schoolId: context.read<AuthViewModel>().user?.schoolId,
   );
 
   @override
@@ -112,7 +113,10 @@ class _WeekBody extends StatelessWidget {
               ? Center(
                   child: Text(
                     l10n.weeklyMenuNothingToday,
-                    style: TextStyle(color: context.mutedColor, fontSize: 13.5),
+                    style: AppFonts.heading3.copyWith(
+                      color: context.mutedColor,
+                      fontSize: 13.5,
+                    ),
                   ),
                 )
               : ListView(
@@ -156,9 +160,9 @@ class _MenuHeader extends StatelessWidget {
               children: [
                 Text(
                   menu.name,
-                  style: TextStyle(
+                  style: AppFonts.heading1.copyWith(
                     fontSize: 17,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: AppFonts.bold,
                     color: context.textColor,
                     letterSpacing: -0.2,
                   ),
@@ -166,7 +170,10 @@ class _MenuHeader extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${_fmt(menu.validFrom)} – ${_fmt(menu.validTo)}',
-                  style: TextStyle(fontSize: 12.5, color: context.mutedColor),
+                  style: AppFonts.heading4.copyWith(
+                    fontSize: 12.5,
+                    color: context.mutedColor,
+                  ),
                 ),
               ],
             ),
@@ -233,9 +240,9 @@ class _DayStrip extends StatelessWidget {
                 children: [
                   Text(
                     labels[i],
-                    style: TextStyle(
+                    style: AppFonts.heading3.copyWith(
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: AppFonts.bold,
                       color: isSelected ? Colors.white : context.textColor,
                     ),
                   ),
@@ -278,9 +285,9 @@ class _SlotHeading extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: AppFonts.heading3.copyWith(
             fontSize: 13,
-            fontWeight: FontWeight.w800,
+            fontWeight: AppFonts.bold,
             color: context.textColor,
             letterSpacing: 0.2,
           ),
@@ -294,9 +301,9 @@ class _SlotHeading extends StatelessWidget {
           ),
           child: Text(
             '$count',
-            style: const TextStyle(
+            style: AppFonts.heading5.copyWith(
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: AppFonts.bold,
               color: AppColors.primary,
             ),
           ),
@@ -353,9 +360,9 @@ class _DishTile extends StatelessWidget {
                   item.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: AppFonts.heading3.copyWith(
                     fontSize: 13.5,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: AppFonts.bold,
                     color: context.textColor,
                   ),
                 ),
@@ -365,7 +372,10 @@ class _DishTile extends StatelessWidget {
                     item.description,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 11.5, color: context.mutedColor),
+                    style: AppFonts.heading5.copyWith(
+                      fontSize: 11.5,
+                      color: context.mutedColor,
+                    ),
                   ),
                 ],
               ],
@@ -374,9 +384,8 @@ class _DishTile extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             '\$${item.price.toStringAsFixed(2)}',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
+            style: AppFonts.heading3.copyWith(
+              fontWeight: AppFonts.bold,
               color: AppColors.primary,
             ),
           ),
@@ -425,7 +434,7 @@ class _Note extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
+              style: AppFonts.heading5.copyWith(
                 fontSize: 11.5,
                 color: context.mutedColor,
                 height: 1.4,
@@ -473,9 +482,8 @@ class _Message extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppFonts.heading2.copyWith(
+                fontWeight: AppFonts.bold,
                 color: context.textColor,
               ),
             ),
@@ -483,8 +491,7 @@ class _Message extends StatelessWidget {
             Text(
               body,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
+              style: AppFonts.heading3.copyWith(
                 color: context.mutedColor,
                 height: 1.4,
               ),

@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
 import 'package:smart_canteen_user_frontend/features/payment/domain/entities/saved_card.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/viewmodels/payment_methods_viewmodel.dart';
+
+/// [Deprecated_File]
+///  Left over from before refactor
 
 /// The single add-card form, shared by Settings › Payment Methods and the
 /// checkout payment screen. Both entry points write to [PaymentMethodsViewModel],
@@ -108,9 +111,9 @@ class _AddCardSheetState extends State<AddCardSheet> {
                 const SizedBox(height: 18),
                 Text(
                   'Add New Card',
-                  style: TextStyle(
+                  style: AppFonts.heading2.copyWith(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: AppFonts.bold,
                     color: context.textColor,
                   ),
                 ),
@@ -190,7 +193,7 @@ class _AddCardSheetState extends State<AddCardSheet> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                SmartCanteenButton(
+                AppButton(
                   label: 'Save Card',
                   gradient: const LinearGradient(
                     colors: [AppColors.primaryDark, AppColors.primaryLight],
@@ -238,10 +241,10 @@ class _SheetField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: AppFonts.heading3.copyWith(
             color: AppColors.primary,
             fontSize: 13,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppFonts.semiBold,
             letterSpacing: 0.2,
           ),
         ),
@@ -253,9 +256,9 @@ class _SheetField extends StatelessWidget {
           textCapitalization: textCapitalization,
           validator: validator,
           obscureText: obscureText,
-          style: TextStyle(
+          style: AppFonts.heading2.copyWith(
             fontSize: 15,
-            fontWeight: FontWeight.w500,
+            fontWeight: AppFonts.medium,
             color: context.textColor,
           ),
           decoration: InputDecoration(

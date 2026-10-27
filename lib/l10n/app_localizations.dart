@@ -866,6 +866,60 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get cartTotal;
 
+  /// No description provided for @cartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cartTitle;
+
+  /// No description provided for @cartItemSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get cartItemSection;
+
+  /// No description provided for @cartPaymentSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get cartPaymentSummary;
+
+  /// No description provided for @cartDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get cartDiscount;
+
+  /// No description provided for @cartApplyCoupon.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply coupon'**
+  String get cartApplyCoupon;
+
+  /// No description provided for @cartSelectPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Payment Method'**
+  String get cartSelectPaymentMethod;
+
+  /// No description provided for @cartCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get cartCheckout;
+
+  /// No description provided for @cartBrowseMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Menu'**
+  String get cartBrowseMenu;
+
+  /// No description provided for @cartPaymentComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment flow will be connected here.'**
+  String get cartPaymentComingSoon;
+
   /// No description provided for @couponExpiredTitle.
   ///
   /// In en, this message translates to:
@@ -1435,6 +1489,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Passwords do not match.'**
   String get authForgotPasswordErrorPasswordMatch;
+
+  /// No description provided for @dialogOkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get dialogOkButton;
+
+  /// No description provided for @paymentQuitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit payment?'**
+  String get paymentQuitTitle;
+
+  /// No description provided for @paymentQuitBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order has not been paid. Are you sure you want to leave?'**
+  String get paymentQuitBody;
+
+  /// No description provided for @paymentQuitConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, quit'**
+  String get paymentQuitConfirm;
 }
 
 class _AppLocalizationsDelegate

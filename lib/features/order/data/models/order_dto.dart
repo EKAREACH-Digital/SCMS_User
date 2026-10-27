@@ -14,26 +14,24 @@ class OrderItemInput {
       };
 }
 
-/// A meal-ticket coupon minted by the backend (one per ordered item). The
-/// [qrToken] is the exact string the canteen scanner reads and redeems, so the
-/// QR the app shows must encode it verbatim.
+/// A meal-ticket coupon, returned by `GET /coupons/my`.
 class CouponDto {
   final String id;
   final String qrToken;
   final String? couponCode;
-  final String mealSession; // breakfast | lunch | dinner
-  final String status; // active | redeemed | expired | cancelled
-  final String? validDate; // yyyy-MM-dd
+  final String mealSession;
+  final String status;
+  final String? validDate;
   final String? menuItemName;
 
   const CouponDto({
     required this.id,
     required this.qrToken,
-    required this.couponCode,
+    this.couponCode,
     required this.mealSession,
     required this.status,
-    required this.validDate,
-    required this.menuItemName,
+    this.validDate,
+    this.menuItemName,
   });
 
   factory CouponDto.fromJson(Map<String, dynamic> json) {
@@ -63,41 +61,51 @@ class CouponDto {
       );
 }
 
-/// The result of `POST /orders` — the order plus the coupons minted for it.
+/// The result of `POST /orders/checkout` — payment session from the gateway.
+///
+/// The backend calculates prices; the app never sends them. [qrImage] is an
+/// SVG URL for CutLuy (Bakong) or a `data:image/png;base64,...` for ABA PayWay.
 class PlacedOrderDto {
-  final String id;
+  final String orderId;
+  final String provider;
   final double totalAmount;
-  final String mealSession;
-  final String status;
-  final List<CouponDto> coupons;
+  final String qrString;
+  final String qrImage;
+  final String? checkoutUrl;
+  final String? deeplink;
+  final String? expiresAt;
 
   const PlacedOrderDto({
-    required this.id,
+    required this.orderId,
+    required this.provider,
     required this.totalAmount,
-    required this.mealSession,
-    required this.status,
-    required this.coupons,
+    required this.qrString,
+    required this.qrImage,
+    this.checkoutUrl,
+    this.deeplink,
+    this.expiresAt,
   });
 
-  factory PlacedOrderDto.fromJson(Map<String, dynamic> json) {
-    final couponsJson = (json['coupons'] as List<dynamic>?) ?? const [];
-    return PlacedOrderDto(
-      id: json['id'] as String,
-      totalAmount: _toDouble(json['total_amount']),
-      mealSession: json['meal_session'] as String? ?? '',
-      status: json['status'] as String? ?? 'pending',
-      coupons: couponsJson
-          .map((e) => CouponDto.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory PlacedOrderDto.fromJson(Map<String, dynamic> json) => PlacedOrderDto(
+        orderId: json['order_id'] as String,
+        provider: json['provider'] as String? ?? 'CUTLUY',
+        totalAmount: _toDouble(json['total_amount']),
+        qrString: json['qr_string'] as String? ?? '',
+        qrImage: json['qr_image'] as String? ?? '',
+        checkoutUrl: json['checkout_url'] as String?,
+        deeplink: json['deeplink'] as String?,
+        expiresAt: json['expires_at'] as String?,
+      );
 
   PlacedOrder toEntity() => PlacedOrder(
-        id: id,
+        orderId: orderId,
+        provider: provider,
         totalAmount: totalAmount,
-        mealSession: mealSession,
-        status: status,
-        coupons: coupons.map((c) => c.toEntity()).toList(),
+        qrString: qrString,
+        qrImage: qrImage,
+        checkoutUrl: checkoutUrl,
+        deeplink: deeplink,
+        expiresAt: expiresAt != null ? DateTime.tryParse(expiresAt!) : null,
       );
 
   static double _toDouble(dynamic value) => switch (value) {

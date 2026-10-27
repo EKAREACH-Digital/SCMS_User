@@ -7,7 +7,7 @@ abstract final class ApiConfig {
 
   // Auth — see docs/features/student-auth-api.md
 
-  /// `POST /auth/login` — email + password → tokens + user.
+  /// `POST /auth/login` — email + password --> tokens + user.
   static const String login = '/$version/auth/login';
 
   /// `POST /auth/register` — creates an inactive student and emails a
@@ -99,9 +99,18 @@ abstract final class ApiConfig {
   static const String menuMenuItems = '/$version/menu-menu-items';
 
   // Orders
-  /// `POST /orders` — place an order (auto-mints a QR coupon per item);
-  /// `GET /orders/my` — the signed-in user's orders.
-  static const String orders = '/$version/orders';
+
+  /// `POST /orders/checkout` — reserves stock, creates the order and opens a
+  /// payment session. Returns order id + KHQR / deeplink. Use this, not
+  /// `POST /orders` (which skips payment).
+  static const String ordersCheckout = '/$version/orders/checkout';
+
+  /// `GET /orders/{id}` — order detail with live status. Used for payment
+  /// polling: each call also queries the gateway directly, so `paid` shows
+  /// immediately after the student pays without waiting for the webhook.
+  static String orderById(String id) => '/$version/orders/$id';
+
+  /// `GET /orders/my` — the signed-in user's past orders.
   static const String ordersMy = '/$version/orders/my';
 
   // Coupons

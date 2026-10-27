@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 
-class SmartCanteenButton extends StatefulWidget {
-  const SmartCanteenButton({
+class AppButton extends StatefulWidget {
+  const AppButton({
     super.key,
     required this.label,
     this.onPressed,
@@ -29,16 +29,16 @@ class SmartCanteenButton extends StatefulWidget {
   final Color textColor;
   final double height;
 
-  /// Corner radius. Defaults to 8px when null.
+  /// Corner radius. Defaults to 32px when null.
   final double? radius;
   final Widget? leading;
   final double width;
 
   @override
-  State<SmartCanteenButton> createState() => _SmartCanteenButtonState();
+  State<AppButton> createState() => _AppButtonState();
 }
 
-class _SmartCanteenButtonState extends State<SmartCanteenButton>
+class _AppButtonState extends State<AppButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -71,11 +71,7 @@ class _SmartCanteenButtonState extends State<SmartCanteenButton>
 
   @override
   Widget build(BuildContext context) {
-    // Sharp corners by default — 8px, overridable via widget.radius.
     final radius = widget.radius ?? 32;
-    // final shadowColor = widget.gradient != null
-    //     ? AppColors.primaryDark
-    //     : widget.fillColor;
 
     return ScaleTransition(
       scale: _scaleAnimation,
@@ -86,13 +82,6 @@ class _SmartCanteenButtonState extends State<SmartCanteenButton>
           decoration: BoxDecoration(
             gradient: widget.gradient,
             borderRadius: BorderRadius.circular(radius),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: shadowColor.withValues(alpha: 0.3),
-            //     blurRadius: 16,
-            //     offset: const Offset(0, 6),
-            //   ),
-            // ],
           ),
           child: ElevatedButton(
             onPressed: (widget.isLoading || widget.onPressed == null)

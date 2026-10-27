@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/utils/password_validator.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_button.dart';
-import 'package:smart_canteen_user_frontend/core/widgets/smart_canteen_text_field.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/app_button.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/form/smart_canteen_text_field.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/auth_logo.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/views/widgets/verify_email/resend_code_button.dart';
@@ -168,7 +168,7 @@ class _EmailStepState extends State<_EmailStep> {
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 24),
-        SmartCanteenButton(
+        AppButton(
           label: _busy
               ? l10n.authForgotPasswordSending
               : l10n.authForgotPasswordSendCode,
@@ -358,7 +358,7 @@ class _NewPasswordStepState extends State<_NewPasswordStep> {
           obscureText: true,
         ),
         const SizedBox(height: 24),
-        SmartCanteenButton(
+        AppButton(
           label: _busy
               ? l10n.authForgotPasswordResetting
               : l10n.authForgotPasswordResetButton,
@@ -512,7 +512,7 @@ class _VerifyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Consumer<AuthViewModel>(
-      builder: (_, vm, _) => SmartCanteenButton(
+      builder: (_, vm, _) => AppButton(
         label: l10n.authForgotPasswordVerifyButton,
         isLoading: false,
         onPressed: onPressed,
