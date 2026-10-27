@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
-import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/food_image_placeholder.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 
 /// Full-width hero image for the food detail page.
 ///
-/// Falls back to the gradient placeholder when there is no image URL or asset.
+/// Falls back to [FoodImagePlaceholder] when there is no image URL or asset,
+/// or when the image fails to load.
 class FoodDetailHeroImage extends StatelessWidget {
   const FoodDetailHeroImage({super.key, required this.item});
 
@@ -25,41 +25,16 @@ class FoodDetailHeroImage extends StatelessWidget {
               item.imageUrl!,
               fit: BoxFit.cover,
               errorBuilder: (context, err, st) =>
-                  _GradientPlaceholder(item: item),
+                  const FoodImagePlaceholder(iconSize: 80),
             )
           : hasAsset
           ? Image.asset(
               item.imagePath!,
               fit: BoxFit.cover,
               errorBuilder: (context, err, st) =>
-                  _GradientPlaceholder(item: item),
+                  const FoodImagePlaceholder(iconSize: 80),
             )
-          : _GradientPlaceholder(item: item),
-    );
-  }
-}
-
-class _GradientPlaceholder extends StatelessWidget {
-  const _GradientPlaceholder({required this.item});
-
-  final FoodItem item;
-
-  @override
-  Widget build(BuildContext context) {
-    final idx = item.colorSeed % kFoodGradients.length;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: kFoodGradients[idx],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Icon(
-        kFoodIcons[idx % kFoodIcons.length],
-        size: 80,
-        color: AppColors.onPrimary.withValues(alpha: 0.7),
-      ),
+          : const FoodImagePlaceholder(iconSize: 80),
     );
   }
 }

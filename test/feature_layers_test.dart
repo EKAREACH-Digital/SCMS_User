@@ -26,13 +26,10 @@ void main() {
   group('menu', () {
     final repo = MenuRepositoryImpl(MenuMockDatasource());
 
-    test('items map to entities with seeds and the fallback photo', () async {
+    test('items map to entities with the fallback photo', () async {
       final items = await repo.getMenuItems();
 
       expect(items, isNotEmpty);
-      expect(items.map((i) => i.colorSeed), [
-        for (var i = 0; i < items.length; i++) i,
-      ]);
       // The mock seeds no photos, so every item gets the shared placeholder.
       expect(items.every((i) => i.imageUrl == kFallbackFoodImageUrl), isTrue);
       expect(items.first.schoolId, 'mock-school-cadt');

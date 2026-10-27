@@ -96,45 +96,33 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
                 children: [
-                  SettingsFadeIn(
-                    index: 0,
-                    child: PasswordField(
-                      label: 'Current Password',
-                      hint: 'Enter your current password',
-                      controller: _currentController,
-                      validator: (v) => (v == null || v.isEmpty)
-                          ? 'Enter your current password.'
-                          : null,
-                    ),
+                  PasswordField(
+                    label: 'Current Password',
+                    hint: 'Enter your current password',
+                    controller: _currentController,
+                    validator: (v) => (v == null || v.isEmpty)
+                        ? 'Enter your current password.'
+                        : null,
                   ),
                   const SizedBox(height: 18),
-                  SettingsFadeIn(
-                    index: 1,
-                    child: PasswordField(
-                      label: 'New Password',
-                      hint: 'At least 8 characters',
-                      controller: _newController,
-                      validator: _validateNew,
-                    ),
+                  PasswordField(
+                    label: 'New Password',
+                    hint: 'At least 8 characters',
+                    controller: _newController,
+                    validator: _validateNew,
                   ),
                   const SizedBox(height: 18),
-                  SettingsFadeIn(
-                    index: 2,
-                    child: PasswordField(
-                      label: 'Confirm New Password',
-                      hint: 'Re-enter the new password',
-                      controller: _confirmController,
-                      validator: _validateConfirm,
-                      textInputAction: TextInputAction.done,
-                    ),
+                  PasswordField(
+                    label: 'Confirm New Password',
+                    hint: 'Re-enter the new password',
+                    controller: _confirmController,
+                    validator: _validateConfirm,
+                    textInputAction: TextInputAction.done,
                   ),
                   const SizedBox(height: 10),
                   // const _PasswordHint(),
                   const SizedBox(height: 36),
-                  SettingsFadeIn(
-                    index: 3,
-                    child: _SaveButton(saving: _saving, onPressed: _save),
-                  ),
+                  _SaveButton(saving: _saving, onPressed: _save),
                 ],
               ),
             ),

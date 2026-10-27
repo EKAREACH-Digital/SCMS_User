@@ -21,10 +21,11 @@ class MenuViewModel extends ChangeNotifier {
 
   ViewState get state => _state;
 
-  /// Every dish across all canteens for today; empty until [state] is [ViewState.success].
+  /// Every dish across all canteens for today; empty until the first load
+  /// succeeds. A forced reload keeps the previous items until the new ones arrive.
   List<FoodItem> get items => _dailyMenu?.items ?? const [];
 
-  /// The loaded daily menu; null until [state] is [ViewState.success].
+  /// The last successfully loaded daily menu; null until the first load succeeds.
   DailyMenu? get dailyMenu => _dailyMenu;
 
   /// Why the last load failed; null unless [state] is [ViewState.error].

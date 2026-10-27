@@ -38,7 +38,6 @@ class OrderRecord {
     this.session,
     this.imagePath,
     this.imageUrl,
-    this.colorSeed = 0,
   });
 
   final String id;
@@ -66,11 +65,8 @@ class OrderRecord {
   final String? imagePath;
 
   /// First item's remote photo, from the backend's `image_url`. Preferred over
-  /// [imagePath]; both null falls back to the gradient placeholder.
+  /// [imagePath]; both null falls back to the food icon placeholder.
   final String? imageUrl;
-
-  /// Controls which gradient/icon slot is used for the placeholder.
-  final int colorSeed;
 }
 
 /// The signed-in user's food orders, shown on History, QR and Settings.
@@ -101,9 +97,8 @@ class OrderHistoryViewModel extends ChangeNotifier {
     try {
       final orders = await _orderRepository.getMyOrders();
 
-      final records = <OrderRecord>[
-        for (final (i, o) in orders.indexed) _toOrderRecord(o, i),
-      ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      final records = <OrderRecord>[for (final o in orders) _toOrderRecord(o)]
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
       _orders
         ..clear()
@@ -119,7 +114,7 @@ class OrderHistoryViewModel extends ChangeNotifier {
     }
   }
 
-  OrderRecord _toOrderRecord(Order o, int index) {
+  OrderRecord _toOrderRecord(Order o) {
     final label = o.items
         .map((i) => i.quantity > 1 ? '${i.name} ×${i.quantity}' : i.name)
         .join(', ');
@@ -137,7 +132,6 @@ class OrderHistoryViewModel extends ChangeNotifier {
       createdAt: o.createdAt,
       session: _capitalize(o.mealSession),
       imageUrl: photo,
-      colorSeed: index,
       lines: [
         for (final i in o.items)
           OrderLine(
@@ -152,12 +146,12 @@ class OrderHistoryViewModel extends ChangeNotifier {
 
   static String _mapStatus(String backend) => switch (backend) {
     'pending_payment' => 'Awaiting Payment',
-    'paid'            => 'Paid',
-    'preparing'       => 'Preparing',
-    'ready'           => 'Ready',
-    'completed'       => 'Completed',
-    'cancelled'       => 'Failed',
-    _                 => 'Pending',
+    'paid' => 'Paid',
+    'preparing' => 'Preparing',
+    'ready' => 'Ready',
+    'completed' => 'Completed',
+    'cancelled' => 'Failed',
+    _ => 'Pending',
   };
 
   static String _capitalize(String s) =>

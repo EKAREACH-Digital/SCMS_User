@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_colors.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_fonts.dart';
 import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/widgets/qr_viewfinder.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/deprecated/qr_viewfinder.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/meal_coupons_viewmodel.dart';
 
 /// [Deprecated_File]

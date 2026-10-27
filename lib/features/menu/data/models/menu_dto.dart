@@ -51,10 +51,9 @@ class MenuItemDto {
     );
   }
 
-  /// The backend has no ratings or tags, so the card falls back to gradient +
-  /// icon placeholders seeded by [colorSeed]; the category doubles as a tag.
+  /// The backend has no ratings or tags; the category doubles as a tag.
   /// [fallbackImageUrl] stands in for a missing photo where the UI wants one.
-  FoodItem toEntity({int colorSeed = 0, String? fallbackImageUrl}) => FoodItem(
+  FoodItem toEntity({String? fallbackImageUrl}) => FoodItem(
     id: id,
     name: name,
     description: description,
@@ -63,7 +62,6 @@ class MenuItemDto {
     tags: categoryName != null ? [categoryName!] : const <String>[],
     category: (categoryName ?? 'other').toLowerCase(),
     imageUrl: imageUrl ?? fallbackImageUrl,
-    colorSeed: colorSeed,
     schoolId: schoolId,
   );
 
@@ -153,10 +151,10 @@ class WeeklyMenuDto {
     validFrom: menu.validFrom,
     validTo: menu.validTo,
     entries: [
-      for (final (i, e) in entries.indexed)
+      for (final e in entries)
         MenuEntry(
           id: e.id,
-          item: e.menuItem.toEntity(colorSeed: i),
+          item: e.menuItem.toEntity(),
           dayOfWeek: e.dayOfWeek,
           quantityAvailable: e.quantityAvailable,
         ),

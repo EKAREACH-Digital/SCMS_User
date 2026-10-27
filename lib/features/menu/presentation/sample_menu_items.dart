@@ -64,17 +64,6 @@ const List<FoodItem> kMenuItems = [
     category: 'drinks',
     imagePath: ImageConst.sugarcaneJuice,
   ),
-  // FoodItem(
-  //   id: '7',
-  //   name: 'Bai Sach Chrouk',
-  //   description:
-  //       'Cambodian breakfast of marinated pork on rice with pickled veggies',
-  //   price: 1.50,
-  //   rating: 4.8,
-  //   tags: ['Grilled', 'Traditional'],
-  //   category: 'breakfast',
-  //   colorSeed: 4,
-  // ),
   FoodItem(
     id: '7',
     name: 'Beef Lok Lak',

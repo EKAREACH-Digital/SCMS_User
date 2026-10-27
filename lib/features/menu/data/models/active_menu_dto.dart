@@ -32,7 +32,6 @@ class ActiveMenuDto {
   /// [imageHost] turns relative `image_url`s (`/uploads/...`) into full URLs;
   /// pass the API base URL. Without it they're left as they came.
   DailyMenu toEntity({String? imageHost}) {
-    var seed = 0;
     return DailyMenu(
       date: DateTime.tryParse(date) ?? DateTime.now(),
       dayOfWeek: dayOfWeek,
@@ -55,7 +54,6 @@ class ActiveMenuDto {
                       item.toEntity(
                         canteenId: canteen.id,
                         categoryName: category.name,
-                        colorSeed: seed++,
                         imageHost: imageHost,
                       ),
                   ],
@@ -175,7 +173,6 @@ class ActiveMenuItemDto {
   FoodItem toEntity({
     required String canteenId,
     required String categoryName,
-    int colorSeed = 0,
     String? imageHost,
   }) => FoodItem(
     id: menuItemId,
@@ -186,7 +183,6 @@ class ActiveMenuItemDto {
     tags: [categoryName],
     category: categoryName.toLowerCase(),
     imageUrl: _absolute(imageUrl, imageHost),
-    colorSeed: colorSeed,
     canteenId: canteenId,
     calories: calories,
     quantityAvailable: quantityAvailable,

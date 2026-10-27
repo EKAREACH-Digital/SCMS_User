@@ -16,7 +16,6 @@ class FoodItem {
   final String category; // 'breakfast' | 'lunch' | 'drinks'
   final String? imagePath; // bundled asset (local)
   final String? imageUrl; // remote photo (network)
-  final int colorSeed;
 
   /// The school (tenant) this dish belongs to — an order is scoped to it.
   final String? schoolId;
@@ -43,7 +42,6 @@ class FoodItem {
     required this.category,
     this.imagePath,
     this.imageUrl,
-    this.colorSeed = 0,
     this.schoolId,
     this.canteenId,
     this.calories,
@@ -61,7 +59,6 @@ class FoodItem {
     String? category,
     String? imagePath,
     String? imageUrl,
-    int? colorSeed,
     String? schoolId,
     String? canteenId,
     int? calories,
@@ -78,7 +75,6 @@ class FoodItem {
       category: category ?? this.category,
       imagePath: imagePath ?? this.imagePath,
       imageUrl: imageUrl ?? this.imageUrl,
-      colorSeed: colorSeed ?? this.colorSeed,
       schoolId: schoolId ?? this.schoolId,
       canteenId: canteenId ?? this.canteenId,
       calories: calories ?? this.calories,

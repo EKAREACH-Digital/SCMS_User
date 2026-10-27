@@ -14,4 +14,3 @@ Why it is shaped this way:
 - **The category name becomes `FoodItem.category` and its tag**, which is how the existing screens already group and label dishes.
 - **Relative image paths are resolved in `toEntity`.** `image_url` may be `/uploads/...`. The repository passes the API base URL as `imageHost`, and `Uri.resolve` keeps only the host, so `http://host:3000/api` + `/uploads/a.jpg` becomes `http://host:3000/uploads/a.jpg`. Empty strings are treated as no image.
 - **`price` accepts a number or a decimal string**, like the other menu DTOs, since the backend's decimal columns can come back as strings.
-- **`colorSeed` is a running index** across the whole menu, so placeholder colours differ from card to card.

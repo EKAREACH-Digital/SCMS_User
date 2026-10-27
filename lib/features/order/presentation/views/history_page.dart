@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/food_image_placeholder.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
@@ -774,44 +774,25 @@ class _FoodThumbnail extends StatelessWidget {
         order.imageUrl!,
         fit: BoxFit.cover,
         loadingBuilder: (context, child, progress) =>
-            progress == null ? child : _placeholder(),
+            progress == null ? child : const FoodImagePlaceholder(iconSize: 22),
         errorBuilder: (_, _, _) => order.imagePath != null
             ? Image.asset(
                 order.imagePath!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _placeholder(),
+                errorBuilder: (_, _, _) =>
+                    const FoodImagePlaceholder(iconSize: 22),
               )
-            : _placeholder(),
+            : const FoodImagePlaceholder(iconSize: 22),
       );
     }
     if (order.imagePath != null) {
       return Image.asset(
         order.imagePath!,
         fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => _placeholder(),
+        errorBuilder: (_, _, _) => const FoodImagePlaceholder(iconSize: 22),
       );
     }
-    return _placeholder();
-  }
-
-  Widget _placeholder() {
-    final idx = order.colorSeed % kFoodGradients.length;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: kFoodGradients[idx],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Center(
-        child: Icon(
-          kFoodIcons[idx % kFoodIcons.length],
-          color: AppColors.primary,
-          size: 22,
-        ),
-      ),
-    );
+    return const FoodImagePlaceholder(iconSize: 22);
   }
 }
 
@@ -1243,7 +1224,12 @@ class _OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.fromLTRB(16, 8, 16, MediaQuery.paddingOf(context).bottom + 50),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        8,
+        16,
+        MediaQuery.paddingOf(context).bottom + 50,
+      ),
       itemCount: sorted.length,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.only(bottom: 12),
@@ -1252,4 +1238,3 @@ class _OrderList extends StatelessWidget {
     );
   }
 }
-

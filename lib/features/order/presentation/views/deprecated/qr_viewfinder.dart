@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_colors.dart';
 
+/// [Deprecated_File]
+///  Left over from before refactor
+
 /// The bordered camera viewfinder overlay for the QR scanner screen.
 ///
 /// Renders a semi-transparent dark scrim over the camera preview with a

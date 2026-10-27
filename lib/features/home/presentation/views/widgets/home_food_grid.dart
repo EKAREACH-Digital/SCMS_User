@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/food_image_placeholder.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/food_item.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
@@ -133,7 +133,6 @@ class _FoodImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final idx = item.colorSeed % kFoodGradients.length;
     final hasUrl = item.imageUrl != null && item.imageUrl!.isNotEmpty;
     final hasAsset = item.imagePath != null && item.imagePath!.isNotEmpty;
 
@@ -141,43 +140,17 @@ class _FoodImage extends StatelessWidget {
       return Image.network(
         item.imageUrl!,
         fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => _Placeholder(idx: idx),
+        errorBuilder: (_, _, _) => const FoodImagePlaceholder(iconSize: 36),
       );
     }
     if (hasAsset) {
       return Image.asset(
         item.imagePath!,
         fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => _Placeholder(idx: idx),
+        errorBuilder: (_, _, _) => const FoodImagePlaceholder(iconSize: 36),
       );
     }
-    return _Placeholder(idx: idx);
-  }
-}
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder({required this.idx});
-
-  final int idx;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: kFoodGradients[idx],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Center(
-        child: Icon(
-          kFoodIcons[idx % kFoodIcons.length],
-          color: AppColors.onPrimary.withValues(alpha: 0.8),
-          size: 36,
-        ),
-      ),
-    );
+    return const FoodImagePlaceholder(iconSize: 36);
   }
 }
 
@@ -207,7 +180,11 @@ class _CircularAddButton extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(Icons.add_rounded, color: AppColors.onPrimary, size: 18),
+        child: const Icon(
+          Icons.add_rounded,
+          color: AppColors.onPrimary,
+          size: 18,
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:smart_canteen_user_frontend/core/constants/food_visuals.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/food_image_placeholder.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/quantity_selector.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/cart_entry.dart';
 
@@ -108,10 +108,10 @@ class _DeleteButton extends StatelessWidget {
     return GestureDetector(
       onTap: onDelete,
       child: const Icon(
-          Icons.delete_outline_rounded,
-          color: AppColors.accentRed,
-          size: 28,
-        ),
+        Icons.delete_outline_rounded,
+        color: AppColors.accentRed,
+        size: 28,
+      ),
     );
   }
 }
@@ -123,7 +123,6 @@ class _CartThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final idx = entry.item.colorSeed % kFoodGradients.length;
     final hasUrl =
         entry.item.imageUrl != null && entry.item.imageUrl!.isNotEmpty;
     final hasAsset =
@@ -138,39 +137,15 @@ class _CartThumbnail extends StatelessWidget {
             ? Image.network(
                 entry.item.imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _Placeholder(idx: idx),
+                errorBuilder: (_, _, _) => const FoodImagePlaceholder(),
               )
             : hasAsset
             ? Image.asset(
                 entry.item.imagePath!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _Placeholder(idx: idx),
+                errorBuilder: (_, _, _) => const FoodImagePlaceholder(),
               )
-            : _Placeholder(idx: idx),
-      ),
-    );
-  }
-}
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder({required this.idx});
-
-  final int idx;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: kFoodGradients[idx],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Icon(
-        kFoodIcons[idx % kFoodIcons.length],
-        color: AppColors.onPrimary.withValues(alpha: 0.8),
-        size: 28,
+            : const FoodImagePlaceholder(),
       ),
     );
   }

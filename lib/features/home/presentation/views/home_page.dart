@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_canteen_user_frontend/core/constants/images_constant.dart';
 import 'package:smart_canteen_user_frontend/core/routes/app_routes.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
-import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
 import 'package:smart_canteen_user_frontend/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/widgets/home_food_grid.dart';
 import 'package:smart_canteen_user_frontend/features/home/presentation/views/widgets/home_header.dart';
@@ -58,74 +57,78 @@ class _HomePageState extends State<HomePage> {
         bottom: false,
         child: Stack(
           children: [
-            // Transparent RefreshIndicator — gesture only; our overlay shows instead.
-            RefreshIndicator(
+            // Gesture only; our overlay shows instead. Don't hide the default
+            // spinner with `color: Colors.transparent`: a zero-alpha color arms
+            // the indicator on any drag from the top, so a fling down the page
+            // triggered a refresh.
+            RefreshIndicator.noSpinner(
               onRefresh: _onRefresh,
-              color: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              strokeWidth: 0,
-              child: CustomScrollView(
-                slivers: [
-                  // Section 1: Top navigation bar
-                  SliverToBoxAdapter(
-                    child: Consumer2<AuthViewModel, CartViewModel>(
-                      builder: (context, auth, cart, _) => HomeHeader(
-                        authViewModel: auth,
-                        onNotificationTap: () =>
-                            context.push(AppPaths.notifications),
-                        onAvatarTap: () => context.go(AppPaths.settings),
-                        onCartTap: () => context.push(AppPaths.orderSummary),
-                        cartItemCount: cart.totalItems,
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 10)),
-                  // Section 2: Auto-scrolling banner carousel
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
-                      child: Text(
-                        "CADT's daily food Banner",
-                        style: AppFonts.heading3.copyWith(
-                          color: context.textColor,
-                          fontWeight: AppFonts.semiBold,
+              // No Android stretch/glow at the edges: at the bottom it looked
+              // like a refresh starting, but pull-to-refresh only runs at the top.
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(
+                  context,
+                ).copyWith(overscroll: false),
+                child: CustomScrollView(
+                  slivers: [
+                    // Section 1: Top navigation bar
+                    SliverToBoxAdapter(
+                      child: Consumer2<AuthViewModel, CartViewModel>(
+                        builder: (context, auth, cart, _) => HomeHeader(
+                          authViewModel: auth,
+                          onNotificationTap: () =>
+                              context.push(AppPaths.notifications),
+                          onAvatarTap: () => context.go(AppPaths.settings),
+                          onCartTap: () => context.push(AppPaths.orderSummary),
+                          cartItemCount: cart.totalItems,
                         ),
                       ),
                     ),
-                  ),
-                  const SliverToBoxAdapter(child: HomeBanner()),
-                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                    // Section 2: Auto-scrolling banner carousel
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+                        child: Text(
+                          "CADT's daily food Banner",
+                          style: AppFonts.heading3.copyWith(
+                            color: context.textColor,
+                            fontWeight: AppFonts.semiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(child: HomeBanner()),
+                    const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-                  // Section 3: Menu grid
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                      child: _MenuSectionHeader(
-                        onSeeAll: () => context.push(AppPaths.menuBrowse),
+                    // Section 3: Menu grid
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                        child: _MenuSectionHeader(
+                          onSeeAll: () => context.push(AppPaths.menuBrowse),
+                        ),
                       ),
                     ),
-                  ),
-                  SliverPadding(
-                    // Bottom clears the floating nav bar + system gesture inset.
-                    padding: EdgeInsets.fromLTRB(
-                      16,
-                      0,
-                      16,
-                      MediaQuery.of(context).padding.bottom + 80,
-                    ),
-                    sliver: SliverToBoxAdapter(
-                      child: Consumer<MenuViewModel>(
-                        builder: (context, menu, _) {
-                          final items = menu.state == ViewState.success
-                              ? menu.items
-                              : kMenuItems;
-                          if (items.isEmpty) return const _EmptyMenu();
-                          return HomeFoodGrid(items: items);
-                        },
+                    SliverPadding(
+                      // Bottom clears the floating nav bar + system gesture inset.
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      sliver: SliverToBoxAdapter(
+                        child: Consumer<MenuViewModel>(
+                          builder: (context, menu, _) {
+                            // Keep the last loaded menu during a pull-to-refresh
+                            // so the grid doesn't flash the sample dishes.
+                            final items = menu.dailyMenu != null
+                                ? menu.items
+                                : kMenuItems;
+                            if (items.isEmpty) return const _EmptyMenu();
+                            return HomeFoodGrid(items: items);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
@@ -206,7 +209,11 @@ class _EmptyMenu extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 48),
       child: Column(
         children: [
-          const Icon(Icons.restaurant_menu_rounded, size: 40, color: AppColors.border),
+          const Icon(
+            Icons.restaurant_menu_rounded,
+            size: 40,
+            color: AppColors.border,
+          ),
           const SizedBox(height: 12),
           Text(
             'No items available',

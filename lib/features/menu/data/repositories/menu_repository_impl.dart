@@ -39,8 +39,8 @@ class MenuRepositoryImpl implements MenuRepository {
     // Each item carries its own photo, falling back to the shared placeholder
     // for the handful of dishes seeded without one.
     return [
-      for (final (i, dto) in dtos.indexed)
-        dto.toEntity(colorSeed: i, fallbackImageUrl: kFallbackFoodImageUrl),
+      for (final dto in dtos)
+        dto.toEntity(fallbackImageUrl: kFallbackFoodImageUrl),
     ];
   }
 

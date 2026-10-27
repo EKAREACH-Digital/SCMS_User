@@ -23,7 +23,7 @@ import 'package:smart_canteen_user_frontend/features/order/presentation/views/hi
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_summary_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_qr_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_success_page.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/qr_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/deprecated/qr_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/payment_methods_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/topup_page.dart';
 import 'package:smart_canteen_user_frontend/features/settings/presentation/views/about_page.dart';
