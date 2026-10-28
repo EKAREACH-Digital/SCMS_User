@@ -183,7 +183,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderDetailQrPreparing =>
-      'Your food is being prepared. The QR appears when it\'s ready for pickup.';
+      'QR ticket is in processing (CODE: QR_TOKEN_NOT_FOUND)';
 
   @override
   String get orderDetailQrPickedUp =>
@@ -848,4 +848,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentQuitConfirm => 'Yes, quit';
+
+  @override
+  String get pickupScanTitle => 'Scan QR';
+
+  @override
+  String get pickupScanInstruction => 'Point at the counter QR code';
+
+  @override
+  String get pickupScanReady => 'Go to the counter';
+
+  @override
+  String get pickupScanPreparing => 'Still preparing';
+
+  @override
+  String get pickupScanManualHint => 'Enter stand code';
+
+  @override
+  String get pickupScanAgain => 'Scan again';
+
+  @override
+  String pickupScanCheckedIn(String counter) {
+    return 'Checked in at $counter';
+  }
+
+  @override
+  String get pickupScanErrorUnknown => 'Unknown pickup counter QR';
+
+  @override
+  String get pickupScanErrorNoOrder =>
+      'You have no order to collect at this counter today';
+
+  @override
+  String get pickupScanSubtitle => 'Smart Canteen | Scan and enjoy the meals';
+
+  @override
+  String get pickupEnterCode => 'Enter Code';
+
+  @override
+  String get pickupEnterCodeConfirm => 'Confirm';
+
+  @override
+  String get pickupFlash => 'Flash';
+
+  @override
+  String get pickupResultTitle => 'Pick Up Items';
 }

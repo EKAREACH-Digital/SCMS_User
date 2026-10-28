@@ -24,7 +24,7 @@ import 'package:smart_canteen_user_frontend/features/order/presentation/views/or
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_summary_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_qr_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_success_page.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/deprecated/qr_page.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/presentation/views/pickup_scan_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/payment_methods_page.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/views/topup_page.dart';
 import 'package:smart_canteen_user_frontend/features/settings/presentation/views/about_page.dart';
@@ -102,7 +102,7 @@ abstract final class AppRouter {
         branches: [
           _tab(AppPaths.home, AppRoutes.home, const HomePage()),
           _tab(AppPaths.menu, AppRoutes.menu, const MenuPage()),
-          _tab(AppPaths.qr, AppRoutes.qr, const QrPage()),
+          _tab(AppPaths.qr, AppRoutes.qr, const PickupScanPage()),
           _tab(AppPaths.history, AppRoutes.history, const OrderHistoryPage()),
           _tab(AppPaths.settings, AppRoutes.settings, const SettingsPage()),
         ],

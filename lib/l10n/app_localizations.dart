@@ -413,7 +413,7 @@ abstract class AppLocalizations {
   /// No description provided for @orderDetailQrPreparing.
   ///
   /// In en, this message translates to:
-  /// **'Your food is being prepared. The QR appears when it\'s ready for pickup.'**
+  /// **'QR ticket is in processing (CODE: QR_TOKEN_NOT_FOUND)'**
   String get orderDetailQrPreparing;
 
   /// No description provided for @orderDetailQrPickedUp.
@@ -1651,6 +1651,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yes, quit'**
   String get paymentQuitConfirm;
+
+  /// No description provided for @pickupScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR'**
+  String get pickupScanTitle;
+
+  /// No description provided for @pickupScanInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at the counter QR code'**
+  String get pickupScanInstruction;
+
+  /// No description provided for @pickupScanReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to the counter'**
+  String get pickupScanReady;
+
+  /// No description provided for @pickupScanPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Still preparing'**
+  String get pickupScanPreparing;
+
+  /// No description provided for @pickupScanManualHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter stand code'**
+  String get pickupScanManualHint;
+
+  /// No description provided for @pickupScanAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan again'**
+  String get pickupScanAgain;
+
+  /// No description provided for @pickupScanCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in at {counter}'**
+  String pickupScanCheckedIn(String counter);
+
+  /// No description provided for @pickupScanErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown pickup counter QR'**
+  String get pickupScanErrorUnknown;
+
+  /// No description provided for @pickupScanErrorNoOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no order to collect at this counter today'**
+  String get pickupScanErrorNoOrder;
+
+  /// No description provided for @pickupScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Canteen | Scan and enjoy the meals'**
+  String get pickupScanSubtitle;
+
+  /// No description provided for @pickupEnterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Code'**
+  String get pickupEnterCode;
+
+  /// No description provided for @pickupEnterCodeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get pickupEnterCodeConfirm;
+
+  /// No description provided for @pickupFlash.
+  ///
+  /// In en, this message translates to:
+  /// **'Flash'**
+  String get pickupFlash;
+
+  /// No description provided for @pickupResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Up Items'**
+  String get pickupResultTitle;
 }
 
 class _AppLocalizationsDelegate

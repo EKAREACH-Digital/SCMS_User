@@ -56,7 +56,7 @@
   "orderDetailSaveFailed": "មិនអាចរក្សាទុក QR បានទេ",
   "orderDetailQrPending": "QR សម្រាប់ទទួលអាហារនឹងបង្ហាញបន្ទាប់ពីបង់ប្រាក់",
   "orderDetailQrCancelled": "ការបញ្ជាទិញនេះត្រូវបានបោះបង់",
-  "orderDetailQrPreparing": "អាហាររបស់អ្នកកំពុងរៀបចំ។ QR នឹងបង្ហាញនៅពេលអាហាររួចរាល់សម្រាប់ទទួល។",
+  "orderDetailQrPreparing": "សំបុត្រ QR កំពុងដំណើរការ (CODE: QR_TOKEN_NOT_FOUND)",
   "orderDetailQrPickedUp": "អ្នកបានទទួលអាហាររួចហើយ។ QR មិនអាចប្រើបានទៀតទេ។",
   "orderDetailErrorTitle": "មិនអាចទាញយកការបញ្ជាទិញនេះបានទេ",
   "orderDetailSummary": "សង្ខេបការបញ្ជាទិញ",
@@ -289,5 +289,25 @@
 
   "paymentQuitTitle": "ចាកចេញពីការទូទាត់?",
   "paymentQuitBody": "ការបញ្ជាទិញរបស់អ្នកមិនទាន់បានទូទាត់នៅឡើយ។ តើអ្នកប្រាកដថាចង់ចាកចេញ?",
-  "paymentQuitConfirm": "បាទ/ចាស ចាកចេញ"
+  "paymentQuitConfirm": "បាទ/ចាស ចាកចេញ",
+
+  "pickupScanTitle": "ស្កេនទទួលអាហារ",
+  "pickupScanInstruction": "ចង្អុលទៅ QR នៅបញ្ជរ",
+  "pickupScanReady": "ទៅទទួលអាហារនៅបញ្ជរ",
+  "pickupScanPreparing": "កំពុងរៀបចំ",
+  "pickupScanManualHint": "បញ្ចូលលេខកូដបញ្ជរ",
+  "pickupScanAgain": "ស្កេនម្តងទៀត",
+  "pickupScanCheckedIn": "បានចុះឈ្មោះនៅ {counter}",
+  "@pickupScanCheckedIn": {
+    "placeholders": {
+      "counter": { "type": "String" }
+    }
+  },
+  "pickupScanErrorUnknown": "QR បញ្ជរមិនត្រូវបានស្គាល់",
+  "pickupScanErrorNoOrder": "អ្នកមិនមានការបញ្ជាទិញដើម្បីទទួលនៅបញ្ជរនេះថ្ងៃនេះ",
+  "pickupScanSubtitle": "ស្ម័រតខែនទីន | ស្កែន ហើយរីករាយ",
+  "pickupEnterCode": "បញ្ចូលលេខកូដ",
+  "pickupEnterCodeConfirm": "បញ្ជាក់",
+  "pickupFlash": "ពន្លឺ",
+  "pickupResultTitle": "ទទួលភោជន"
 }

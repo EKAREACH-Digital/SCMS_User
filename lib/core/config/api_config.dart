@@ -80,6 +80,10 @@ abstract final class ApiConfig {
   /// for one paid order: status, pickup number and the QR token to scan.
   static String pickupMy(String orderId) => '/$version/pickup/my/$orderId';
 
+  /// `POST /pickup/arrive` — check in at a counter stand; returns today's open
+  /// orders at the branch the stand belongs to.
+  static const String pickupArrive = '/$version/pickup/arrive';
+
   // Menu — see docs/features/student-menu-api.md
 
   /// `GET /menus/active?branch_id=&canteen_id=&date=` (public) — the student

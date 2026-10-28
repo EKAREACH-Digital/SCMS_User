@@ -65,7 +65,7 @@ check '(^|[^A-Za-z0-9_])TextStyle\(' \
       'Use AppFonts.headingN.copyWith(...), not raw TextStyle' "$FONT_DEF_FILES"
 check 'FontWeight\.w[0-9]' \
       'Use AppFonts.regular/medium/semiBold/bold, not FontWeight.wXXX' "$FONT_DEF_FILES"
-check 'Colors\.grey' \
+check '(^|[^A-Za-z0-9_])Colors\.grey' \
       'Use an AppColors constant, not Colors.grey' "$FONT_DEF_FILES"
 
 # ---- UI construction ----

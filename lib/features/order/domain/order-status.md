@@ -12,7 +12,7 @@ The backend sends a status string. The data layer turns it into the
 | Backend | `OrderStatus` | History tab | Badge | QR on Order Detail |
 |---|---|---|---|---|
 | `pending_payment` | `pendingPayment` | Pending Payment | orange | No: "appears once the order is paid" |
-| `paid`, `preparing` | `paid` | Processing | yellow | No: "your food is being prepared" |
+| `paid`, `preparing` | `paid` | Processing | yellow | **Yes**, with Download |
 | `ready` | `ready` | Ready | blue | **Yes**, with Download |
 | `completed` | `completed` | Completed | green | No: "already picked up, QR not available" |
 | `cancelled` | `cancelled` | All only | red | No: "this order was cancelled" |
@@ -25,8 +25,10 @@ The backend sends a status string. The data layer turns it into the
 - It is only returned by `GET /pickup/my/{orderId}`. `GET /orders/my` doesn't include it.
 - The backend issues it at `paid` and returns it while the order is `paid`,
   `preparing` or `ready`. For `pending_payment`, `completed` and `cancelled` it is `null`.
-- **The app shows the QR only at `ready`**, even though the token exists from
-  `paid`. Before that the food is still cooking, so there is nothing to collect.
+- **The app shows the QR at `paid` (Processing) and `ready`**, as soon as the
+  token exists, so the student has it before the food reaches the counter.
+  A `paid` or `ready` order whose ticket has no token yet shows "QR ticket is
+  in processing (CODE: QR_TOKEN_NOT_FOUND)" instead.
 
 ## Where the logic lives
 

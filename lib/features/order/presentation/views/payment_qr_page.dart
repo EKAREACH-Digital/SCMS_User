@@ -13,6 +13,7 @@ import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
 import 'package:smart_canteen_user_frontend/core/widgets/dialog/message_dialog.dart';
 import 'package:smart_canteen_user_frontend/features/menu/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_placement_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
@@ -133,6 +134,9 @@ class _PaymentQrPageState extends State<PaymentQrPage> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             context.read<CartViewModel>().clear();
+            // Fetch order history, so when landed on history page after success,
+            // user see the new order card.
+            context.read<OrderHistoryViewModel>().loadFromBackend();
             vm.reset();
             context.push(AppPaths.paymentSuccess);
           });

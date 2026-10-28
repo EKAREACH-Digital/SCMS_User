@@ -30,6 +30,11 @@ import 'package:smart_canteen_user_frontend/features/notification/presentation/v
 import 'package:smart_canteen_user_frontend/features/order/data/datasources/order_remote_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/order/data/repositories/order_repository_impl.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/data/datasources/pickup_datasource.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/data/datasources/pickup_remote_datasource.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/data/repositories/pickup_repository_impl.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/domain/repositories/pickup_repository.dart';
+import 'package:smart_canteen_user_frontend/features/pickup/presentation/viewmodels/pickup_scan_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/meal_coupons_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_detail_viewmodel.dart';
@@ -96,6 +101,13 @@ class SmartCanteenApp extends StatelessWidget {
           create: (c) =>
               OrderRepositoryImpl(OrderRemoteDatasource(c.read<Dio>())),
         ),
+        Provider<PickupDatasource>(
+          create: (c) => PickupRemoteDatasource(c.read<Dio>()),
+        ),
+        Provider<PickupRepository>(
+          create: (c) =>
+              PickupRepositoryImpl(c.read<PickupDatasource>()),
+        ),
         Provider<WalletRepository>(
           create: (c) =>
               WalletRepositoryImpl(WalletRemoteDatasource(c.read<Dio>())),
@@ -138,6 +150,9 @@ class SmartCanteenApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (c) => OrderDetailViewModel(c.read<OrderRepository>()),
+        ),
+        ChangeNotifierProvider(
+          create: (c) => PickupScanViewModel(c.read<PickupRepository>()),
         ),
         ChangeNotifierProvider(
           create: (c) => BalanceViewModel(c.read<WalletRepository>()),

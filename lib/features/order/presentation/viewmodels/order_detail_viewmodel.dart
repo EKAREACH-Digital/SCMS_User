@@ -11,11 +11,11 @@ import 'package:smart_canteen_user_frontend/features/order/domain/repositories/o
 enum PickupQrState {
   loading,
 
-  /// Ready for pickup, with a token: show the QR and the Download button.
+  /// Paid or ready for pickup, with a token: show the QR and the Download button.
   available,
   awaitingPayment,
 
-  /// Paid but still cooking: no QR until it's ready.
+  /// Paid or ready but its ticket has no token yet: no QR until it's issued.
   preparing,
   pickedUp,
   cancelled,
@@ -57,8 +57,9 @@ class OrderDetailViewModel extends ChangeNotifier {
   }
 
   /// Decides the QR area from the pickup ticket and [listStatus], the order's
-  /// status in the history list. The QR only shows once the food is ready:
-  /// before that the student would queue for food that is still cooking.
+  /// status in the history list. The QR shows from the moment the order is
+  /// paid (still cooking, "Processing") through ready, so the student has it
+  /// in hand before the food reaches the counter.
   ///
   /// A final status (completed, cancelled) from either source wins. Otherwise
   /// the pickup ticket is preferred, since it was just fetched; unpaid and
@@ -74,18 +75,17 @@ class OrderDetailViewModel extends ChangeNotifier {
     if (status == OrderStatus.pendingPayment) {
       return PickupQrState.awaitingPayment;
     }
-    if (status == OrderStatus.ready && _pickup?.pickupQrToken != null) {
+    if ((status == OrderStatus.ready || status == OrderStatus.paid) &&
+        _pickup?.pickupQrToken != null) {
       return PickupQrState.available;
     }
     return switch (_state) {
       ViewState.error => PickupQrState.error,
-      // Paid, or marked ready before its ticket was issued.
+      // Paid or marked ready before its ticket was issued.
       ViewState.success => PickupQrState.preparing,
-      // The list already says it's cooking; no need to wait for the ticket.
-      ViewState.idle || ViewState.loading =>
-        status == OrderStatus.paid
-            ? PickupQrState.preparing
-            : PickupQrState.loading,
+      // Even when the list already says it's cooking, wait for the ticket:
+      // a paid order now shows its QR, so it may arrive with it.
+      ViewState.idle || ViewState.loading => PickupQrState.loading,
     };
   }
 

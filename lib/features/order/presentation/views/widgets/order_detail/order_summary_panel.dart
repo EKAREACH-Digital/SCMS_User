@@ -78,7 +78,9 @@ class _SummaryContent extends StatelessWidget {
         const SizedBox(height: 14),
         _SummaryRow(
           label: l10n.orderDetailDate,
-          value: DateFormat('dd/MMM/yyyy').format(order.createdAt.toLocal()),
+          value: DateFormat(
+            'dd/MMM/yyyy  hh:mm a',
+          ).format(order.createdAt.toLocal()),
         ),
         for (final line in order.lines)
           _SummaryRow(

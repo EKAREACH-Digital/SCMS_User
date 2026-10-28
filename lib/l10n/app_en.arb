@@ -66,7 +66,7 @@
   "orderDetailSaveFailed": "Couldn't save the QR code",
   "orderDetailQrPending": "Your pickup QR appears once the order is paid",
   "orderDetailQrCancelled": "This order was cancelled",
-  "orderDetailQrPreparing": "Your food is being prepared. The QR appears when it's ready for pickup.",
+  "orderDetailQrPreparing": "QR ticket is in processing (CODE: QR_TOKEN_NOT_FOUND)",
   "orderDetailQrPickedUp": "You have already picked up your food. QR not available.",
   "orderDetailErrorTitle": "Couldn't load this order",
   "orderDetailSummary": "Order Summary",
@@ -335,5 +335,25 @@
 
   "paymentQuitTitle": "Quit payment?",
   "paymentQuitBody": "Your order has not been paid. Are you sure you want to leave?",
-  "paymentQuitConfirm": "Yes, quit"
+  "paymentQuitConfirm": "Yes, quit",
+
+  "pickupScanTitle": "Scan QR",
+  "pickupScanInstruction": "Point at the counter QR code",
+  "pickupScanReady": "Go to the counter",
+  "pickupScanPreparing": "Still preparing",
+  "pickupScanManualHint": "Enter stand code",
+  "pickupScanAgain": "Scan again",
+  "pickupScanCheckedIn": "Checked in at {counter}",
+  "@pickupScanCheckedIn": {
+    "placeholders": {
+      "counter": { "type": "String" }
+    }
+  },
+  "pickupScanErrorUnknown": "Unknown pickup counter QR",
+  "pickupScanErrorNoOrder": "You have no order to collect at this counter today",
+  "pickupScanSubtitle": "Smart Canteen | Scan and enjoy the meals",
+  "pickupEnterCode": "Enter Code",
+  "pickupEnterCodeConfirm": "Confirm",
+  "pickupFlash": "Flash",
+  "pickupResultTitle": "Pick Up Items"
 }

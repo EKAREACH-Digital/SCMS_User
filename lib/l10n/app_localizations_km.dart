@@ -182,7 +182,7 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get orderDetailQrPreparing =>
-      'អាហាររបស់អ្នកកំពុងរៀបចំ។ QR នឹងបង្ហាញនៅពេលអាហាររួចរាល់សម្រាប់ទទួល។';
+      'សំបុត្រ QR កំពុងដំណើរការ (CODE: QR_TOKEN_NOT_FOUND)';
 
   @override
   String get orderDetailQrPickedUp =>
@@ -849,4 +849,49 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get paymentQuitConfirm => 'បាទ/ចាស ចាកចេញ';
+
+  @override
+  String get pickupScanTitle => 'ស្កេនទទួលអាហារ';
+
+  @override
+  String get pickupScanInstruction => 'ចង្អុលទៅ QR នៅបញ្ជរ';
+
+  @override
+  String get pickupScanReady => 'ទៅទទួលអាហារនៅបញ្ជរ';
+
+  @override
+  String get pickupScanPreparing => 'កំពុងរៀបចំ';
+
+  @override
+  String get pickupScanManualHint => 'បញ្ចូលលេខកូដបញ្ជរ';
+
+  @override
+  String get pickupScanAgain => 'ស្កេនម្តងទៀត';
+
+  @override
+  String pickupScanCheckedIn(String counter) {
+    return 'បានចុះឈ្មោះនៅ $counter';
+  }
+
+  @override
+  String get pickupScanErrorUnknown => 'QR បញ្ជរមិនត្រូវបានស្គាល់';
+
+  @override
+  String get pickupScanErrorNoOrder =>
+      'អ្នកមិនមានការបញ្ជាទិញដើម្បីទទួលនៅបញ្ជរនេះថ្ងៃនេះ';
+
+  @override
+  String get pickupScanSubtitle => 'ស្ម័រតខែនទីន | ស្កែន ហើយរីករាយ';
+
+  @override
+  String get pickupEnterCode => 'បញ្ចូលលេខកូដ';
+
+  @override
+  String get pickupEnterCodeConfirm => 'បញ្ជាក់';
+
+  @override
+  String get pickupFlash => 'ពន្លឺ';
+
+  @override
+  String get pickupResultTitle => 'ទទួលភោជន';
 }
