@@ -26,6 +26,7 @@ class AppColors {
   // Accents / Status
   static const Color accentRed = Color(0xFFE53E3E);
   static const Color warning = Color(0xFFFFCB3D);
+  static const Color orange = Color(0xFFF2994A);
   static const Color success = secondary;
 
   // Backgrounds

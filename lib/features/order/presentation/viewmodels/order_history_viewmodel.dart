@@ -4,6 +4,7 @@ import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
 import 'package:smart_canteen_user_frontend/core/utils/view_state.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_status.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
 
 /// One dish within a past order, as the history screen displays it.
@@ -55,8 +56,7 @@ class OrderRecord {
   /// Real timestamp, used to sort the list chronologically.
   final DateTime createdAt;
 
-  /// 'Pending', 'Completed', or 'Failed'.
-  final String status;
+  final OrderStatus status;
 
   /// 'Breakfast', 'Lunch' or 'Dinner'.
   final String? session;
@@ -77,6 +77,16 @@ class OrderHistoryViewModel extends ChangeNotifier {
   final List<OrderRecord> _orders = [];
 
   List<OrderRecord> get orders => List.unmodifiable(_orders);
+
+  /// The orders in [status], newest first; null means every order. Backs the
+  /// History tabs.
+  List<OrderRecord> ordersWith(OrderStatus? status) => status == null
+      ? orders
+      : _orders.where((o) => o.status == status).toList();
+
+  /// The order with [id], or null when the loaded list doesn't hold it.
+  OrderRecord? orderById(String id) =>
+      _orders.where((o) => o.id == id).firstOrNull;
 
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
@@ -128,7 +138,7 @@ class OrderHistoryViewModel extends ChangeNotifier {
       date: _fmtDate(o.createdAt),
       items: label.isEmpty ? 'Order' : label,
       total: o.totalAmount,
-      status: _mapStatus(o.status),
+      status: o.status,
       createdAt: o.createdAt,
       session: _capitalize(o.mealSession),
       imageUrl: photo,
@@ -143,16 +153,6 @@ class OrderHistoryViewModel extends ChangeNotifier {
       ],
     );
   }
-
-  static String _mapStatus(String backend) => switch (backend) {
-    'pending_payment' => 'Awaiting Payment',
-    'paid' => 'Paid',
-    'preparing' => 'Preparing',
-    'ready' => 'Ready',
-    'completed' => 'Completed',
-    'cancelled' => 'Failed',
-    _ => 'Pending',
-  };
 
   static String _capitalize(String s) =>
       s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';

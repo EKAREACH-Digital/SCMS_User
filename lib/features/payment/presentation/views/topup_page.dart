@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr/qr.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/qr_code_view.dart';
 import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
 import 'package:smart_canteen_user_frontend/features/payment/domain/entities/topup_session.dart';
 import 'package:smart_canteen_user_frontend/features/payment/presentation/viewmodels/topup_viewmodel.dart';
@@ -434,7 +434,7 @@ class _WaitingView extends StatelessWidget {
                 ),
               ],
             ),
-            child: _QrWidget(data: session.qrString, size: 220),
+            child: QrCodeView(data: session.qrString, size: 220),
           ),
         ),
         const SizedBox(height: 20),
@@ -567,67 +567,6 @@ class _FailedView extends StatelessWidget {
       ],
     );
   }
-}
-
-// QR code renderer
-
-/// Renders [data] as a QR code using the `qr` package matrix.
-/// The white background is provided by the caller's container.
-class _QrWidget extends StatelessWidget {
-  const _QrWidget({required this.data, required this.size});
-
-  final String data;
-  final double size;
-
-  static QrImage _parseQrImage(String data) {
-    // QrCode.fromData auto-selects the smallest type number that fits the data.
-    final code = QrCode.fromData(
-      data: data,
-      errorCorrectLevel: QrErrorCorrectLevel.M,
-    );
-    return QrImage(code);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final qrImage = _parseQrImage(data);
-    return CustomPaint(
-      size: Size(size, size),
-      painter: _QrPainter(qrImage: qrImage),
-    );
-  }
-}
-
-class _QrPainter extends CustomPainter {
-  const _QrPainter({required this.qrImage});
-
-  final QrImage qrImage;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black;
-    final moduleCount = qrImage.moduleCount;
-    final moduleSize = size.width / moduleCount;
-
-    for (var row = 0; row < moduleCount; row++) {
-      for (var col = 0; col < moduleCount; col++) {
-        if (qrImage.isDark(row, col)) {
-          canvas.drawRect(
-            Rect.fromLTWH(
-              col * moduleSize,
-              row * moduleSize,
-              moduleSize,
-              moduleSize,
-            ),
-            paint,
-          );
-        }
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_QrPainter oldDelegate) => qrImage != oldDelegate.qrImage;
 }
 
 // Success

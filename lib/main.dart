@@ -32,6 +32,7 @@ import 'package:smart_canteen_user_frontend/features/order/data/repositories/ord
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/meal_coupons_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_detail_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_placement_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/datasources/payment_remote_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/repositories/payment_repository_impl.dart';
@@ -134,6 +135,9 @@ class SmartCanteenApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (c) => OrderPlacementViewModel(c.read<OrderRepository>()),
+        ),
+        ChangeNotifierProvider(
+          create: (c) => OrderDetailViewModel(c.read<OrderRepository>()),
         ),
         ChangeNotifierProvider(
           create: (c) => BalanceViewModel(c.read<WalletRepository>()),

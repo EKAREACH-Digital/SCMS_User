@@ -1,5 +1,6 @@
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/meal_coupon.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_status.dart';
 
 /// One line in a placed order (request body).
 class OrderItemInput {
@@ -169,7 +170,8 @@ class OrderLineDto {
 class OrderSummaryDto {
   final String id;
   final double totalAmount;
-  final String status; // pending | preparing | ready | completed | cancelled
+  /// pending_payment | paid | ready | completed | cancelled
+  final String status;
   final String mealSession;
   final DateTime createdAt;
   final List<OrderLineDto> items;
@@ -188,7 +190,7 @@ class OrderSummaryDto {
     return OrderSummaryDto(
       id: json['id'] as String,
       totalAmount: PlacedOrderDto._toDouble(json['total_amount']),
-      status: json['status'] as String? ?? 'pending',
+      status: json['status'] as String? ?? 'pending_payment',
       mealSession: json['meal_session'] as String? ?? '',
       createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ??
           DateTime.now(),
@@ -201,9 +203,20 @@ class OrderSummaryDto {
   Order toEntity() => Order(
         id: id,
         totalAmount: totalAmount,
-        status: status,
+        status: orderStatusFromBackend(status),
         mealSession: mealSession,
         createdAt: createdAt,
         items: items.map((i) => i.toEntity()).toList(),
       );
 }
+
+/// Maps the backend's status string to [OrderStatus]. `preparing` is the same
+/// stage as `paid` for the student (still cooking). An unknown value counts as
+/// unpaid: that is the safe guess, since an unpaid order shows no pickup QR.
+OrderStatus orderStatusFromBackend(String value) => switch (value) {
+  'paid' || 'preparing' => OrderStatus.paid,
+  'ready' => OrderStatus.ready,
+  'completed' => OrderStatus.completed,
+  'cancelled' => OrderStatus.cancelled,
+  _ => OrderStatus.pendingPayment,
+};

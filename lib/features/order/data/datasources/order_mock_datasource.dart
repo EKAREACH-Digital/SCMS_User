@@ -1,5 +1,6 @@
 import 'package:smart_canteen_user_frontend/features/order/data/datasources/order_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/order/data/models/order_dto.dart';
+import 'package:smart_canteen_user_frontend/features/order/data/models/order_pickup_dto.dart';
 
 /// In-memory [OrderDatasource] for tests and offline work.
 class OrderMockDatasource implements OrderDatasource {
@@ -38,6 +39,17 @@ class OrderMockDatasource implements OrderDatasource {
       mealSession: 'lunch',
       createdAt: DateTime.now(),
       items: const [],
+    );
+  }
+
+  @override
+  Future<OrderPickupDto> getMyPickup(String orderId) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return OrderPickupDto(
+      orderId: orderId,
+      status: 'ready',
+      pickupNo: 1,
+      pickupQrToken: 'mock-pickup-$orderId',
     );
   }
 

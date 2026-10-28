@@ -26,6 +26,7 @@ abstract final class AppRoutes {
   static const foodDetail = 'foodDetail';
   static const paymentQr = 'paymentQr';
   static const paymentSuccess = 'paymentSuccess';
+  static const orderDetail = 'orderDetail';
 }
 
 /// Route paths, for `context.go` / `context.push`.
@@ -71,6 +72,10 @@ abstract final class AppPaths {
 
   /// Full-screen success animation shown after payment is confirmed.
   static const paymentSuccess = '/payment-success';
+
+  /// Base path for one past order's detail (pickup QR + summary).
+  /// Pass the order id as a path segment: `'${AppPaths.orderDetail}/$id'`.
+  static const orderDetail = '/order';
 
   /// The bottom-nav tabs, in bar order. Each is a branch of the shell route,
   /// so `context.go(AppPaths.menu)` switches tab and keeps each tab's state.

@@ -47,6 +47,39 @@
   "statusRedeemed": "Redeemed",
   "statusPending": "Pending",
   "statusFailed": "Failed",
+  "statusPendingPayment": "Pending Payment",
+  "statusProcessing": "Processing",
+  "statusReady": "Ready",
+  "statusCancelled": "Cancelled",
+  "historyTabAll": "All",
+  "historyViewOrder": "View Order",
+  "historyTotalItems": "{count, plural, =1{Total 1 item} other{Total {count} items}}",
+  "@historyTotalItems": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "orderDetailTitle": "Order Detail",
+  "orderDetailScanCaption": "Scan and enjoy the meals",
+  "orderDetailDownload": "Download",
+  "orderDetailSaved": "QR code saved to your photos",
+  "orderDetailSaveFailed": "Couldn't save the QR code",
+  "orderDetailQrPending": "Your pickup QR appears once the order is paid",
+  "orderDetailQrCancelled": "This order was cancelled",
+  "orderDetailQrPreparing": "Your food is being prepared. The QR appears when it's ready for pickup.",
+  "orderDetailQrPickedUp": "You have already picked up your food. QR not available.",
+  "orderDetailErrorTitle": "Couldn't load this order",
+  "orderDetailSummary": "Order Summary",
+  "orderDetailDate": "Date",
+  "orderDetailSubTotal": "Sub Total",
+  "orderDetailDiscount": "Discount",
+  "orderDetailTotal": "Total",
+  "historyTotal": "Total: {amount}",
+  "@historyTotal": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
 
   "walletMyWallet": "My Wallet",
   "walletTopUpBalance": "Top Up Balance",

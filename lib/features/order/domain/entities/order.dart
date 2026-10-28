@@ -1,8 +1,10 @@
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_status.dart';
+
 /// A past order, as returned by `GET /orders/my`.
 class Order {
   final String id;
   final double totalAmount;
-  final String status; // pending | preparing | ready | completed | cancelled
+  final OrderStatus status;
   final String mealSession;
   final DateTime createdAt;
   final List<OrderItem> items;
@@ -19,7 +21,7 @@ class Order {
   Order copyWith({
     String? id,
     double? totalAmount,
-    String? status,
+    OrderStatus? status,
     String? mealSession,
     DateTime? createdAt,
     List<OrderItem>? items,

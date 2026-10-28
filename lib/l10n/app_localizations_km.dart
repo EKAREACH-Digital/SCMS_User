@@ -131,6 +131,87 @@ class AppLocalizationsKm extends AppLocalizations {
   String get statusFailed => 'បរាជ័យ';
 
   @override
+  String get statusPendingPayment => 'រង់ចាំបង់ប្រាក់';
+
+  @override
+  String get statusProcessing => 'កំពុងដំណើរការ';
+
+  @override
+  String get statusReady => 'រួចរាល់';
+
+  @override
+  String get statusCancelled => 'បានបោះបង់';
+
+  @override
+  String get historyTabAll => 'ទាំងអស់';
+
+  @override
+  String get historyViewOrder => 'មើលការបញ្ជាទិញ';
+
+  @override
+  String historyTotalItems(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'សរុប $count មុខ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get orderDetailTitle => 'ព័ត៌មានលម្អិតការបញ្ជាទិញ';
+
+  @override
+  String get orderDetailScanCaption => 'ស្កេន ហើយរីករាយជាមួយអាហារ';
+
+  @override
+  String get orderDetailDownload => 'ទាញយក';
+
+  @override
+  String get orderDetailSaved => 'បានរក្សាទុក QR ក្នុងរូបភាព';
+
+  @override
+  String get orderDetailSaveFailed => 'មិនអាចរក្សាទុក QR បានទេ';
+
+  @override
+  String get orderDetailQrPending =>
+      'QR សម្រាប់ទទួលអាហារនឹងបង្ហាញបន្ទាប់ពីបង់ប្រាក់';
+
+  @override
+  String get orderDetailQrCancelled => 'ការបញ្ជាទិញនេះត្រូវបានបោះបង់';
+
+  @override
+  String get orderDetailQrPreparing =>
+      'អាហាររបស់អ្នកកំពុងរៀបចំ។ QR នឹងបង្ហាញនៅពេលអាហាររួចរាល់សម្រាប់ទទួល។';
+
+  @override
+  String get orderDetailQrPickedUp =>
+      'អ្នកបានទទួលអាហាររួចហើយ។ QR មិនអាចប្រើបានទៀតទេ។';
+
+  @override
+  String get orderDetailErrorTitle => 'មិនអាចទាញយកការបញ្ជាទិញនេះបានទេ';
+
+  @override
+  String get orderDetailSummary => 'សង្ខេបការបញ្ជាទិញ';
+
+  @override
+  String get orderDetailDate => 'កាលបរិច្ឆេទ';
+
+  @override
+  String get orderDetailSubTotal => 'សរុបរង';
+
+  @override
+  String get orderDetailDiscount => 'បញ្ចុះតម្លៃ';
+
+  @override
+  String get orderDetailTotal => 'សរុប';
+
+  @override
+  String historyTotal(String amount) {
+    return 'សរុប៖ $amount';
+  }
+
+  @override
   String get walletMyWallet => 'កាបូបរបស់ខ្ញុំ';
 
   @override

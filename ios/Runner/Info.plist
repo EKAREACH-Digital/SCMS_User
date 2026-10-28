@@ -6,6 +6,8 @@
 	<string>Take a photo for your profile picture</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Choose a photo from your gallery for your profile picture</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save your order's pickup QR code to your photos</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Used in development to reach the Smart Canteen backend running on your computer</string>
 	<key>CFBundleURLTypes</key>

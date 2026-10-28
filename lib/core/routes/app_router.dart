@@ -19,7 +19,8 @@ import 'package:smart_canteen_user_frontend/features/menu/presentation/views/wee
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_page.dart';
 import 'package:smart_canteen_user_frontend/features/notification/presentation/views/notification_settings_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
-import 'package:smart_canteen_user_frontend/features/order/presentation/views/history_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_history_page.dart';
+import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_detail_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/order_summary_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_qr_page.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/views/payment_success_page.dart';
@@ -102,7 +103,7 @@ abstract final class AppRouter {
           _tab(AppPaths.home, AppRoutes.home, const HomePage()),
           _tab(AppPaths.menu, AppRoutes.menu, const MenuPage()),
           _tab(AppPaths.qr, AppRoutes.qr, const QrPage()),
-          _tab(AppPaths.history, AppRoutes.history, const HistoryPage()),
+          _tab(AppPaths.history, AppRoutes.history, const OrderHistoryPage()),
           _tab(AppPaths.settings, AppRoutes.settings, const SettingsPage()),
         ],
       ),
@@ -183,6 +184,14 @@ abstract final class AppRouter {
         path: AppPaths.paymentSuccess,
         name: AppRoutes.paymentSuccess,
         pageBuilder: (_, state) => _slideUp(state, const PaymentSuccessPage()),
+      ),
+      GoRoute(
+        path: '${AppPaths.orderDetail}/:id',
+        name: AppRoutes.orderDetail,
+        pageBuilder: (_, state) => _cupertino(
+          state,
+          OrderDetailPage(orderId: state.pathParameters['id']!),
+        ),
       ),
     ],
   );

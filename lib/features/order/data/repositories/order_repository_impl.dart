@@ -2,6 +2,7 @@ import 'package:smart_canteen_user_frontend/features/order/data/datasources/orde
 import 'package:smart_canteen_user_frontend/features/order/data/models/order_dto.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/meal_coupon.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_pickup.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
@@ -39,6 +40,10 @@ class OrderRepositoryImpl implements OrderRepository {
   @override
   Future<List<Order>> getMyOrders() async =>
       (await _datasource.getMyOrders()).map((o) => o.toEntity()).toList();
+
+  @override
+  Future<OrderPickup> getMyPickup(String orderId) async =>
+      (await _datasource.getMyPickup(orderId)).toEntity();
 
   @override
   Future<List<MealCoupon>> getActiveCoupons() async =>

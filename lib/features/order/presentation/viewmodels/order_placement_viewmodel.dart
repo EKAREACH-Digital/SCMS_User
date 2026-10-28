@@ -6,6 +6,7 @@ import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/core/utils/logger.dart';
 import 'package:smart_canteen_user_frontend/features/menu/domain/entities/cart_entry.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_status.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/repositories/order_repository.dart';
 
 enum OrderPlacementState {
@@ -80,10 +81,10 @@ class OrderPlacementViewModel extends ChangeNotifier {
         // GET /orders/{id} — each call also queries the gateway directly.
         final order = await _orderRepository.getOrderById(orderId);
         AppLogger.d('Polling order ${order.id}: ${order.status}');
-        if (order.status == 'paid') {
+        if (order.status == OrderStatus.paid) {
           _stopPolling();
           _setState(OrderPlacementState.paid);
-        } else if (order.status == 'cancelled') {
+        } else if (order.status == OrderStatus.cancelled) {
           _stopPolling();
           _setState(OrderPlacementState.cancelled);
         }

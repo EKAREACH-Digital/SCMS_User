@@ -29,12 +29,20 @@ class MenuFoodListItem extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: context.cardColor,
-          borderRadius: BorderRadius.circular(10),
+          // borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8), // History card
           boxShadow: [
+            // BoxShadow(
+            //   color: AppColors.primary.withValues(alpha: 0.05),
+            //   blurRadius: 10,
+            //   offset: const Offset(0, 3),
+            // ),
+
+            // Version the same as history card
             BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              color: AppColors.shadowLight,
+              blurRadius: 1,
+              offset: const Offset(0, 1),
             ),
           ],
         ),

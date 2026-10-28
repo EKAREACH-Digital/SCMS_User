@@ -131,6 +131,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusFailed => 'Failed';
 
   @override
+  String get statusPendingPayment => 'Pending Payment';
+
+  @override
+  String get statusProcessing => 'Processing';
+
+  @override
+  String get statusReady => 'Ready';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get historyTabAll => 'All';
+
+  @override
+  String get historyViewOrder => 'View Order';
+
+  @override
+  String historyTotalItems(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Total $count items',
+      one: 'Total 1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get orderDetailTitle => 'Order Detail';
+
+  @override
+  String get orderDetailScanCaption => 'Scan and enjoy the meals';
+
+  @override
+  String get orderDetailDownload => 'Download';
+
+  @override
+  String get orderDetailSaved => 'QR code saved to your photos';
+
+  @override
+  String get orderDetailSaveFailed => 'Couldn\'t save the QR code';
+
+  @override
+  String get orderDetailQrPending =>
+      'Your pickup QR appears once the order is paid';
+
+  @override
+  String get orderDetailQrCancelled => 'This order was cancelled';
+
+  @override
+  String get orderDetailQrPreparing =>
+      'Your food is being prepared. The QR appears when it\'s ready for pickup.';
+
+  @override
+  String get orderDetailQrPickedUp =>
+      'You have already picked up your food. QR not available.';
+
+  @override
+  String get orderDetailErrorTitle => 'Couldn\'t load this order';
+
+  @override
+  String get orderDetailSummary => 'Order Summary';
+
+  @override
+  String get orderDetailDate => 'Date';
+
+  @override
+  String get orderDetailSubTotal => 'Sub Total';
+
+  @override
+  String get orderDetailDiscount => 'Discount';
+
+  @override
+  String get orderDetailTotal => 'Total';
+
+  @override
+  String historyTotal(String amount) {
+    return 'Total: $amount';
+  }
+
+  @override
   String get walletMyWallet => 'My Wallet';
 
   @override

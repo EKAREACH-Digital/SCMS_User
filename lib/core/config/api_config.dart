@@ -76,6 +76,10 @@ abstract final class ApiConfig {
   /// `is_home` marking the student's saved one.
   static const String pickupBranches = '/$version/pickup/branches';
 
+  /// `GET /pickup/my/:orderId` (Bearer) — the signed-in user's pickup ticket
+  /// for one paid order: status, pickup number and the QR token to scan.
+  static String pickupMy(String orderId) => '/$version/pickup/my/$orderId';
+
   // Menu — see docs/features/student-menu-api.md
 
   /// `GET /menus/active?branch_id=&canteen_id=&date=` (public) — the student

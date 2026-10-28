@@ -11,6 +11,7 @@ import 'package:smart_canteen_user_frontend/features/notification/domain/entitie
 import 'package:smart_canteen_user_frontend/features/order/data/datasources/order_mock_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/order/data/repositories/order_repository_impl.dart';
 import 'package:smart_canteen_user_frontend/features/order/domain/entities/order.dart';
+import 'package:smart_canteen_user_frontend/features/order/domain/entities/order_status.dart';
 import 'package:smart_canteen_user_frontend/features/order/presentation/viewmodels/order_history_viewmodel.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/datasources/payment_mock_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/payment/data/models/payment_dto.dart';
@@ -117,7 +118,11 @@ void main() {
       expect(vm.orders.first.items, 'Chicken with Rice ×2, Pork with Rice');
       expect(
         vm.orders.map((o) => o.status),
-        containsAll(['Completed', 'Pending', 'Failed']),
+        containsAll([
+          OrderStatus.completed,
+          OrderStatus.pendingPayment,
+          OrderStatus.cancelled,
+        ]),
       );
     });
   });

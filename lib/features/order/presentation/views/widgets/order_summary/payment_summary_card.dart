@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:smart_canteen_user_frontend/core/theme/app_theme.dart';
+import 'package:smart_canteen_user_frontend/core/widgets/dashed_divider.dart';
 import 'package:smart_canteen_user_frontend/l10n/app_localizations.dart';
 
 /// Subtotal / Discount / Total card with a dotted divider above the total row.
@@ -43,7 +44,7 @@ class PaymentSummaryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const _DottedDivider(),
+          const DashedDivider(color: AppColors.darkBackground),
           const SizedBox(height: 12),
           _SummaryRow(
             label: l10n.cartTotal,
@@ -80,48 +81,4 @@ class _SummaryRow extends StatelessWidget {
       ],
     );
   }
-}
-
-/// Dashed horizontal rule drawn with [CustomPainter] so it fills the exact
-/// available width with no gap on the right.
-class _DottedDivider extends StatelessWidget {
-  const _DottedDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 1.5,
-      width: double.infinity,
-      child: CustomPaint(
-        painter: _DashPainter(color: AppColors.darkBackground),
-      ),
-    );
-  }
-}
-
-class _DashPainter extends CustomPainter {
-  const _DashPainter({required this.color});
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const dashWidth = 6.0;
-    const dashSpace = 4.0;
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = size.height
-      ..strokeCap = StrokeCap.square;
-
-    final y = size.height / 2;
-    double x = 0;
-    while (x < size.width) {
-      final end = (x + dashWidth).clamp(0.0, size.width);
-      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
-      x += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DashPainter old) => old.color != color;
 }

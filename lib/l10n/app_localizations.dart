@@ -326,6 +326,144 @@ abstract class AppLocalizations {
   /// **'Failed'**
   String get statusFailed;
 
+  /// No description provided for @statusPendingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Payment'**
+  String get statusPendingPayment;
+
+  /// No description provided for @statusProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get statusProcessing;
+
+  /// No description provided for @statusReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get statusReady;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get statusCancelled;
+
+  /// No description provided for @historyTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get historyTabAll;
+
+  /// No description provided for @historyViewOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'View Order'**
+  String get historyViewOrder;
+
+  /// No description provided for @historyTotalItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Total 1 item} other{Total {count} items}}'**
+  String historyTotalItems(int count);
+
+  /// No description provided for @orderDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Detail'**
+  String get orderDetailTitle;
+
+  /// No description provided for @orderDetailScanCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan and enjoy the meals'**
+  String get orderDetailScanCaption;
+
+  /// No description provided for @orderDetailDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get orderDetailDownload;
+
+  /// No description provided for @orderDetailSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code saved to your photos'**
+  String get orderDetailSaved;
+
+  /// No description provided for @orderDetailSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the QR code'**
+  String get orderDetailSaveFailed;
+
+  /// No description provided for @orderDetailQrPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pickup QR appears once the order is paid'**
+  String get orderDetailQrPending;
+
+  /// No description provided for @orderDetailQrCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'This order was cancelled'**
+  String get orderDetailQrCancelled;
+
+  /// No description provided for @orderDetailQrPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Your food is being prepared. The QR appears when it\'s ready for pickup.'**
+  String get orderDetailQrPreparing;
+
+  /// No description provided for @orderDetailQrPickedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already picked up your food. QR not available.'**
+  String get orderDetailQrPickedUp;
+
+  /// No description provided for @orderDetailErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this order'**
+  String get orderDetailErrorTitle;
+
+  /// No description provided for @orderDetailSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Summary'**
+  String get orderDetailSummary;
+
+  /// No description provided for @orderDetailDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get orderDetailDate;
+
+  /// No description provided for @orderDetailSubTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub Total'**
+  String get orderDetailSubTotal;
+
+  /// No description provided for @orderDetailDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get orderDetailDiscount;
+
+  /// No description provided for @orderDetailTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get orderDetailTotal;
+
+  /// No description provided for @historyTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {amount}'**
+  String historyTotal(String amount);
+
   /// No description provided for @walletMyWallet.
   ///
   /// In en, this message translates to:

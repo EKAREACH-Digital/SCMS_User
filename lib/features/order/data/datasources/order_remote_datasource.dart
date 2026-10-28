@@ -5,6 +5,7 @@ import 'package:smart_canteen_user_frontend/core/error/error_handler.dart';
 import 'package:smart_canteen_user_frontend/core/error/exceptions.dart';
 import 'package:smart_canteen_user_frontend/features/order/data/datasources/order_datasource.dart';
 import 'package:smart_canteen_user_frontend/features/order/data/models/order_dto.dart';
+import 'package:smart_canteen_user_frontend/features/order/data/models/order_pickup_dto.dart';
 
 class OrderRemoteDatasource implements OrderDatasource {
   OrderRemoteDatasource(this._dio);
@@ -55,6 +56,21 @@ class OrderRemoteDatasource implements OrderDatasource {
       throw ErrorHandler.fromDio(e);
     } catch (e) {
       throw ApiException('Unexpected error fetching order: $e');
+    }
+  }
+
+  @override
+  Future<OrderPickupDto> getMyPickup(String orderId) async {
+    try {
+      // GET /pickup/my/{orderId} — the pickup QR token for Order Detail.
+      final response = await _dio.get(ApiConfig.pickupMy(orderId));
+      return OrderPickupDto.fromJson(
+        response.data['data'] as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throw ErrorHandler.fromDio(e);
+    } catch (e) {
+      throw ApiException('Unexpected error fetching pickup: $e');
     }
   }
 
